@@ -8,9 +8,17 @@ package com.team.seahouse.commons.response;
  * @date 18/7/10
  */
 public interface ReturnCode {
-	
-	public Integer getCode();
 
+	/**
+	 * 获得状态码
+	 * @return
+	 */
+	public Integer getStatus();
+
+	/**
+	 * 获得信息
+	 * @return
+	 */
 	public String getMessage();
 	
 }

@@ -1,8 +1,15 @@
-package com.team.seahouse.commons.constant;
+package com.team.seahouse.commons.response;
 
 
 import com.team.seahouse.commons.response.ReturnCode;
 
+/**
+ * @title 统一返回码
+ * @describe
+ * @author vanguard
+ * @version 1.0
+ * @date 18/7/12
+ */
 public enum CommonReturnCode implements ReturnCode {
 	
 	/** 请求失败 */
@@ -41,20 +48,22 @@ public enum CommonReturnCode implements ReturnCode {
 	INTERNAL_SERVER_ERROR(500, "服务器出错");
 	
 	/** 返回状态码 */
-	private Integer code;
+	private Integer status;
 
 	/** 返回消息 */
 	private String message;
 	
-	private CommonReturnCode(Integer code, String message) {
-		this.code = code;
+	private CommonReturnCode(Integer status, String message) {
+		this.status = status;
 		this.message = message;
 	}
 
-	public Integer getCode() {
-		return code;
+	@Override
+	public Integer getStatus() {
+		return status;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

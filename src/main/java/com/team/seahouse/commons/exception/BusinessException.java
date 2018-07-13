@@ -41,12 +41,12 @@ public class BusinessException extends BaseException {
 	
 	public BusinessException(ReturnCode returnCode) {
 		super(returnCode.getMessage());
-		this.code = returnCode.getCode();
+		this.code = returnCode.getStatus();
 	}
 	
 	public BusinessException(ReturnCode returnCode, Throwable cause) {
 		super(returnCode.getMessage(), cause);
-		this.code = returnCode.getCode();
+		this.code = returnCode.getStatus();
 	}
 	
 	public BusinessException(Integer code, String message, Throwable cause) {

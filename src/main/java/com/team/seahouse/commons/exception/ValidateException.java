@@ -3,13 +3,11 @@ package com.team.seahouse.commons.exception;
 import com.team.seahouse.commons.response.ReturnCode;
 
 /**
- * 
-* 项目名称：morning-common   
-* 类名称：ValidateException   
-* 类描述：ValidateException 验证异常   
-* 创建人：陈星星   
-* 创建时间：2017年3月31日 下午12:55:39   
-*
+ * @title ValidateException 异常类
+ * @describe
+ * @author vanguard
+ * @version 1.0
+ * @date 18/7/12
  */
 public class ValidateException extends BaseException {
 
@@ -41,12 +39,12 @@ public class ValidateException extends BaseException {
 	
 	public ValidateException(ReturnCode returnCode) {
 		super(returnCode.getMessage());
-		this.code = returnCode.getCode();
+		this.code = returnCode.getStatus();
 	}
 	
 	public ValidateException(ReturnCode returnCode, Throwable cause) {
 		super(returnCode.getMessage(), cause);
-		this.code = returnCode.getCode();
+		this.code = returnCode.getStatus();
 	}
 	
 	public ValidateException(Integer code, String message, Throwable cause) {

@@ -1,4 +1,4 @@
-package com.team.seahouse.commons.constant;
+package com.team.seahouse.commons.response;
 
 import com.team.seahouse.commons.response.ReturnCode;
 
@@ -18,23 +18,25 @@ public enum UserReturnCode implements ReturnCode {
 	REGISTER_CODE_ERROR(10005, "验证码错误!"),
 	ENTERED_PASSWORDS_DIFFER(10006, "两次输入的密码不一致"),
 	PASSWORD_AUTHENTICATION_ERROR(10007, "密码长度8~16位，其中数字，字母和符号至少包含两种!"),
-	ACCOUNT_ERROR(10008, "该用户名已被使用!");
+	ACCOUNT_ERROR(10008, "该手机号已被注册，请登录!");
 	
 	/** 返回状态码 */
-	private Integer code;
+	private Integer status;
 
 	/** 返回消息 */
 	private String message;
 	
-	private UserReturnCode(Integer code, String message) {
-		this.code = code;
+	private UserReturnCode(Integer status, String message) {
+		this.status = status;
 		this.message = message;
 	}
 
-	public Integer getCode() {
-		return code;
+	@Override
+	public Integer getStatus() {
+		return status;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

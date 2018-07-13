@@ -1,5 +1,6 @@
 package com.team.seahouse.commons.base;
 
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,5 @@
 package com.team.seahouse.commons.response;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.team.seahouse.commons.base.BaseResult;
 
 /**
@@ -13,11 +12,15 @@ import com.team.seahouse.commons.base.BaseResult;
 public class Response extends BaseResult {
 
 	public Response(ReturnCode returnCode) {
-		super(returnCode.getCode(), returnCode.getMessage());
+		super(returnCode.getStatus(), returnCode.getMessage());
 	}
 
 	public Response(ReturnCode returnCode, Object data) {
-		super(returnCode.getCode(), returnCode.getMessage(), data);
+		super(returnCode.getStatus(), returnCode.getMessage(), data);
+	}
+
+	public Response(Integer returnCode, String message) {
+		super(returnCode, message);
 	}
 
 }

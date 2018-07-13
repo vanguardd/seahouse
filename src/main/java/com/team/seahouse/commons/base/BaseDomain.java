@@ -1,8 +1,12 @@
 package com.team.seahouse.commons.base;
 
+
+
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
@@ -12,10 +16,9 @@ import java.io.Serializable;
  * @Version 1.0
  *
  */
-@Setter@Getter
+@Getter@Setter
 public class BaseDomain implements Serializable {
 
     protected static final long serialVersionUID = 1L;
 
-    protected Long id;
 }

@@ -1,13 +1,11 @@
 package com.team.seahouse.commons.exception;
 
 /**
- * 
-* 项目名称：morning-common   
-* 类名称：BaseException   
-* 类描述：BaseException 统一异常基类    
-* 创建人：陈星星   
-* 创建时间：2017年3月31日 下午12:06:06   
-*
+ * @title 统一异常基类
+ * @describe
+ * @author vanguard
+ * @version 1.0
+ * @date 18/7/12
  */
 public class BaseException extends RuntimeException {
 

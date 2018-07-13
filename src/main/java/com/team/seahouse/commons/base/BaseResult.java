@@ -1,5 +1,6 @@
 package com.team.seahouse.commons.base;
 
+
 import lombok.Getter;
 import lombok.Setter;
 

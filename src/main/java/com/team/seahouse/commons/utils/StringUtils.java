@@ -126,9 +126,9 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 		}
 		if(args instanceof  JSONArray){
 			
-			net.sf.json.JSONArray arr = (net.sf.json.JSONArray)args;
+			JSONArray arr = (JSONArray)args;
 			for (Object json : arr) {
-				if(json != null && json instanceof net.sf.json.JSONObject){
+				if(json != null && json instanceof JSONObject){
 					result.add(json);
 					continue;
 				}else{
