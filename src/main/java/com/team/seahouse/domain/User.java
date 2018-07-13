@@ -18,9 +18,10 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/12
  */
-@Getter@Setter
+
 @Entity
 @Table(name = "tb_user")
+@Getter@Setter
 public class User extends BaseDomain {
 
     @Id

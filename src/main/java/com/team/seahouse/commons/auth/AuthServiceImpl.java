@@ -6,6 +6,8 @@ import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.domain.JwtUser;
 import com.team.seahouse.domain.User;
+import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.repository.UserInfoRepository;
 import com.team.seahouse.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,7 @@ public class AuthServiceImpl implements IAuthService {
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
     private UserRepository userRepository;
+    private UserInfoRepository userInfoRepository;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -43,11 +46,13 @@ public class AuthServiceImpl implements IAuthService {
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
             JwtTokenUtil jwtTokenUtil,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            UserInfoRepository userInfoRepository) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
+        this.userInfoRepository = userInfoRepository;
     }
 
     @Override
@@ -61,7 +66,20 @@ public class AuthServiceImpl implements IAuthService {
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
 
-        return userRepository.save(userToAdd);
+        //添加注册用户
+        User registerUser = userRepository.save(userToAdd);
+
+        //添加用户详细信息
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(registerUser.getUserId());
+        userInfo.setUserName(registerUser.getUserName());
+        userInfo.setMobilePhone(registerUser.getMobilePhone());
+        userInfo.setEmail(registerUser.getEmail());
+        userInfo.setCreateDate(new Date());
+        userInfo.setUpdateDate(new Date());
+        userInfoRepository.save(userInfo);
+
+        return registerUser;
     }
 
     @Override

@@ -65,16 +65,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and().csrf().disable()
+        httpSecurity.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .antMatchers(AUTH_WHITELIST).permitAll()
             .anyRequest().authenticated()  // 所有请求需要身份认证
             .and()
             .logout() // 默认注销行为为logout，可以通过下面的方式来修改
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/login")
-            .permitAll();// 设置注销成功后跳转页面，默认是跳转到登录页面;
+            .logoutUrl("/pass/logout")
+            .permitAll();
         // 添加JWT filter
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
