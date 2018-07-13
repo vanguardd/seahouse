@@ -18,7 +18,7 @@ public class BaseResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 返回状态码 */
-	private Integer code;
+	private Integer status;
 	
 	/** 返回信息 */
 	private String message;
@@ -26,15 +26,15 @@ public class BaseResult implements Serializable {
 	/** 返回数据 */
 	private Object data;
 	
-	public BaseResult(Integer code, String message) {
+	public BaseResult(Integer status, String message) {
 		super();
-		this.code = code;
+		this.status = status;
 		this.message = message;
 	}
 
-	public BaseResult(Integer code, String message, Object data) {
+	public BaseResult(Integer status, String message, Object data) {
 		super();
-		this.code = code;
+		this.status = status;
 		this.message = message;
 		this.data = data;
 	}

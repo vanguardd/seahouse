@@ -28,7 +28,7 @@ public class User extends BaseDomain {
     private Long userId;
 
     /**
-     * 用户名
+     * 昵称
      */
     private String userName;
 

@@ -35,7 +35,7 @@ public class AuthController extends BaseController {
     public Response createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest) {
         try {
-            final String token = authService.login(authenticationRequest.getUserName(), authenticationRequest.getPassword());
+            final String token = authService.login(authenticationRequest.getLoginName(), authenticationRequest.getPassword());
             // Return the token
             return new Response(CommonReturnCode.OK ,new JwtAuthenticationResponse(token));
         } catch(ValidateException e) {

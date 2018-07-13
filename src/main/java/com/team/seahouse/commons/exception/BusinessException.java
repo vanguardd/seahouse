@@ -3,13 +3,11 @@ package com.team.seahouse.commons.exception;
 import com.team.seahouse.commons.response.ReturnCode;
 
 /**
- * 
-* 项目名称：morning-common   
-* 类名称：BusinessException   
-* 类描述：BusinessException 业务异常   
-* 创建人：陈星星   
-* 创建时间：2017年3月31日 下午12:53:32   
-*
+ * @title 自定义业务异常
+ * @describe
+ * @author vanguard
+ * @version 1.0
+ * @date 18/7/13
  */
 public class BusinessException extends BaseException {
 

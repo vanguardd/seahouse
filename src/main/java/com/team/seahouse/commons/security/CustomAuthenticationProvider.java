@@ -35,9 +35,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         try {
             // 认证逻辑
             UserDetails userDetails = userDetailsService.loadUserByUsername(name);
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String encodePassword = encoder.encode(password);
-            if (userDetails.getPassword().equals(encodePassword)) {
+            //加密后的密码和用户输入的密码进行比较
+            if (bCryptPasswordEncoder.matches(password, userDetails.getPassword())) {
                 // 生成令牌 这里令牌里面存入了:name,password,authorities, 当然你也可以放其他内容
                 Authentication auth = new UsernamePasswordAuthenticationToken(name, password);
                 return auth;
