@@ -1,5 +1,7 @@
 package com.team.seahouse.service.impl;
 
+import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.repository.UserInfoRepository;
@@ -8,32 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
+ * @title 用户业务层实现
+ * @describe
  * @author vanguard
  * @version 1.0
- * @title
- * @describe
- * @date 2018/07/13
+ * @date 18/7/16
  */
 @Service
 public class UserServiceImpl implements IUserService {
 
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
     @Override
-    public UserInfo findByToken(String tokenStr) {
-        final String token = tokenStr.substring(tokenHead.length());
-        Long userId = jwtTokenUtil.getUserIdFromToken(token);
-        if(userId != null) {
-            return userInfoRepository.findByUserId(userId);
+    public UserInfo updateUserInfo(UserInfo userInfo) throws BusinessException {
+        userInfo.setUpdateDate(new Date());
+        UserInfo save = null;
+        try {
+            save = userInfoRepository.save(userInfo);
+        } catch (BusinessException e) {
+            throw new BusinessException(CommonReturnCode.REQUEST_TIMEOUT.getStatus(),
+                    CommonReturnCode.REQUEST_TIMEOUT.getMessage());
         }
-        return null;
+        return save;
     }
 }

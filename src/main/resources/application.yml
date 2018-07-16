@@ -66,19 +66,3 @@ spring:
   cache:
     type: redis
 
-jwt:
-  header: Authorization
-  secret: "spring-security-@Jwt!&Secret^#"
-  expiration: 604800
-  tokenHead: "Bearer "
-  route:
-    authentication:
-      path: "auth/login"
-      refresh: "auth/refresh"
-      register: "auth/register"
-
-logging:
-  level:
-    org.springframework:
-      data: DEBUG
-      security: DEBUG

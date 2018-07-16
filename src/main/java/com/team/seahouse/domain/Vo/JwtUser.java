@@ -1,4 +1,4 @@
-package com.team.seahouse.domain;
+package com.team.seahouse.domain.Vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,17 +19,12 @@ public class JwtUser implements UserDetails {
     private final Long userId;
     private final String userName;
     private final String password;
-    private final String mobilePhone;
-    private final String email;
     private Date lastPasswordResetDate;
 
-    public JwtUser(Long id, String userName, String password, String mobilePhone,
-                   String email, Date lastPasswordResetDate) {
+    public JwtUser(Long id, String userName, String password, Date lastPasswordResetDate) {
         this.userId = id;
         this.userName = userName;
         this.password = password;
-        this.mobilePhone = mobilePhone;
-        this.email = email;
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 

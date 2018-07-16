@@ -11,3 +11,32 @@ spring:
       port: 6379
       # Redis服务器连接密码（默认为空）
       password:
+
+jwt:
+  header: Authorization
+  secret: "spring-security-@Jwt!&Secret^#"
+  expiration: 604800
+  tokenHead: "Bearer "
+  route:
+    authentication:
+      refresh: "auth/refresh"
+      register: "auth/register"
+      password:
+        login: "auth/login"
+      mobilePhone:
+        login: "auth/mobilePhone/login"
+      Oauth:
+        login: "auth/Oauth/login"
+
+logging:
+  level:
+    org.springframework:
+      data: DEBUG
+      security: DEBUG
+
+sms:
+  host: "http://localhost:8081/sendMessage"
+  username: "vanguard"
+  password: "vangaurd"
+  apiKey: "key"
+

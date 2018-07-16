@@ -1,6 +1,7 @@
 package com.team.seahouse.commons.security;
 
 import com.team.seahouse.commons.filter.*;
+import com.team.seahouse.service.ISmsSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private ISmsSenderService smsSenderService;
 
     /**
      * 装载BCrypt密码编码器
@@ -90,6 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.authenticationProvider(new CustomAuthenticationProvider(userDetailsService, passwordEncoder()));
+        auth.authenticationProvider(new CustomAuthenticationProvider(userDetailsService, passwordEncoder()))
+                .authenticationProvider(new ValidateCodeAuthenticationProvider(userDetailsService, smsSenderService));
     }
 }

@@ -4,7 +4,7 @@ package com.team.seahouse.commons.auth;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
-import com.team.seahouse.domain.JwtUser;
+import com.team.seahouse.domain.Vo.JwtUser;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.repository.UserInfoRepository;
@@ -58,7 +58,7 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public User register(User userToAdd) throws ValidateException {
         final String mobilePhone = userToAdd.getMobilePhone();
-        if(userRepository.findByMobilePhone(mobilePhone)!=null) {
+        if(userRepository.findByMobilePhone(mobilePhone) != null) {
             throw new ValidateException(UserReturnCode.ACCOUNT_ERROR.getStatus(), UserReturnCode.ACCOUNT_ERROR.getMessage());
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -85,9 +85,9 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public String login(String username, String password) throws ValidateException {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        // Perform the security
-        final Authentication authentication = authenticationManager.authenticate(upToken);
         try {
+            // Perform the security
+            final Authentication authentication = authenticationManager.authenticate(upToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             // Reload password post-security so we can generate token
             final UserDetails userDetails = userDetailsService.loadUserByUsername(username);

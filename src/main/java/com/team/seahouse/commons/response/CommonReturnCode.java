@@ -43,6 +43,8 @@ public enum CommonReturnCode implements ReturnCode {
 	GONE(410, "已被删除"),
 	/** 423已被锁定 */
 	LOCKED(423, "已被锁定"),
+	/** 424短信发送失败*/
+	SEND_MESSAGE_FAILED(424, "短信发送失败"),
 	
 	/** 500服务器出错 */
 	INTERNAL_SERVER_ERROR(500, "服务器出错");

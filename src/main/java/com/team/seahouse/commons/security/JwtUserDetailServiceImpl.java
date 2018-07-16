@@ -1,7 +1,7 @@
 package com.team.seahouse.commons.security;
 
 import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.domain.JwtUserFactory;
+import com.team.seahouse.domain.Vo.JwtUserFactory;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,11 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
             if(user == null) {
                 throw new UsernameNotFoundException(UserReturnCode.USER_NOT_EXIST.getMessage());
             } else {
+                user.setUserName(loginName);
                 return JwtUserFactory.create(user);
             }
         } else {
+            user.setUserName(loginName);
             return JwtUserFactory.create(user);
         }
 

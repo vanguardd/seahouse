@@ -18,12 +18,14 @@ public interface IAuthService {
     User register(User userToAdd);
 
     /**
-     * 用于登录
-     * @param username
-     * @param password
+     * 登录业务
+     * 包含密码登录、短信验证码登录和第三方登录
+     * @param username 手机号、邮箱等
+     * @param password 密码或者验证码
      * @return
      */
     String login(String username, String password);
+
 
     /**
      * 刷新Token

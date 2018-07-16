@@ -1,12 +1,23 @@
 package com.team.seahouse.commons.base;
 
 
+import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.response.CommonReturnCode;
+import com.team.seahouse.commons.utils.JwtTokenUtil;
+import com.team.seahouse.domain.User;
+import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.repository.UserInfoRepository;
+import com.team.seahouse.repository.UserRepository;
+import com.team.seahouse.service.IUserService;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditorSupport;
 
 /**
@@ -16,9 +27,31 @@ import java.beans.PropertyEditorSupport;
  * @date: 2018-02-09
  */
 public class BaseController {
-	
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-	
+
+	@Value("${jwt.header}")
+	private String tokenHeader;
+
+	@Value("${jwt.tokenHead}")
+	private String tokenHead;
+
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+
+	@Autowired
+	private UserInfoRepository userInfoRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+
+	/**
+	 * 获得HttpServletRequest
+	 * @return
+	 */
+	protected HttpServletRequest getRequest() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+	}
+
 	/**
 	 * 初始化数据绑定
 	 * 1. 将所有传递进来的String进行HTML编码，防止XSS攻击
@@ -39,5 +72,31 @@ public class BaseController {
 				return value != null ? value.toString() : "";
 			}
 		});
+	}
+
+	/**
+	 * 根据请求携带的Token获得用户信息实体
+	 * @return
+	 */
+	protected UserInfo getUserInfo() throws BusinessException {
+		final String tokenStr = getRequest().getHeader(tokenHeader);
+		final String token = tokenStr.substring(tokenHead.length());
+		Long userId = jwtTokenUtil.getUserIdFromToken(token);
+		if(userId == null) {
+			throw new BusinessException(CommonReturnCode.BAD_REQUEST.getStatus(),
+					CommonReturnCode.BAD_REQUEST.getMessage());
+		}
+		return userInfoRepository.findByUserId(userId);
+	}
+
+	/**
+	 * 根据请求携带的Token获得用户实体
+	 * @return
+	 */
+	protected User getUser() {
+		final String tokenStr = getRequest().getHeader(tokenHeader);
+		final String token = tokenStr.substring(tokenHead.length());
+		  Long userId = jwtTokenUtil.getUserIdFromToken(token);
+		return userRepository.findByUserId(userId);
 	}
 }

@@ -1,6 +1,6 @@
 package com.team.seahouse.commons.utils;
 
-import com.team.seahouse.domain.JwtUser;
+import com.team.seahouse.domain.Vo.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -60,7 +60,7 @@ public class JwtTokenUtil implements Serializable {
         Long userId;
         try {
             final Claims claims = getClaimsFromToken(token);
-            userId = (Long) claims.get(CLAIM_KEY_USER_ID);
+            userId = Long.valueOf(String.valueOf(claims.get(CLAIM_KEY_USER_ID)));
         } catch (Exception e) {
             userId = null;
         }
@@ -132,7 +132,7 @@ public class JwtTokenUtil implements Serializable {
 
     /**
      * 生成令牌
-     * @param userDetails
+     * @param userDetails 用户信息
      * @return
      */
     public String generateToken(UserDetails userDetails) {
@@ -156,6 +156,7 @@ public class JwtTokenUtil implements Serializable {
 
     /**
      * 从数据声明中获取令牌
+     * @param subject 主要信息:登录名
      * @param claims
      * @return
      */

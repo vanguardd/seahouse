@@ -2,6 +2,8 @@ package com.team.seahouse.commons.security;
 
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
+import com.team.seahouse.service.ISmsSenderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +24,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public CustomAuthenticationProvider(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder){
+    @Autowired
+    private ISmsSenderService smsSenderService;
+
+    public CustomAuthenticationProvider(UserDetailsService userDetailsService,
+                                        BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }

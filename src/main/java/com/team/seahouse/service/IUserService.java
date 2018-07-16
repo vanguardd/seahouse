@@ -1,5 +1,6 @@
 package com.team.seahouse.service;
 
+import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 
 /**
@@ -12,9 +13,10 @@ import com.team.seahouse.domain.UserInfo;
 public interface IUserService {
 
     /**
-     * 根据Token获取用户信息
-     * @param token
+     * 修改用户信息
+     * @param userInfo
      * @return
      */
-    UserInfo findByToken(String token);
+    UserInfo updateUserInfo(UserInfo userInfo);
+
 }
