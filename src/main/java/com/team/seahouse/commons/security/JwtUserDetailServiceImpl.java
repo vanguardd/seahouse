@@ -1,7 +1,7 @@
 package com.team.seahouse.commons.security;
 
 import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.domain.Vo.JwtUserFactory;
+import com.team.seahouse.domain.vo.JwtUserFactory;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

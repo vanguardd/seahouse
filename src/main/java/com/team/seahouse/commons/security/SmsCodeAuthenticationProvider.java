@@ -3,6 +3,7 @@ package com.team.seahouse.commons.security;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.UserReturnCode;
+import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,7 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @version 1.0
  * @date 18/7/16
  */
-public class ValidateCodeAuthenticationProvider implements AuthenticationProvider {
+public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
     /**
      * 验证码验证服务
@@ -32,10 +33,17 @@ public class ValidateCodeAuthenticationProvider implements AuthenticationProvide
      */
     private UserDetailsService userDetailsService;
 
-    public ValidateCodeAuthenticationProvider(UserDetailsService userDetailsService,
-                                              ISmsSenderService smsSenderService) {
+    /**
+     * redis服务
+     */
+    private IRedisService redisService;
+
+    public SmsCodeAuthenticationProvider(UserDetailsService userDetailsService,
+                                         ISmsSenderService smsSenderService,
+                                         IRedisService redisService) {
         this.smsSenderService = smsSenderService;
         this.userDetailsService = userDetailsService;
+        this.redisService = redisService;
     }
 
     @Override
@@ -48,7 +56,9 @@ public class ValidateCodeAuthenticationProvider implements AuthenticationProvide
             //验证短信验证码
             boolean isCorrectCode = smsSenderService.checkIsCorrectCode(username, validateCode);
             if(isCorrectCode) {
-                Authentication auth = new UsernamePasswordAuthenticationToken(username, validateCode);
+                Authentication auth = new SmsCodeAuthenticationToken(username, validateCode);
+                //验证成功后，手动删除redis中的验证码
+                redisService.remove(username);
                 return auth;
             } else {
                 throw new ValidateException(UserReturnCode.REGISTER_CODE_ERROR);
@@ -60,6 +70,6 @@ public class ValidateCodeAuthenticationProvider implements AuthenticationProvide
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return authentication.equals(SmsCodeAuthenticationToken.class);
     }
 }

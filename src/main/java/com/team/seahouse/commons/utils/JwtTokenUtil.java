@@ -1,6 +1,6 @@
 package com.team.seahouse.commons.utils;
 
-import com.team.seahouse.domain.Vo.JwtUser;
+import com.team.seahouse.domain.vo.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

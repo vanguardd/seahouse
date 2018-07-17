@@ -1,4 +1,4 @@
-package com.team.seahouse.domain.Vo;
+package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

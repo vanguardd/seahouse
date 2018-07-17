@@ -1,7 +1,7 @@
 package com.team.seahouse.service;
 
-import com.team.seahouse.domain.Dto.RedisKeyDto;
-import com.team.seahouse.domain.Vo.ValidateCodeVo;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @title
@@ -10,30 +10,64 @@ import com.team.seahouse.domain.Vo.ValidateCodeVo;
  * @version 1.0
  * @date 2018/07/16
  */
-public interface IRedisService {
-    /**
-     * Redis中添加数据
-     * @param redisKeyDto
-     */
-    void addData(RedisKeyDto redisKeyDto);
+public interface IRedisService<T> {
 
     /**
-     * Redis中删除数据
-     * @param redisKeyDto
+     * 添加
+     *
+     * @param key    key
+     * @param doamin 对象
+     * @param expire 过期时间(单位:秒),传入 -1 时表示不设置过期时间
      */
-    void delete(RedisKeyDto redisKeyDto);
+    public void put(String key, T doamin, long expire);
 
     /**
-     * 根据key获取Redis的值
-     * @param redisKeyDto
+     * 删除
+     *
+     * @param key 传入key的名称
+     */
+    public void remove(String key);
+
+    /**
+     * 查询
+     *
+     * @param key 查询的key
      * @return
      */
-    ValidateCodeVo redisGet(RedisKeyDto redisKeyDto);
+    public T get(String key);
 
     /**
-     * Redis中添加有过期时间的数据
-     * @param redisKeyDto
-     * @param outTime
+     * 获取当前redis库下所有对象
+     *
+     * @return
      */
-    void addRedisData(RedisKeyDto redisKeyDto, int outTime);
+    public List<T> getAll();
+
+    /**
+     * 查询查询当前redis库下所有key
+     *
+     * @return
+     */
+    public Set<String> getKeys();
+
+    /**
+     * 判断key是否存在redis中
+     *
+     * @param key 传入key的名称
+     * @return
+     */
+    public boolean isKeyExists(String key);
+
+    /**
+     * 查询当前key下缓存数量
+     *
+     * @return
+     */
+    public long count();
+
+    /**
+     * 清空redis
+     */
+    public void empty();
 }
+

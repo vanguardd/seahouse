@@ -11,6 +11,7 @@ spring:
       port: 6379
       # Redis服务器连接密码（默认为空）
       password:
+      key: "sea-house"
 
 jwt:
   header: Authorization
@@ -24,7 +25,7 @@ jwt:
       password:
         login: "auth/login"
       mobilePhone:
-        login: "auth/mobilePhone/login"
+        login: "auth/mobile/login"
       Oauth:
         login: "auth/Oauth/login"
 
@@ -35,8 +36,9 @@ logging:
       security: DEBUG
 
 sms:
-  host: "http://localhost:8081/sendMessage"
+  host: "http://localhost:8081/sendMsg"
   username: "vanguard"
   password: "vangaurd"
   apiKey: "key"
+  expireTime: 600
 

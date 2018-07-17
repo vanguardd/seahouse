@@ -1,7 +1,6 @@
-package com.team.seahouse.domain.Vo;
+package com.team.seahouse.domain.vo;
 
 import com.team.seahouse.domain.User;
-import com.team.seahouse.domain.Vo.JwtUser;
 
 /**
  * @title JwtUser 工厂类

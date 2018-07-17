@@ -1,16 +1,18 @@
 package com.team.seahouse.service.impl;
 
-import com.team.seahouse.domain.Dto.RedisKeyDto;
-import com.team.seahouse.domain.Vo.ValidateCodeVo;
+import com.team.seahouse.domain.dto.RedisKeyDto;
+import com.team.seahouse.domain.vo.SmsCodeVo;
 import com.team.seahouse.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @title Redis业务层接口实现
@@ -20,28 +22,108 @@ import java.io.Serializable;
  * @date 18/7/16
  */
 @Service
-public class RedisServiceImpl implements IRedisService {
+public class RedisServiceImpl implements IRedisService<SmsCodeVo> {
 
     @Autowired
-    private RedisTemplate<String, ValidateCodeVo> redisTemplate;
+    protected RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    protected HashOperations<String, String, SmsCodeVo> hashOperations;
 
-    @Override
-    public void addData(final RedisKeyDto redisKeyDto) {
-        redisTemplate.opsForValue().set(redisKeyDto.getKeys(), redisKeyDto.getValues());
+    @Value("${spring.redis.key}")
+    private String REDIS_KEY;
+
+    /**
+     * 存入redis中的key
+     *
+     * @return
+     */
+    protected String getRedisKey() {
+        return this.REDIS_KEY;
     }
 
+    /**
+     * 添加
+     *
+     * @param key    key
+     * @param doamin 对象
+     * @param expire 过期时间(单位:秒),传入 -1 时表示不设置过期时间
+     */
     @Override
-    public void delete(final RedisKeyDto redisKeyDto) {
-        redisTemplate.delete(redisKeyDto.getKeys());
+    public void put(String key, SmsCodeVo doamin, long expire) {
+        hashOperations.put(getRedisKey(), key, doamin);
+        if (expire != -1) {
+            redisTemplate.expire(getRedisKey(), expire, TimeUnit.SECONDS);
+        }
     }
 
+    /**
+     * 删除
+     *
+     * @param key 传入key的名称
+     */
     @Override
-    public ValidateCodeVo redisGet(final RedisKeyDto redisKeyDto) {
-        return redisTemplate.opsForValue().get(redisKeyDto.getKeys());
+    public void remove(String key) {
+        hashOperations.delete(getRedisKey(), key);
     }
 
+    /**
+     * 查询
+     *
+     * @param key 查询的key
+     * @return
+     */
     @Override
-    public void addRedisData(final RedisKeyDto redisKeyDto, final int outTime) {
-        redisTemplate.opsForValue().set(redisKeyDto.getKeys(), redisKeyDto.getValues(), outTime);
+    public SmsCodeVo get(String key) {
+        return hashOperations.get(getRedisKey(), key);
+    }
+
+    /**
+     * 获取当前redis库下所有对象
+     *
+     * @return
+     */
+    @Override
+    public List<SmsCodeVo> getAll() {
+        return hashOperations.values(getRedisKey());
+    }
+
+    /**
+     * 查询查询当前redis库下所有key
+     *
+     * @return
+     */
+    @Override
+    public Set<String> getKeys() {
+        return hashOperations.keys(getRedisKey());
+    }
+
+    /**
+     * 判断key是否存在redis中
+     *
+     * @param key 传入key的名称
+     * @return
+     */
+    @Override
+    public boolean isKeyExists(String key) {
+        return hashOperations.hasKey(getRedisKey(), key);
+    }
+
+    /**
+     * 查询当前key下缓存数量
+     *
+     * @return
+     */
+    @Override
+    public long count() {
+        return hashOperations.size(getRedisKey());
+    }
+
+    /**
+     * 清空redis
+     */
+    @Override
+    public void empty() {
+        Set<String> set = hashOperations.keys(getRedisKey());
+        set.stream().forEach(key -> hashOperations.delete(getRedisKey(), key));
     }
 }

@@ -24,7 +24,9 @@ public interface IAuthService {
      * @param password 密码或者验证码
      * @return
      */
-    String login(String username, String password);
+    String loginByPassword(String username, String password);
+
+    String loginBySmsCode(String mobilePhone, String smsCode);
 
 
     /**

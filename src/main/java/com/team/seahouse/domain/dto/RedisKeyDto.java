@@ -1,7 +1,6 @@
-package com.team.seahouse.domain.Dto;
+package com.team.seahouse.domain.dto;
 
 import com.team.seahouse.commons.base.BaseDomain;
-import com.team.seahouse.domain.Vo.ValidateCodeVo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +22,5 @@ public class RedisKeyDto extends BaseDomain {
     /**
      * 值
      */
-    private ValidateCodeVo values;
+    private Object values;
 }

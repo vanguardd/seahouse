@@ -1,4 +1,4 @@
-package com.team.seahouse.domain.Vo;
+package com.team.seahouse.domain.vo;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.serializer.support.DeserializingConverter;
@@ -7,13 +7,13 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
 /**
+ * @title 自定义Redis对象序列化
+ * @describe
  * @author vanguard
  * @version 1.0
- * @title
- * @describe
- * @date 2018/07/16
+ * @date 18/7/17
  */
-public class RedisObjectSerializer implements RedisSerializer {
+public class RedisObjectSerializer implements RedisSerializer<Object> {
     private Converter<Object, byte[]> serializer = new SerializingConverter();
     private Converter<byte[], Object> deserializer = new DeserializingConverter();
 

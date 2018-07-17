@@ -3,14 +3,16 @@ package com.team.seahouse.commons.auth;
 
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
+import com.team.seahouse.commons.security.SmsCodeAuthenticationToken;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
-import com.team.seahouse.domain.Vo.JwtUser;
+import com.team.seahouse.domain.vo.JwtUser;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.repository.UserInfoRepository;
 import com.team.seahouse.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -83,20 +85,24 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public String login(String username, String password) throws ValidateException {
+    public String loginByPassword(String username, String password) throws ValidateException {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
         try {
-            // Perform the security
-            final Authentication authentication = authenticationManager.authenticate(upToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            // Reload password post-security so we can generate token
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            final String token = jwtTokenUtil.generateToken(userDetails);
-            return token;
+            return authenticateToken(upToken, username);
         } catch (ValidateException e) {
             throw new ValidateException(e.getCode(), e.getMessage());
         }
 
+    }
+
+    @Override
+    public String loginBySmsCode(String mobilePhone, String smsCode) {
+        SmsCodeAuthenticationToken upToken = new SmsCodeAuthenticationToken(mobilePhone, smsCode);
+        try {
+            return authenticateToken(upToken, mobilePhone);
+        } catch (ValidateException e) {
+            throw new ValidateException(e.getCode(), e.getMessage());
+        }
     }
 
     @Override
@@ -108,5 +114,23 @@ public class AuthServiceImpl implements IAuthService {
             return jwtTokenUtil.refreshToken(token);
         }
         return null;
+    }
+
+    /**
+     * 验证认证逻辑并生成Token
+     * @param upToken
+     * @param username
+     * @return
+     */
+    public String authenticateToken(AbstractAuthenticationToken upToken, String username) {
+        //验证认证逻辑
+        final Authentication authentication = authenticationManager.authenticate(upToken);
+        //将Authentication存入SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        //根据用户名查询用户信息
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        //生成Token
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        return token;
     }
 }

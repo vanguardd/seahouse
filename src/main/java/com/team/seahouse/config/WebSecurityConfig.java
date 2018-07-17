@@ -1,6 +1,9 @@
-package com.team.seahouse.commons.security;
+package com.team.seahouse.config;
 
 import com.team.seahouse.commons.filter.*;
+import com.team.seahouse.commons.security.CustomAuthenticationProvider;
+import com.team.seahouse.commons.security.SmsCodeAuthenticationProvider;
+import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/auth/**"
+            "/auth/**",
+            "/sms/**"
     };
 
     @Autowired
@@ -47,6 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private ISmsSenderService smsSenderService;
+
+    @Autowired
+    private IRedisService redisService;
 
     /**
      * 装载BCrypt密码编码器
@@ -94,7 +101,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.authenticationProvider(new CustomAuthenticationProvider(userDetailsService, passwordEncoder()))
-                .authenticationProvider(new ValidateCodeAuthenticationProvider(userDetailsService, smsSenderService));
+        auth.authenticationProvider(new SmsCodeAuthenticationProvider(userDetailsService, smsSenderService,
+                redisService)).
+                authenticationProvider(new CustomAuthenticationProvider(userDetailsService, passwordEncoder()));
     }
 }
