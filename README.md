@@ -5,8 +5,10 @@
 
 #### 软件架构
 软件架构说明
-架构：SSM、MAVEN
-开发工具：Intellj IDEA
+架构：
+Spring Boot + Spring Data Jpa + Spring Security + Jwt + Redis
+
+开发工具：Intellj IDEA 
 
 #### 安装教程
 
