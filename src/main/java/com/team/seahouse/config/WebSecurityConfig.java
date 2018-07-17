@@ -52,9 +52,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ISmsSenderService smsSenderService;
 
-    @Autowired
-    private IRedisService redisService;
-
     /**
      * 装载BCrypt密码编码器
      * @return PasswordEncoder 密码解码器
@@ -101,8 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.authenticationProvider(new SmsCodeAuthenticationProvider(userDetailsService, smsSenderService,
-                redisService)).
+        auth.authenticationProvider(new SmsCodeAuthenticationProvider(userDetailsService, smsSenderService)).
                 authenticationProvider(new CustomAuthenticationProvider(userDetailsService, passwordEncoder()));
     }
 }

@@ -3,6 +3,7 @@ package com.team.seahouse.controller;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
+import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.service.ISmsSenderService;
 import io.swagger.annotations.Api;
@@ -35,5 +36,15 @@ public class SmsSender {
             return new Response(e.getCode(), e.getMessage());
         }
         return new Response(CommonReturnCode.OK);
+    }
+
+    @PostMapping("/checkSmsCode")
+    @ApiOperation(value = "校验短信验证码", notes = "校验短信验证码")
+    public Response checkSmsCode(String mobilePhone, String smsCode) {
+        boolean isCorrectCode = smsSenderService.checkIsCorrectCode(mobilePhone, smsCode);
+        if(!isCorrectCode) {
+            return new Response(UserReturnCode.REGISTER_CODE_ERROR);
+        }
+        return new Response(CommonReturnCode.SUCCESS);
     }
 }

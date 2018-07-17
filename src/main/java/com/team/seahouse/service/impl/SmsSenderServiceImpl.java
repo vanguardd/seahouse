@@ -102,10 +102,12 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
 
     @Override
     public boolean checkIsCorrectCode(String phone, String code) {
-        RedisKeyDto redisKeyDto=new RedisKeyDto();
+        RedisKeyDto redisKeyDto = new RedisKeyDto();
         redisKeyDto.setKeys(phone);
         SmsCodeVo result= (SmsCodeVo) redisService.get(redisKeyDto.getKeys());
-        if (result!=null && result.getValidateCode().equals(String.valueOf(code))) {
+        if(result != null && result.getValidateCode().equals(String.valueOf(code))) {
+            //验证成功后，手动删除redis中的验证码
+            redisService.remove(phone);
             return true;
         }
         return false;

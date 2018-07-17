@@ -33,17 +33,11 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
      */
     private UserDetailsService userDetailsService;
 
-    /**
-     * redis服务
-     */
-    private IRedisService redisService;
 
     public SmsCodeAuthenticationProvider(UserDetailsService userDetailsService,
-                                         ISmsSenderService smsSenderService,
-                                         IRedisService redisService) {
+                                         ISmsSenderService smsSenderService) {
         this.smsSenderService = smsSenderService;
         this.userDetailsService = userDetailsService;
-        this.redisService = redisService;
     }
 
     @Override
@@ -57,8 +51,6 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             boolean isCorrectCode = smsSenderService.checkIsCorrectCode(username, validateCode);
             if(isCorrectCode) {
                 Authentication auth = new SmsCodeAuthenticationToken(username, validateCode);
-                //验证成功后，手动删除redis中的验证码
-                redisService.remove(username);
                 return auth;
             } else {
                 throw new ValidateException(UserReturnCode.REGISTER_CODE_ERROR);

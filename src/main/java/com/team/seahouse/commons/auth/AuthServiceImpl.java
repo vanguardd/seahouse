@@ -8,6 +8,7 @@ import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.domain.vo.JwtUser;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.domain.vo.UserVo;
 import com.team.seahouse.repository.UserInfoRepository;
 import com.team.seahouse.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,27 +59,37 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public User register(User userToAdd) throws ValidateException {
+    public User register(UserVo userToAdd) throws ValidateException {
         final String mobilePhone = userToAdd.getMobilePhone();
         if(userRepository.findByMobilePhone(mobilePhone) != null) {
             throw new ValidateException(UserReturnCode.ACCOUNT_ERROR.getStatus(), UserReturnCode.ACCOUNT_ERROR.getMessage());
         }
+        //创建用户对象，并设置用户登录信息
+        User user = new User();
+        user.setMobilePhone(mobilePhone);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
-        userToAdd.setPassword(encoder.encode(rawPassword));
-        userToAdd.setLastPasswordResetDate(new Date());
+        user.setPassword(encoder.encode(rawPassword));
+        user.setLastPasswordResetDate(new Date());
+        user.setUserName(userToAdd.getUsername());
 
-        //添加注册用户
-        User registerUser = userRepository.save(userToAdd);
+        //保存用户登录信息
+        User registerUser = userRepository.save(user);
 
-        //添加用户详细信息
+        //创建用户详细信息，并设置详细信息
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(registerUser.getUserId());
         userInfo.setUserName(registerUser.getUserName());
         userInfo.setMobilePhone(registerUser.getMobilePhone());
         userInfo.setEmail(registerUser.getEmail());
+        userInfo.setAvatar(userToAdd.getAvatar());
+        userInfo.setSex(userToAdd.getSex());
+        userInfo.setBornDate(userToAdd.getBornDate());
+        userInfo.setCompanyAddress(userToAdd.getCompanyAddress());
         userInfo.setCreateDate(new Date());
         userInfo.setUpdateDate(new Date());
+
+        //保存用户详细信息
         userInfoRepository.save(userInfo);
 
         return registerUser;

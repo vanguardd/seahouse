@@ -9,6 +9,7 @@ import com.team.seahouse.commons.security.*;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.vo.JwtAuthVo;
+import com.team.seahouse.domain.vo.UserVo;
 import com.team.seahouse.service.ISmsSenderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +41,7 @@ public class AuthController extends BaseController {
 
     /**
      * @title 登录接口
-     * @describe 包括密码登录和短信验证码登录
+     * @describe 包括密码登录
      * @author vanguard
      * @version 1.0
      * @date 18/7/17
@@ -60,7 +61,7 @@ public class AuthController extends BaseController {
 
     /**
      * @title 登录接口
-     * @describe 包括密码登录和短信验证码登录
+     * @describe 短信验证码登录
      * @author vanguard
      * @version 1.0
      * @date 18/7/17
@@ -97,13 +98,13 @@ public class AuthController extends BaseController {
 
     /**
      * 注册
-     * @param addedUser
+     * @param userVo
      * @return
      */
     @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
-    public Response register(@RequestBody User addedUser) {
+    public Response register(@RequestBody UserVo userVo) {
         try {
-            User user = authService.register(addedUser);
+            User user = authService.register(userVo);
             return new Response(CommonReturnCode.OK, user);
         } catch(ValidateException e) {
             LoggerUtils.error(AuthController.class, e.getMessage(), e);

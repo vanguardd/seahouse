@@ -1,6 +1,7 @@
 package com.team.seahouse.commons.auth;
 
 import com.team.seahouse.domain.User;
+import com.team.seahouse.domain.vo.UserVo;
 
 /**
  * @title Auth Service接口
@@ -15,17 +16,24 @@ public interface IAuthService {
      * @param userToAdd
      * @return
      */
-    User register(User userToAdd);
+    User register(UserVo userToAdd);
 
     /**
      * 登录业务
-     * 包含密码登录、短信验证码登录和第三方登录
+     * 包含密码登录
      * @param username 手机号、邮箱等
-     * @param password 密码或者验证码
+     * @param password 密码
      * @return
      */
     String loginByPassword(String username, String password);
 
+    /**
+     * 登录业务
+     * 短信验证码登录
+     * @param mobilePhone 手机号
+     * @param smsCode 邮箱
+     * @return
+     */
     String loginBySmsCode(String mobilePhone, String smsCode);
 
 
