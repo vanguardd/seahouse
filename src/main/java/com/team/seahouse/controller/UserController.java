@@ -50,7 +50,8 @@ public class UserController extends BaseController {
         try {
             userInfo = getUserInfo();
         } catch (BusinessException e) {
-            return new Response(CommonReturnCode.BAD_REQUEST);
+            LoggerUtils.error(UserController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
         }
         return new Response(CommonReturnCode.OK, userInfo);
     }
@@ -63,8 +64,10 @@ public class UserController extends BaseController {
     @ApiOperation(value = "更新用户信息", notes = "修改用户信息接口")
     @PostMapping("/userInfo/update")
     public Response updateUserInfo(@RequestBody UserInfo userInfo) {
+        //从登陆Token中获得用户编号，并设置到userInfo中
         UserInfo updateUserInfo = null;
         try {
+            //执行更新操作
             updateUserInfo = userService.updateUserInfo(userInfo);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
@@ -79,9 +82,15 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新头像", notes = "将上传头像后的URL保存到数据库中")
-    @PostMapping("/userInfo/updateAvatar")
+    @PostMapping("/userInfo/avatar/update")
     public Response updateAvatar(String avatarPath) {
-        UserInfo userInfo = getUserInfo();
+        UserInfo userInfo = null;
+        try {
+            userInfo = getUserInfo();
+        } catch (BusinessException e) {
+            LoggerUtils.error(UserController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
         userInfoRepository.setAvatar(avatarPath, userInfo.getUserId());
         return new Response(CommonReturnCode.OK);
     }
@@ -92,16 +101,20 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新昵称", notes = "新增、修改昵称接口")
-    @PostMapping("userInfo/updateUserName")
+    @PostMapping("/userInfo/userName/update")
     public Response updateUserName(String userName) {
+        //昵称最大长度
         Integer userNameLengthLimit = 12;
         User user = getUser();
-        if(userName.equals(user.getUserName())) {
+        if(null != user.getUserName() && userName.equals(user.getUserName())) {
+            LoggerUtils.error(UserController.class, UserReturnCode.USERNAME_SAME.getMessage());
             return new Response(UserReturnCode.USERNAME_SAME);
         }
         if(userName.length() > userNameLengthLimit) {
+            LoggerUtils.error(UserController.class, UserReturnCode.USERNAME_LENGTH_LIMIT.getMessage());
             return new Response(UserReturnCode.USERNAME_LENGTH_LIMIT);
         }
+        userRepository.setUsername(userName, user.getUserId());
         userInfoRepository.setUserName(userName, user.getUserId());
         return new Response(CommonReturnCode.OK);
     }

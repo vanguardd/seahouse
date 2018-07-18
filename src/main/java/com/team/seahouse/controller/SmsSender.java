@@ -5,6 +5,7 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.domain.vo.SmsCodeVo;
 import com.team.seahouse.service.ISmsSenderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,9 +27,9 @@ public class SmsSender {
     @Autowired
     private ISmsSenderService smsSenderService;
 
-    @PostMapping("/sendMessage")
+    @PostMapping("/sendMessage/{mobilePhone}")
     @ApiOperation(value = "发送短信验证码的接口", notes = "发送短信验证码的接口")
-    public Response sendMessage(@RequestParam("mobile") String mobilePhone) {
+    public Response sendMessage(@PathVariable("mobilePhone") String mobilePhone) {
         try {
             smsSenderService.sendMessage(mobilePhone);
         } catch (BusinessException e) {
@@ -40,8 +41,8 @@ public class SmsSender {
 
     @PostMapping("/checkSmsCode")
     @ApiOperation(value = "校验短信验证码", notes = "校验短信验证码")
-    public Response checkSmsCode(String mobilePhone, String smsCode) {
-        boolean isCorrectCode = smsSenderService.checkIsCorrectCode(mobilePhone, smsCode);
+    public Response checkSmsCode(@RequestBody SmsCodeVo smsCodeVo) {
+        boolean isCorrectCode = smsSenderService.checkIsCorrectCode(smsCodeVo.getMobilePhone(), smsCodeVo.getValidateCode());
         if(!isCorrectCode) {
             return new Response(UserReturnCode.REGISTER_CODE_ERROR);
         }

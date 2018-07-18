@@ -71,7 +71,7 @@ public class AuthServiceImpl implements IAuthService {
         final String rawPassword = userToAdd.getPassword();
         user.setPassword(encoder.encode(rawPassword));
         user.setLastPasswordResetDate(new Date());
-        user.setUserName(userToAdd.getUsername());
+        user.setUserName(userToAdd.getUserName());
 
         //保存用户登录信息
         User registerUser = userRepository.save(user);
@@ -96,10 +96,10 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public String loginByPassword(String username, String password) throws ValidateException {
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
+    public String loginByPassword(String userName, String password) throws ValidateException {
+        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(userName, password);
         try {
-            return authenticateToken(upToken, username);
+            return authenticateToken(upToken, userName);
         } catch (ValidateException e) {
             throw new ValidateException(e.getCode(), e.getMessage());
         }
@@ -119,8 +119,8 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public String refresh(String oldToken) {
         final String token = oldToken.substring(tokenHead.length());
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        String userName = jwtTokenUtil.getUsernameFromToken(token);
+        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(userName);
         if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
             return jwtTokenUtil.refreshToken(token);
         }
@@ -130,16 +130,16 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * 验证认证逻辑并生成Token
      * @param upToken
-     * @param username
+     * @param userName
      * @return
      */
-    public String authenticateToken(AbstractAuthenticationToken upToken, String username) {
+    public String authenticateToken(AbstractAuthenticationToken upToken, String userName) {
         //验证认证逻辑
         final Authentication authentication = authenticationManager.authenticate(upToken);
         //将Authentication存入SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //根据用户名查询用户信息
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
         //生成Token
         final String token = jwtTokenUtil.generateToken(userDetails);
         return token;

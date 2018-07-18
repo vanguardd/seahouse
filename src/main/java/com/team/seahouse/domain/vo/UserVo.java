@@ -24,7 +24,7 @@ public class UserVo extends BaseDomain {
     /**
      * 昵称
      */
-    private String username;
+    private String userName;
 
     /**
      * 密码

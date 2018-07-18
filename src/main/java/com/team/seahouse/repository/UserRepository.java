@@ -2,6 +2,7 @@ package com.team.seahouse.repository;
 
 import com.team.seahouse.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 /**
@@ -39,4 +40,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return
      */
     User findByUserId(Long userId);
+
+    /**
+     * 根据用户编号更新昵称
+     * @param userName
+     * @param userId
+     * @return
+     */
+    @Query("update User set userName=:userName where userId=:userId")
+    int setUsername(String userName, Long userId);
 }

@@ -13,13 +13,11 @@ import java.util.Date;
 import java.util.Random;
 
 /**
- * 
-* 项目名称：morning-common   
-* 类名称：UploadManager   
-* 类描述：文件上传支持类     
-* 创建人：陈星星   
-* 创建时间：2017年4月10日 上午3:24:42   
-*
+ * @title 文件上传支持类
+ * @describe
+ * @author vanguard
+ * @version 1.0
+ * @date 18/7/18
  */
 public class UploadManager {
 
