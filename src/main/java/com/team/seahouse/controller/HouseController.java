@@ -27,9 +27,6 @@ public class HouseController extends BaseController {
     @Autowired
     private IHouseService houseService;
 
-    @Autowired
-    private HouseRepository houseRepository;
-
     /**
      * 发布出租房屋信息
      * @param house
@@ -55,7 +52,7 @@ public class HouseController extends BaseController {
     @ApiOperation(value = "查看房屋详情", notes = "查看房屋详情接口")
     public Response detail(@PathVariable("houseId") Long houseId) {
         try {
-            House house = houseRepository.findByHouseId(houseId);
+            House house = houseService.findByHouseId(houseId);
             return new Response(CommonReturnCode.OK, house);
         } catch (Exception e) {
             return new Response(CommonReturnCode.INTERNAL_SERVER_ERROR);

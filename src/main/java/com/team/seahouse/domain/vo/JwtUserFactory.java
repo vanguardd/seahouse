@@ -19,7 +19,8 @@ public class JwtUserFactory {
                 user.getUserId(),
                 user.getUserName(),
                 user.getPassword(),
-                user.getLastPasswordResetDate()
+                user.getLastPasswordResetDate(),
+                user.getState()
         );
     }
 }

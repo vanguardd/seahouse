@@ -28,5 +28,9 @@ public interface IReservationService {
      */
     List<Reservation> findReservations(Long userId, Pageable pageable);
 
+    /**
+     * 修改预约看房信息
+     * @param reservation
+     */
     void update(Reservation reservation);
 }

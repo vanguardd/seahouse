@@ -1,6 +1,7 @@
 package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team.seahouse.commons.enums.StatusEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,12 +21,14 @@ public class JwtUser implements UserDetails {
     private final String userName;
     private final String password;
     private Date lastPasswordResetDate;
+    private Integer state;
 
-    public JwtUser(Long id, String userName, String password, Date lastPasswordResetDate) {
+    public JwtUser(Long id, String userName, String password, Date lastPasswordResetDate, Integer state) {
         this.userId = id;
         this.userName = userName;
         this.password = password;
         this.lastPasswordResetDate = lastPasswordResetDate;
+        this.state = state;
     }
 
     @Override
@@ -59,6 +62,9 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
+        if(state.equals(StatusEnum.FREEZE)) {
+            return false;
+        }
         return true;
     }
 

@@ -12,12 +12,11 @@ spring:
       # Redis服务器连接密码（默认为空）
       password:
       key: "sea-house"
+      REDIS_TRACK_PRE: "TRACK"
     mail:
       host: "smtp.163.com"
       username: "vanguardd@163.com"
       password: "vanguard950124"
-      properties:
-
 
 jwt:
   header: Authorization

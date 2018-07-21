@@ -1,7 +1,10 @@
 package com.team.seahouse.repository;
 
 import com.team.seahouse.domain.House;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 /**
  * @title 房屋模块
@@ -18,4 +21,12 @@ public interface HouseRepository extends JpaRepository<House, Long> {
      * @return
      */
     House findByHouseId(Long houseId);
+
+    /**
+     * 根据房屋编号查询出租房屋信息列表
+     * @param houseIds
+     * @param pageable
+     * @return
+     */
+    List<House> findByHouseIdIn(List<Long> houseIds, Pageable pageable);
 }

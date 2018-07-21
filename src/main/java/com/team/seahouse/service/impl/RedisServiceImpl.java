@@ -22,12 +22,13 @@ import java.util.concurrent.TimeUnit;
  * @date 18/7/16
  */
 @Service
-public class RedisServiceImpl implements IRedisService<SmsCodeVo> {
+public class RedisServiceImpl<Object> implements IRedisService<Object> {
 
-    @Autowired
-    protected RedisTemplate<String, Object> redisTemplate;
     @Resource
-    protected HashOperations<String, String, SmsCodeVo> hashOperations;
+    protected RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
+    protected HashOperations<String, String, Object> hashOperations;
 
     @Value("${spring.redis.key}")
     private String REDIS_KEY;
@@ -49,7 +50,7 @@ public class RedisServiceImpl implements IRedisService<SmsCodeVo> {
      * @param expire 过期时间(单位:秒),传入 -1 时表示不设置过期时间
      */
     @Override
-    public void put(String key, SmsCodeVo domain, long expire) {
+    public void put(String key, Object domain, long expire) {
         hashOperations.put(getRedisKey(), key, domain);
         if (expire != -1) {
             redisTemplate.expire(getRedisKey(), expire, TimeUnit.SECONDS);
@@ -73,7 +74,7 @@ public class RedisServiceImpl implements IRedisService<SmsCodeVo> {
      * @return
      */
     @Override
-    public SmsCodeVo get(String key) {
+    public Object get(String key) {
         return hashOperations.get(getRedisKey(), key);
     }
 
@@ -83,7 +84,7 @@ public class RedisServiceImpl implements IRedisService<SmsCodeVo> {
      * @return
      */
     @Override
-    public List<SmsCodeVo> getAll() {
+    public List<Object> getAll() {
         return hashOperations.values(getRedisKey());
     }
 

@@ -17,8 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.HtmlUtils;
 
 /**
- * @title 文件上传表示层控制器
- * @describe
+ * @title 文件上传接口
+ * @describe 文件上传接口
  * @author vanguard
  * @version 1.0
  * @date 18/7/16

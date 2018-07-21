@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @title 发送短信接口
- * @describe
+ * @describe 发送短信接口
  * @author vanguard
  * @version 1.0
  * @date 18/7/16

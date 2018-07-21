@@ -66,3 +66,12 @@ spring:
   cache:
     type: redis
 
+  mail:
+    properties:
+      mail:
+        stmp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+

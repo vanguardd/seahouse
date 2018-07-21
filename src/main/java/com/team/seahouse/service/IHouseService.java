@@ -23,4 +23,10 @@ public interface IHouseService {
      */
     void update(House house);
 
+    /**
+     * 根据房屋编号查询出租房屋信息详情
+     * @param houseId
+     * @return
+     */
+    House findByHouseId(Long houseId);
 }

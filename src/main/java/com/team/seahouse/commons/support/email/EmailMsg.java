@@ -3,6 +3,7 @@ package com.team.seahouse.commons.support.email;
 import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
+import org.thymeleaf.context.Context;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -37,11 +38,11 @@ public class EmailMsg extends BaseDomain {
 	/**
 	 * velocity模版
 	 */
-	private String velocityTemplate;
+	private String thymeleafTemplate;
 	/**
 	 * 声明Map对象，并填入用来填充模板文件的键值对
 	 */
-	private Map<String, Object> model;
+	private Context context;
 	/**
 	 * 邮件中的图片，为空时无图片。map中的key为图片ID，value为图片地址
 	 */

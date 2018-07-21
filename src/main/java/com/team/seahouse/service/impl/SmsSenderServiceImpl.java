@@ -36,7 +36,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     private Integer expireTime;
 
     @Resource
-    private IRedisService redisService;
+    private IRedisService<SmsCodeVo> redisService;
 
     @Autowired
     private UserRepository userRepository;

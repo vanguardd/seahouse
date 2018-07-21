@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/reservation")
-@Api(value = "预约看房接口", description = "预约看房接口")
+@Api(value = "预约看房模块接口", description = "预约看房接口")
 public class ReservationController extends BaseController {
 
     @Autowired
@@ -66,8 +67,10 @@ public class ReservationController extends BaseController {
     public Response getReservations(@PathVariable("userId") Long userId,
                                  @RequestParam(value = "page", defaultValue = "0") Integer page,
                                  @RequestParam(value = "size", defaultValue = "15") Integer size) {
+        //以创建时间降序排序
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        PageRequest pageable = new PageRequest(page, size, sort);
+        //封装分页对象
+        Pageable pageable = new PageRequest(page, size, sort);
         try {
             List<Reservation> reservations = reservationService.findReservations(userId, pageable);
             return new Response(CommonReturnCode.OK, reservations);

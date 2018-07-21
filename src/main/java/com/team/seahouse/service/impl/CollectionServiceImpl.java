@@ -1,0 +1,57 @@
+package com.team.seahouse.service.impl;
+
+import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.response.CommonReturnCode;
+import com.team.seahouse.domain.Collection;
+import com.team.seahouse.domain.House;
+import com.team.seahouse.repository.CollectionRepository;
+import com.team.seahouse.repository.HouseRepository;
+import com.team.seahouse.service.ICollectionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @Title: 收藏业务接口实现类
+ * @Description:
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 2018/07/21
+ */
+@Service
+public class CollectionServiceImpl implements ICollectionService {
+
+    @Autowired
+    private CollectionRepository collectionRepository;
+
+    @Autowired
+    private HouseRepository houseRepository;
+
+    @Override
+    public void add(Collection collection) {
+        //设置创建时间
+        collection.setCreateTime(new Date());
+        try {
+            collectionRepository.save(collection);
+        } catch (Exception e) {
+            throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<House> getMyCollections(Long userId, Pageable pageable) {
+        List<House> houseList = null;
+        try {
+            List<Long> houseIds = collectionRepository.findMyHouseIdByUserId(userId);
+            if(houseIds != null && houseIds.size() > 0) {
+                houseList = houseRepository.findByHouseIdIn(houseIds, pageable);
+            }
+        } catch (Exception e) {
+            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+        }
+        return houseList;
+    }
+}

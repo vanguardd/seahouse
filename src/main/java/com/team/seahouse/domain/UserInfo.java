@@ -72,11 +72,6 @@ public class UserInfo {
     private String companyAddress;
 
     /**
-     * 用户状态
-     */
-    private String state;
-
-    /**
      * 创建时间
      */
     private Date createDate;

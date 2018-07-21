@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @title 用户接口
- * @describe
+ * @title 用户模块接口
+ * @describe 用户模块接口
  * @author vanguard
  * @version 1.0
  * @date 18/7/14

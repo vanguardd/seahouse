@@ -3,14 +3,12 @@ package com.team.seahouse.commons.support.email;
 
 import com.team.seahouse.commons.utils.DateUtils;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import org.apache.velocity.app.VelocityEngine;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.ui.velocity.VelocityEngineUtils;
-
+import org.thymeleaf.TemplateEngine;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -21,22 +19,23 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * 
-* 项目名称：morning-common-provider   
-* 类名称：EmailSendManager   
-* 类描述：邮件发送支持类   
-* 创建人：陈星星   
-* 创建时间：2017年3月6日 下午10:40:59   
-*
+ * @Title: 邮件发送支持类
+ * @Description: 包含发送普通邮件、设置邮件附件和以thymeleaf模板发送邮件
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 18/7/21
  */
 @SuppressWarnings("deprecation")
 public class EmailSendManager {
 
-	ApplicationContext context = new FileSystemXmlApplicationContext("classpath:spring/applicationContext-mail.xml");
-	
-	JavaMailSenderImpl javaMailSender = (JavaMailSenderImpl) context.getBean("javaMailSender");
-	
-	VelocityEngine velocityEngine = (VelocityEngine) context.getBean("velocityEngine");
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+	@Value("${spring.mail.username}")
+	private String mailSenderAddress;
+
+	@Autowired
+	private TemplateEngine templateEngine;
 	
 	public boolean sendMail(EmailMsg emailMsg) {
 		try{
@@ -44,10 +43,10 @@ public class EmailSendManager {
 			MimeMessage mime = javaMailSender.createMimeMessage();
 			
 			//创建MimeMessageHelper对象，处理MimeMessage的辅助类  
-			MimeMessageHelper helper = new MimeMessageHelper(mime, true, javaMailSender.getDefaultEncoding());
+			MimeMessageHelper helper = new MimeMessageHelper(mime, true);
             
 			// 设置发件人邮箱
-            Address address = new InternetAddress(javaMailSender.getUsername(),emailMsg.getFromName());   
+            Address address = new InternetAddress(mailSenderAddress, emailMsg.getFromName());
             helper.setFrom((InternetAddress) address);
 			
             //设置收件人
@@ -88,6 +87,11 @@ public class EmailSendManager {
             }else {
                 helper.setSentDate(new Date());
             }
+
+            //设置thymeleaf为模板发送邮件
+            if(null != emailMsg.getThymeleafTemplate()) {
+            	this.sendWithTemplate(emailMsg, helper);
+			}
 
             // 发送邮件 
 			javaMailSender.send(mime);
@@ -141,19 +145,15 @@ public class EmailSendManager {
 	}
 
 	/**
-	 * 以velocity为模板发送邮件
+	 * 以thymeleaf为模板发送邮件
 	 * @param emailMsg
 	 * @param helper
 	 */
 	private void sendWithTemplate(EmailMsg emailMsg, MimeMessageHelper helper) {
 		try {
-			// Spring提供的VelocityEngineUtils将模板进行数据填充，并转换成普通的String对象
-			String emailText = VelocityEngineUtils.mergeTemplateIntoString(
-					velocityEngine,
-					"templates/" + emailMsg.getVelocityTemplate(),
-					javaMailSender.getDefaultEncoding(),
-					emailMsg.getModel());
-			helper.setText(emailText, true);
+			//获取thymeleaf的html模板
+			String emailContext = templateEngine.process(emailMsg.getThymeleafTemplate(), emailMsg.getContext());
+			helper.setText(emailContext, true);
 		} catch (Exception e) {
 			LoggerUtils.error(EmailSendManager.class, "EmailSendManager.sendWithTemplate={}", e);
 		}

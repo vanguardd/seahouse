@@ -52,4 +52,9 @@ public class User extends BaseDomain {
      */
     private Date lastPasswordResetDate;
 
+    /**
+     * 用户状态
+     */
+    private Integer state;
+
 }

@@ -6,6 +6,7 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.domain.House;
 import com.team.seahouse.repository.HouseRepository;
 import com.team.seahouse.service.IHouseService;
+import com.team.seahouse.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,9 @@ public class HouseServiceImpl implements IHouseService {
 
     @Autowired
     private HouseRepository houseRepository;
+
+    @Autowired
+    private IRedisService redisService;
 
     @Override
     public void publish(House house) {
@@ -49,6 +53,16 @@ public class HouseServiceImpl implements IHouseService {
             houseRepository.save(house);
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public House findByHouseId(Long houseId) {
+        try {
+            House house = houseRepository.findByHouseId(houseId);
+            return house;
+        } catch (Exception e) {
+            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }
     }
 }
