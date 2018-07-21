@@ -1,9 +1,16 @@
 package com.team.seahouse.service.impl;
 
+import com.team.seahouse.commons.enums.CommonEnum;
+import com.team.seahouse.commons.exception.ValidateException;
+import com.team.seahouse.commons.response.UserReturnCode;
+import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.dto.RedisKeyDto;
 import com.team.seahouse.domain.vo.SmsCodeVo;
+import com.team.seahouse.repository.UserRepository;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
+import com.team.seahouse.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +38,9 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     @Resource
     private IRedisService redisService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Value("${sms.host}")
     private String host;
     @Value("${sms.username}")
@@ -40,9 +50,22 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     @Value("${sms.apiKey}")
     private String apiKey;
 
-    @Transactional
+
+    @Transactional(rollbackFor = ValidateException.class)
     @Override
-    public String sendMessage(String phoneNumber) {
+    public String sendMessage(String phoneNumber, String type) {
+        User user = userRepository.findByMobilePhone(phoneNumber);
+        if(CommonEnum.REGISTER_TYPE.getType().equals(type)) {
+            if(user != null) {
+                throw new ValidateException(UserReturnCode.ACCOUNT_ERROR);
+            }
+        }
+        if(CommonEnum.LOGIN_TYPE.getType().equals(type)) {
+            if(user == null) {
+                throw new ValidateException(UserReturnCode.MOBILE_PHONE_NOT_EXIST);
+            }
+        }
+
         System.out.println(host);
         String code = getRandNum(6);
         System.out.println("验证码是:" + code);

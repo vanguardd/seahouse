@@ -1,6 +1,5 @@
 package com.team.seahouse.controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
@@ -15,7 +14,6 @@ import com.team.seahouse.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 /**

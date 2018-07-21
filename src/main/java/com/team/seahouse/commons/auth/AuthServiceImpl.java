@@ -1,6 +1,7 @@
 package com.team.seahouse.commons.auth;
 
 
+import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.security.SmsCodeAuthenticationToken;
@@ -22,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -58,6 +60,7 @@ public class AuthServiceImpl implements IAuthService {
         this.userInfoRepository = userInfoRepository;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public User register(UserVo userToAdd) throws ValidateException {
         final String mobilePhone = userToAdd.getMobilePhone();
@@ -74,7 +77,12 @@ public class AuthServiceImpl implements IAuthService {
         user.setUserName(userToAdd.getUserName());
 
         //保存用户登录信息
-        User registerUser = userRepository.save(user);
+        User registerUser = null;
+        try {
+            registerUser = userRepository.save(user);
+        } catch (Exception e) {
+            throw new ValidateException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
 
         //创建用户详细信息，并设置详细信息
         UserInfo userInfo = new UserInfo();

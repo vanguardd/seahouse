@@ -11,45 +11,52 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * @title 用户实体类
+ * @title 会员实体
  * @describe
  * @author vanguard
  * @version 1.0
- * @date 18/7/12
+ * @date 18/7/18
  */
-
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_member")
 @Getter@Setter
-public class User extends BaseDomain {
+public class Member extends BaseDomain {
 
+    /**
+     * 会员编号
+     */
     @Id
     @GeneratedValue
+    private Long memId;
+
+    /**
+     * 用户编号
+     */
     private Long userId;
 
     /**
-     * 昵称
+     * 会员类型
      */
-    private String userName;
+    private String memType;
 
     /**
-     * 手机号
+     * 状态
      */
-    private String mobilePhone;
+    private String state;
 
     /**
-     * 邮箱
+     * 创建时间
      */
-    private String email;
+    private Date createTime;
 
     /**
-     * 密码
+     * 到期时间
      */
-    private String password;
+    private Date endTime;
 
     /**
-     * 最近一次修改或重置密码的时间
+     * 更新时间
      */
-    private Date lastPasswordResetDate;
+    private Date updateTime;
 
 }

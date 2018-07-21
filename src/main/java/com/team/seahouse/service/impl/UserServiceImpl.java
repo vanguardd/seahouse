@@ -32,8 +32,7 @@ public class UserServiceImpl implements IUserService {
         try {
             save = userInfoRepository.save(userInfo);
         } catch (BusinessException e) {
-            throw new BusinessException(CommonReturnCode.REQUEST_TIMEOUT.getStatus(),
-                    CommonReturnCode.REQUEST_TIMEOUT.getMessage());
+            throw new BusinessException(CommonReturnCode.REQUEST_TIMEOUT);
         }
         return save;
     }

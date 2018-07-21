@@ -1,13 +1,11 @@
 package com.team.seahouse.commons.enums;
 
 /**
- * 
-* 项目名称：morning-common   
-* 类名称：StatusEnum   
-* 类描述：StatusEnum 状态枚举表述常量数据字段       
-* 创建人：陈星星   
-* 创建时间：2017年3月31日 下午12:57:39   
-*
+ * @title StatusEnum 状态枚举表述常量数据字段
+ * @describe StatusEnum 状态枚举表述常量数据字段
+ * @author vanguard
+ * @version 1.0
+ * @date 18/7/18
  */
 public enum StatusEnum {
 	
@@ -47,7 +45,12 @@ public enum StatusEnum {
 	OFF_SHELVE(0, "下架"),
 	
 	/** 全部*/
-	ALL(null, "全部");
+	ALL(null, "全部"),
+
+	/** 审核的状态 */
+	UN_AUDIT(0, "未审核"),
+
+	AUDITED(1, "已审核");
 	
 	private Integer status;
 

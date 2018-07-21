@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * @title Jwt鉴权视图对象
+ * @describe
  * @author vanguard
  * @version 1.0
- * @title
- * @describe
- * @date 2018/07/17
+ * @date 18/7/18
  */
 @Getter@Setter
 public class JwtAuthVo extends BaseDomain {
@@ -31,5 +31,4 @@ public class JwtAuthVo extends BaseDomain {
         this.setUserName(userName);
         this.setPassword(password);
     }
-
 }

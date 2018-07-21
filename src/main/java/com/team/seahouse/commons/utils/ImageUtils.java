@@ -40,7 +40,7 @@ public class ImageUtils {
 	 * @param src 源图片路径
 	 */
 	public void getImageSizeByImageReader(String src) {
-		long beginTime = new Date().getTime();
+		long beginTime = System.currentTimeMillis();
 		File file = new File(src);
 		try {
 			Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("jpg");

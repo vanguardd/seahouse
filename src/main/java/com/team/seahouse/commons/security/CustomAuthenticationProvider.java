@@ -45,6 +45,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 return auth;
             } else {
                 throw new ValidateException(UserReturnCode.WRONG_PASSWORD);
+
             }
         } catch (UsernameNotFoundException e) {
             throw new ValidateException(UserReturnCode.USER_NOT_EXIST);

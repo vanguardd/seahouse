@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
+ * @title 用户信息模块
+ * @describe
  * @author vanguard
  * @version 1.0
- * @title
- * @describe
- * @date 2018/07/13
+ * @date 18/7/18
  */
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
     /**

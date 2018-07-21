@@ -7,11 +7,11 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
+ * @title 用户试图对象
+ * @describe
  * @author vanguard
  * @version 1.0
- * @title
- * @describe
- * @date 2018/07/17
+ * @date 18/7/18
  */
 @Getter@Setter
 public class UserVo extends BaseDomain {

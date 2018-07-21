@@ -1,5 +1,6 @@
 package com.team.seahouse.commons.support.email;
 
+import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,19 +9,14 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * 
-* 项目名称：morning-common   
-* 类名称：EmailMsg   
-* 类描述：EmailMsg 表实体类      
-* 创建人：陈星星   
-* 创建时间：2017年4月8日 下午4:39:38   
-*
+ * @Title: 邮箱消息封装实体类
+ * @Description: 邮箱消息封装实体类
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 18/7/20
  */
-@Setter
-@Getter
-public class EmailMsg implements Serializable {
-	
-	private static final long serialVersionUID = -808318905357852929L;
+@Setter@Getter
+public class EmailMsg extends BaseDomain {
 
 	/**
 	 * 收件人邮箱，多个邮箱以“,”分隔

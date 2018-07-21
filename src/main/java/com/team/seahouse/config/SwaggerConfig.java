@@ -49,7 +49,7 @@ public class SwaggerConfig {
         pars.add(tokenPar.build());
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.team.seahouse.controller"))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/**"))
                 .build()
                 .globalOperationParameters(pars)

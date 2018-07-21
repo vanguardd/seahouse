@@ -12,6 +12,12 @@ spring:
       # Redis服务器连接密码（默认为空）
       password:
       key: "sea-house"
+    mail:
+      host: "smtp.163.com"
+      username: "vanguardd@163.com"
+      password: "vanguard950124"
+      properties:
+
 
 jwt:
   header: Authorization
@@ -41,4 +47,5 @@ sms:
   password: "vangaurd"
   apiKey: "key"
   expireTime: 600
+
 

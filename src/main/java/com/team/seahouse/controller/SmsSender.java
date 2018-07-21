@@ -1,6 +1,6 @@
 package com.team.seahouse.controller;
 
-import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
@@ -27,12 +27,19 @@ public class SmsSender {
     @Autowired
     private ISmsSenderService smsSenderService;
 
-    @PostMapping("/sendMessage/{mobilePhone}")
+    /**
+     * 发送验证码的接口
+     * @param mobilePhone 手机号
+     * @param type 发送验证码的类型：注册、登录和其他
+     * @return
+     */
+    @PostMapping("/sendMessage/{mobilePhone}/{type}")
     @ApiOperation(value = "发送短信验证码的接口", notes = "发送短信验证码的接口")
-    public Response sendMessage(@PathVariable("mobilePhone") String mobilePhone) {
+    public Response sendMessage(@PathVariable("mobilePhone") String mobilePhone,
+                                @PathVariable("type") String type) {
         try {
-            smsSenderService.sendMessage(mobilePhone);
-        } catch (BusinessException e) {
+            smsSenderService.sendMessage(mobilePhone, type);
+        } catch (ValidateException e) {
             LoggerUtils.error(SmsSender.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }

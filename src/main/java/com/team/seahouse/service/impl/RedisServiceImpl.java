@@ -45,12 +45,12 @@ public class RedisServiceImpl implements IRedisService<SmsCodeVo> {
      * 添加
      *
      * @param key    key
-     * @param doamin 对象
+     * @param domain 对象
      * @param expire 过期时间(单位:秒),传入 -1 时表示不设置过期时间
      */
     @Override
-    public void put(String key, SmsCodeVo doamin, long expire) {
-        hashOperations.put(getRedisKey(), key, doamin);
+    public void put(String key, SmsCodeVo domain, long expire) {
+        hashOperations.put(getRedisKey(), key, domain);
         if (expire != -1) {
             redisTemplate.expire(getRedisKey(), expire, TimeUnit.SECONDS);
         }

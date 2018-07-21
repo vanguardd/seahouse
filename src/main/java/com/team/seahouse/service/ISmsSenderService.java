@@ -11,10 +11,11 @@ public interface ISmsSenderService {
 
     /***
      * 发送验证码
-     * @param phoneName
+     * @param phoneNumber 手机号
+     * @param type 发送验证码的类型：登录、注册、其他
      * @return
      */
-    String sendMessage(String phoneName);
+    String sendMessage(String phoneNumber, String type);
 
     /**
      * 判断验证码是否正确
@@ -22,5 +23,5 @@ public interface ISmsSenderService {
      * @param code
      * @return
      */
-    boolean checkIsCorrectCode(String phone,String code);
+    boolean checkIsCorrectCode(String phone, String code);
 }
