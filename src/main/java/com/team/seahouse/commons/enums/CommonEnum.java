@@ -11,7 +11,14 @@ public enum  CommonEnum {
      * 发送短信验证码的类型
      */
     LOGIN_TYPE(1, "登录"),
-    REGISTER_TYPE(2, "注册");
+    REGISTER_TYPE(2, "注册"),
+
+    /**
+     * 出租房屋类型
+     */
+    ALL_TYPE(1, "整租"),
+    SHARE_TYPE(2, "合租");
+
 
     private Integer type;
 

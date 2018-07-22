@@ -100,6 +100,11 @@ public class House extends BaseDomain {
     private String introduce;
 
     /**
+     * 房屋类型1：整租,2:合租
+     */
+    private Integer type;
+
+    /**
      * 管家编号
      */
     private Long houseKeeperId;
@@ -128,6 +133,11 @@ public class House extends BaseDomain {
      * 审核状态
      */
     private Integer auditState;
+
+    /**
+     * 审核备注信息
+     */
+    private String remark;
 
     /**
      * 审核时间

@@ -11,8 +11,7 @@ spring:
       port: 6379
       # Redis服务器连接密码（默认为空）
       password:
-      key: "sea-house"
-      REDIS_TRACK_PRE: "TRACK"
+
     mail:
       host: "smtp.163.com"
       username: "vanguardd@163.com"
@@ -46,5 +45,8 @@ sms:
   password: "vangaurd"
   apiKey: "key"
   expireTime: 600
+
+REDIS_TRACKS_PRE: "TRACKS"
+REDIS_SMS_PRE: "SMS"
 
 

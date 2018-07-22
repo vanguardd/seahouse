@@ -8,9 +8,11 @@ import com.team.seahouse.repository.CollectionRepository;
 import com.team.seahouse.repository.HouseRepository;
 import com.team.seahouse.service.ICollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,11 +45,11 @@ public class CollectionServiceImpl implements ICollectionService {
 
     @Override
     public List<House> getMyCollections(Long userId, Pageable pageable) {
-        List<House> houseList = null;
+        List<House> houseList = new ArrayList<>();
         try {
-            List<Long> houseIds = collectionRepository.findMyHouseIdByUserId(userId);
-            if(houseIds != null && houseIds.size() > 0) {
-                houseList = houseRepository.findByHouseIdIn(houseIds, pageable);
+            Page<House> housePages = houseRepository.findCollectedHouseByUserId(userId, pageable);
+            for(House house : housePages) {
+                houseList.add(house);
             }
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);

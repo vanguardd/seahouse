@@ -50,7 +50,9 @@ public enum StatusEnum {
 	/** 审核的状态 */
 	UN_AUDIT(0, "未审核"),
 
-	AUDITED(1, "已审核");
+	AUDIT_PASS(1, "审核通过"),
+
+	AUDIT_FAIL(2, "审核未通过");
 	
 	private Integer status;
 

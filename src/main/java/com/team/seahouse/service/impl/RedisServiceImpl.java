@@ -1,12 +1,9 @@
 package com.team.seahouse.service.impl;
 
-import com.team.seahouse.domain.dto.RedisKeyDto;
-import com.team.seahouse.domain.vo.SmsCodeVo;
 import com.team.seahouse.service.IRedisService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @title Redis业务层接口实现
- * @describe
+ * @describe Redis业务层接口实现
  * @author vanguard
  * @version 1.0
  * @date 18/7/16
@@ -25,106 +22,83 @@ import java.util.concurrent.TimeUnit;
 public class RedisServiceImpl<Object> implements IRedisService<Object> {
 
     @Resource
-    protected RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    protected HashOperations<String, String, Object> hashOperations;
+    private ValueOperations<String, Object> valueOperations;
 
-    @Value("${spring.redis.key}")
-    private String REDIS_KEY;
+    @Resource
+    private HashOperations<String, String, Object> hashOperations;
 
-    /**
-     * 存入redis中的key
-     *
-     * @return
-     */
-    protected String getRedisKey() {
-        return this.REDIS_KEY;
-    }
 
-    /**
-     * 添加
-     *
-     * @param key    key
-     * @param domain 对象
-     * @param expire 过期时间(单位:秒),传入 -1 时表示不设置过期时间
-     */
     @Override
-    public void put(String key, Object domain, long expire) {
-        hashOperations.put(getRedisKey(), key, domain);
-        if (expire != -1) {
-            redisTemplate.expire(getRedisKey(), expire, TimeUnit.SECONDS);
-        }
+    public void set(String key, Object value) {
+        valueOperations.set(key, value);
     }
 
-    /**
-     * 删除
-     *
-     * @param key 传入key的名称
-     */
     @Override
-    public void remove(String key) {
-        hashOperations.delete(getRedisKey(), key);
+    public void set(String key, Object value, Long second) {
+        valueOperations.set(key, value, second, TimeUnit.SECONDS);
     }
 
-    /**
-     * 查询
-     *
-     * @param key 查询的key
-     * @return
-     */
     @Override
     public Object get(String key) {
-        return hashOperations.get(getRedisKey(), key);
+        return valueOperations.get(key);
     }
 
-    /**
-     * 获取当前redis库下所有对象
-     *
-     * @return
-     */
     @Override
-    public List<Object> getAll() {
-        return hashOperations.values(getRedisKey());
+    public Boolean exists(String key) {
+        return redisTemplate.hasKey(key);
     }
 
-    /**
-     * 查询查询当前redis库下所有key
-     *
-     * @return
-     */
     @Override
-    public Set<String> getKeys() {
-        return hashOperations.keys(getRedisKey());
+    public void expire(String key, Long seconds) {
+        redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
     }
 
-    /**
-     * 判断key是否存在redis中
-     *
-     * @param key 传入key的名称
-     * @return
-     */
     @Override
-    public boolean isKeyExists(String key) {
-        return hashOperations.hasKey(getRedisKey(), key);
+    public void del(String key) {
+        redisTemplate.delete(key);
     }
 
-    /**
-     * 查询当前key下缓存数量
-     *
-     * @return
-     */
     @Override
-    public long count() {
-        return hashOperations.size(getRedisKey());
+    public void hput(String key, String field, Object object) {
+        hashOperations.put(key, field, object);
     }
 
-    /**
-     * 清空redis
-     */
     @Override
-    public void empty() {
-        Set<String> set = hashOperations.keys(getRedisKey());
-        set.stream().forEach(key -> hashOperations.delete(getRedisKey(), key));
+    public Object hget(String key, String field) {
+        return hashOperations.get(key, field);
+    }
+
+    @Override
+    public List<Object> hvals(String key) {
+        return hashOperations.values(key);
+    }
+
+    @Override
+    public Set<String> hkeys(String key) {
+        return hashOperations.keys(key);
+    }
+
+    @Override
+    public void hdel(String key, String... field) {
+        hashOperations.delete(key, field);
+    }
+
+    @Override
+    public boolean hexists(String key, String field) {
+        return hashOperations.hasKey(key, field);
+    }
+
+    @Override
+    public long count(String key) {
+        return hashOperations.size(key);
+    }
+
+    @Override
+    public void empty(String key) {
+        Set<String> set = hashOperations.keys(key);
+        set.stream().forEach(hkey -> hashOperations.delete(key, hkey));
     }
 }

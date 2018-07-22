@@ -4,12 +4,10 @@ import com.team.seahouse.commons.enums.CommonEnum;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.domain.User;
-import com.team.seahouse.domain.dto.RedisKeyDto;
 import com.team.seahouse.domain.vo.SmsCodeVo;
 import com.team.seahouse.repository.UserRepository;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
-import com.team.seahouse.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,10 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
      * 短信验证码过期时间
      */
     @Value("${sms.expireTime}")
-    private Integer expireTime;
+    private Long expireTime;
+
+    @Value("${REDIS_SMS_PRE}")
+    private String REDIS_SMS_PRE;
 
     @Resource
     private IRedisService<SmsCodeVo> redisService;
@@ -116,21 +117,18 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         smsCodeVo.setValidateCode(code);
         smsCodeVo.setSendTime(new Date());
 
-        RedisKeyDto redisKeyDto=new RedisKeyDto();
-        redisKeyDto.setKeys(phoneNumber);
-        redisKeyDto.setValues(smsCodeVo);
-        redisService.put(redisKeyDto.getKeys(), smsCodeVo, expireTime);
+        redisService.set(REDIS_SMS_PRE + ":" + phoneNumber, smsCodeVo, expireTime);
         return sb.toString();
     }
 
     @Override
     public boolean checkIsCorrectCode(String phone, String code) {
-        RedisKeyDto redisKeyDto = new RedisKeyDto();
-        redisKeyDto.setKeys(phone);
-        SmsCodeVo result= (SmsCodeVo) redisService.get(redisKeyDto.getKeys());
+        //根据手机号获得存入redis中的验证码
+        SmsCodeVo result= redisService.get(REDIS_SMS_PRE + ":" + phone);
+        //校验验证码
         if(result != null && result.getValidateCode().equals(String.valueOf(code))) {
             //验证成功后，手动删除redis中的验证码
-            redisService.remove(phone);
+            redisService.del(REDIS_SMS_PRE + ":" + phone);
             return true;
         }
         return false;
@@ -140,7 +138,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
      * @param charCount
      * @return
      */
-    public String getRandNum(int charCount) {
+    private String getRandNum(int charCount) {
         String charValue = "";
         for (int i = 0; i < charCount; i++) {
             char c = (char) (randomInt(0, 10) + '0');
@@ -149,7 +147,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         return charValue;
     }
 
-    public int randomInt(int from, int to) {
+    private int randomInt(int from, int to) {
         Random r = new Random();
         return from + r.nextInt(to - from);
     }

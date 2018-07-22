@@ -12,62 +12,104 @@ import java.util.Set;
  */
 public interface IRedisService<T> {
 
-    /**
-     * 添加
-     *
-     * @param key    key
-     * @param doamin 对象
-     * @param expire 过期时间(单位:秒),传入 -1 时表示不设置过期时间
-     */
-    public void put(String key, T doamin, long expire);
 
     /**
-     * 删除
-     *
-     * @param key 传入key的名称
+     * 将对象value关联至key
+     * @param key
+     * @param value
      */
-    public void remove(String key);
+    public void set(String key, T value);
 
     /**
-     * 查询
-     *
-     * @param key 查询的key
+     * 将对象value关联至key,并设置过期时间
+     * @param key
+     * @param value
+     * @param second
+     */
+    public void set(String key, T value, Long second);
+
+    /**
+     * 获得key为key的value
+     * @param key
      * @return
      */
     public T get(String key);
 
     /**
-     * 获取当前redis库下所有对象
-     *
+     * 是否存在key的value
+     * @param key
      * @return
      */
-    public List<T> getAll();
+    public Boolean exists(String key);
 
     /**
-     * 查询查询当前redis库下所有key
-     *
-     * @return
+     * 设置key的过期时间
+     * @param key
+     * @param seconds
      */
-    public Set<String> getKeys();
+    public void expire(String key, Long seconds);
 
     /**
-     * 判断key是否存在redis中
-     *
-     * @param key 传入key的名称
-     * @return
+     * 删除key对应的数据
+     * @param key
      */
-    public boolean isKeyExists(String key);
+    public void del(String key);
 
     /**
-     * 查询当前key下缓存数量
-     *
+     * 在hash表中添加数据
+     * @param key    key
+     * @param field
+     * @param object 对象
+     */
+    public void hput(String key, String field, T object);
+
+    /**
+     * hash表查询
+     * @param key
+     * @param field
      * @return
      */
-    public long count();
+    public T hget(String key, String field);
+
+    /**
+     * 删除hash表key和field对应的数据
+     * @param key
+     * @param field
+     */
+    public void hdel(String key, String... field);
+
+    /**
+     * 查询hash表中key的所有对象
+     * @param key
+     * @return
+     */
+    public List<T> hvals(String key);
+
+    /**
+     * 查询hash表中key的所有field
+     * @param key
+     * @return
+     */
+    public Set<String> hkeys(String key);
+
+    /**
+     * hash表key中，是否存在给定field值
+     * @param key 存入的key值
+     * @param field 存入的field
+     * @return
+     */
+    public boolean hexists(String key, String field);
+
+    /**
+     * 查询hash表key的数量
+     * @param key
+     * @return
+     */
+    public long count(String key);
 
     /**
      * 清空redis
      */
-    public void empty();
+    public void empty(String key);
 }
 

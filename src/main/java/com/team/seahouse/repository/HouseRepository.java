@@ -1,8 +1,10 @@
 package com.team.seahouse.repository;
 
 import com.team.seahouse.domain.House;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -14,6 +16,10 @@ import java.util.List;
  * @date 18/7/18
  */
 public interface HouseRepository extends JpaRepository<House, Long> {
+
+    public String baseSql = "select h.houseId, h.title, h.images, h.firstAddress, h.price, h.rentWay, h.housePattern," +
+            "h.payWay, h.address, h.addressCoordinate, h.tags, h.disposition, h.area, h.exposition, h.introduce," +
+            "h.houseKeeperId, h.landlordId, h.landlordName, h.updateTime from House h, Collection c where h.houseId=c.houseId";
 
     /**
      * 根据房屋编号查询房屋信息
@@ -28,5 +34,14 @@ public interface HouseRepository extends JpaRepository<House, Long> {
      * @param pageable
      * @return
      */
-    List<House> findByHouseIdIn(List<Long> houseIds, Pageable pageable);
+    Page<House> findByHouseIdIn(List<Long> houseIds, Pageable pageable);
+
+    /**
+     * 根据用户编号查询收藏的房屋列表
+     * @param userId
+     * @param pageable
+     * @return
+     */
+    @Query(baseSql + " and c.userId=:userId")
+    Page<House> findCollectedHouseByUserId(Long userId, Pageable pageable);
 }
