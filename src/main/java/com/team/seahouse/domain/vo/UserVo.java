@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * @title 用户试图对象
+ * @title 用户对象
  * @describe
  * @author vanguard
  * @version 1.0

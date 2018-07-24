@@ -120,6 +120,11 @@ public class House extends BaseDomain {
     private String landlordName;
 
     /**
+     * 房东芝麻信用分
+     */
+    private Integer landLoardZhiMaScore;
+
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -130,9 +135,9 @@ public class House extends BaseDomain {
     private Date updateTime;
 
     /**
-     * 审核状态
+     * 房屋状态
      */
-    private Integer auditState;
+    private Integer state;
 
     /**
      * 审核备注信息

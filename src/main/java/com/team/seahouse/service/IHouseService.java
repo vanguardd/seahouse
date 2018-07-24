@@ -1,6 +1,10 @@
 package com.team.seahouse.service;
 
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.vo.QueryVo;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * @title 房屋业务接口
@@ -29,4 +33,21 @@ public interface IHouseService {
      * @return
      */
     House findByHouseId(Long houseId);
+
+    /**
+     * 房屋搜索功能
+     * 包含关键字搜索，筛选等功能
+     * @param queryVo
+     * @param pageable
+     * @return
+     */
+    List<House> search(QueryVo queryVo, Pageable pageable);
+
+    /**
+     * 根据类型查询房屋信息
+     * @param type
+     * @param pageable
+     * @return
+     */
+    List<House>  findByType(Integer type, Pageable pageable);
 }

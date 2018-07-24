@@ -23,4 +23,10 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
      */
     @Query("select houseId from Collection where userId=:userId")
     List<Long> findMyHouseIdByUserId(@Param("userId") Long userId);
+
+    /**
+     * 根据房屋编号删除收藏信息
+     * @param houseId
+     */
+    void deleteCollectionByHouseId(Long houseId);
 }

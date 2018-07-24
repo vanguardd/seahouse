@@ -51,9 +51,9 @@ public class CollectionController extends BaseController {
 
     @DeleteMapping("remove/{collectionId}")
     @ApiOperation(value = "取消收藏接口", notes = "取消收藏出租信息接口")
-    public Response remove(@PathVariable Long collectionId) {
+    public Response remove(@PathVariable Long houseId) {
         try {
-            collectionRepository.delete(collectionId);
+            collectionRepository.deleteCollectionByHouseId(houseId);
             return new Response(CommonReturnCode.SUCCESS);
         } catch (Exception e) {
             LoggerUtils.error(CollectionController.class, CommonReturnCode.FAILED.getMessage());

@@ -47,12 +47,16 @@ public enum StatusEnum {
 	/** 全部*/
 	ALL(null, "全部"),
 
-	/** 审核的状态 */
+	/** 审核状态 */
 	UN_AUDIT(0, "未审核"),
 
 	AUDIT_PASS(1, "审核通过"),
 
-	AUDIT_FAIL(2, "审核未通过");
+	AUDIT_FAIL(2, "审核未通过"),
+
+	FINISHED(3, "交易完成");
+
+
 	
 	private Integer status;
 

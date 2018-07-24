@@ -38,7 +38,7 @@ public class ZhimaAuth extends BaseDomain {
     /**
      * 芝麻信用分
      */
-    private Integer smScore;
+    private Integer zmScore;
 
     /**
      * 创建时间
