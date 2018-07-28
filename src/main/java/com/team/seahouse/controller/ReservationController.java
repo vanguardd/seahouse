@@ -5,15 +5,19 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.Reservation;
+import com.team.seahouse.domain.vo.Pages;
 import com.team.seahouse.repository.ReservationRepository;
 import com.team.seahouse.service.IReservationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,21 +62,16 @@ public class ReservationController extends BaseController {
     /**
      * 用户查看自己预约看房记录
      * @param userId
-     * @param page
-     * @param size
      * @return
      */
     @GetMapping("list/{userId}")
     @ApiOperation(value = "查询用户预约看房信息接口", notes = "根据用户编号查询预约看房信息")
     public Response getReservations(@PathVariable("userId") Long userId,
-                                 @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                 @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        //以创建时间降序排序
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        //封装分页对象
-        Pageable pageable = new PageRequest(page, size, sort);
+                                    @RequestBody Pages pages) {
+        //创建Pageable对象
+        Pageable pageable = PagesUtils.createPageRequest(pages);
         try {
-            List<Reservation> reservations = reservationService.findReservations(userId, pageable);
+            Page<Reservation> reservations = reservationService.findReservations(userId, pageable);
             return new Response(CommonReturnCode.OK, reservations);
         } catch (BusinessException e) {
             LoggerUtils.error(ReservationController.class, e.getMessage());

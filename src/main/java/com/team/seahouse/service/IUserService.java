@@ -1,7 +1,9 @@
 package com.team.seahouse.service;
 
+import com.team.seahouse.domain.IdentityAuth;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.domain.ZhiMaAuth;
 
 /**
  * @title 用户业务层接口
@@ -18,5 +20,17 @@ public interface IUserService {
      * @return
      */
     UserInfo updateUserInfo(UserInfo userInfo);
+
+    /**
+     * 芝麻信用认证
+     * @param zhiMaAuth
+     */
+    void zhiMaAuth(ZhiMaAuth zhiMaAuth);
+
+    /**
+     * 实名认证业务
+     * @param identityAuth
+     */
+    void identityAuth(IdentityAuth identityAuth);
 
 }

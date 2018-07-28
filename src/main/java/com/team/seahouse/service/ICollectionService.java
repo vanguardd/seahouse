@@ -2,6 +2,7 @@ package com.team.seahouse.service;
 
 import com.team.seahouse.domain.Collection;
 import com.team.seahouse.domain.House;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -23,7 +24,8 @@ public interface ICollectionService {
     /**
      * 查看我的收藏的出租房屋信息列表
      * @param userId
+     * @param pageable
      * @return
      */
-    List<House> getMyCollections(Long userId, Pageable pageable);
+    Page<House> getMyCollections(Long userId, Pageable pageable);
 }

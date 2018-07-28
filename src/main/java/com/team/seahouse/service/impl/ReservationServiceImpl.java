@@ -40,14 +40,10 @@ public class ReservationServiceImpl implements IReservationService {
     }
 
     @Override
-    public List<Reservation> findReservations(Long userId, Pageable pageable) {
+    public Page<Reservation> findReservations(Long userId, Pageable pageable) {
         try {
             Page<Reservation> reservationPage = reservationRepository.findAllByUserId(userId, pageable);
-            List<Reservation> reservationList = new ArrayList<>();
-            for(Reservation reservation : reservationPage) {
-                reservationList.add(reservation);
-            }
-            return reservationList;
+            return reservationPage;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }

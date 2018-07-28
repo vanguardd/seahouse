@@ -6,8 +6,11 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.domain.IdentityAuth;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.domain.ZhiMaAuth;
+import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.repository.UserInfoRepository;
 import com.team.seahouse.repository.UserRepository;
 import com.team.seahouse.service.IUserService;
@@ -44,14 +47,14 @@ public class UserController extends BaseController {
     @ApiOperation(value = "用户信息接口", notes = "获得用户信息接口")
     @GetMapping("/userInfo")
     public Response userInfo() {
-        UserInfo userInfo = null;
+        UserInfoVo userInfo = null;
         try {
             userInfo = getUserInfo();
+            return new Response(CommonReturnCode.OK, userInfo);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK, userInfo);
     }
 
     /**
@@ -67,11 +70,11 @@ public class UserController extends BaseController {
         try {
             //执行更新操作
             updateUserInfo = userService.updateUserInfo(userInfo);
+            return new Response(CommonReturnCode.OK, updateUserInfo);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK, updateUserInfo);
     }
 
     /**
@@ -82,15 +85,15 @@ public class UserController extends BaseController {
     @ApiOperation(value = "更新头像", notes = "将上传头像后的URL保存到数据库中")
     @PostMapping("/userInfo/avatar/update")
     public Response updateAvatar(String avatarPath) {
-        UserInfo userInfo = null;
         try {
-            userInfo = getUserInfo();
+            Long userId = getUserId();
+            userInfoRepository.setAvatar(avatarPath, userId);
+            return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
-        userInfoRepository.setAvatar(avatarPath, userInfo.getUserId());
-        return new Response(CommonReturnCode.OK);
+
     }
 
     /**
@@ -117,4 +120,35 @@ public class UserController extends BaseController {
         return new Response(CommonReturnCode.OK);
     }
 
+    /**
+     * 芝麻信用认证接口
+     * @param zhiMaAuth
+     * @return
+     */
+    @ApiOperation(value = "芝麻信用认证", notes = "芝麻信用认证接口")
+    @PostMapping("/user/zhiMa/auth")
+    public Response zhiMaAuth(@RequestBody ZhiMaAuth zhiMaAuth) {
+        try {
+            userService.zhiMaAuth(zhiMaAuth);
+            return new Response(CommonReturnCode.OK);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 实名认证接口
+     * @param identityAuth
+     * @return
+     */
+    @PostMapping("/user/identity/auth")
+    @ApiOperation(value = "实名认证接口", notes = "实名认证接口")
+    public Response identityAuth(@RequestBody IdentityAuth identityAuth) {
+        try {
+            userService.identityAuth(identityAuth);
+            return new Response(CommonReturnCode.OK);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
 }

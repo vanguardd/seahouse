@@ -21,7 +21,7 @@ import java.util.Date;
 @Entity
 @Table(name = "tb_zhima_auth")
 @Getter@Setter
-public class ZhimaAuth extends BaseDomain {
+public class ZhiMaAuth extends BaseDomain {
 
     /**
      * 芝麻编号

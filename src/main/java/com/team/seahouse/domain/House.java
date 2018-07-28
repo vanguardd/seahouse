@@ -34,35 +34,145 @@ public class House extends BaseDomain {
      */
     private String title;
 
+    /******* 认证材料 1、房产证 type=1***********/
     /**
-     * 轮播图片
+     * 房产证照片
      */
-    private String images;
+    private String propertyCardImages;
 
     /**
-     * 一级地址
+     * 房产证号
      */
-    private String firstAddress;
+    private String propertyCardId;
 
     /**
-     * 价格
+     * 房地产权人
      */
-    private BigDecimal price;
+    private String propertyCarder;
 
     /**
-     * 租房方式
+     * 房屋使用起始日期
      */
-    private String rentWay;
+    private Date startDate;
+
+    /******* 认证材料 2、租赁合同 type=2*******/
+
+    /**
+     * 租赁合同照片
+     */
+    private String leaseContractImages;
+
+
+
+    /**************公共空间配置**************/
+    /**
+     * 客厅
+     */
+    private String drawingRoom;
+
+    /**
+     * 卫生间
+     */
+    private String bathRoom;
+
+    /**
+     * 餐厅
+     */
+    private String diningRoom;
+
+    /**
+     * 阳台
+     */
+    private String balcony;
+
+    /***************物业&水电费等***********/
+
+    /**
+     * 物业费（月付）
+     */
+    private BigDecimal propertyFee;
+
+    /**
+     * 水费（月付）
+     */
+    private BigDecimal waterFee;
+
+    /**
+     * 电费（月付）
+     */
+    private BigDecimal electricCharge;
+
+    /**
+     * 自定义费用（月付）
+     */
+    private BigDecimal customFee;
+
+    /****************其他******************/
+
+    /**
+     * 楼层
+     */
+    private Integer floors;
+
+    /**
+     * 是否有电梯
+     */
+    private Boolean isHasElevator;
+
+    /**
+     * 装修程度
+     */
+    private String fixtures;
 
     /**
      * 房屋格局
      */
     private String housePattern;
 
+    /******************房间信息*************/
+
+    /**
+     * 房间名称
+     */
+    private String roomName;
+
+    /**
+     * 房间面积
+     */
+    private Double roomArea;
+
+    /**
+     * 房间设施
+     */
+    private String roomFacilities;
+
+    /**
+     * 房间照片
+     */
+    private String roomImages;
+
+    /**
+     * 朝向
+     */
+    private String exposition;
+
+    /**
+     * 租金
+     */
+    private BigDecimal rent;
+
+    /**
+     * 租房方式
+     */
+    private String rentWay;
+
+
     /**
      * 支付方式
      */
     private String payWay;
+
+    /****************地址信息**********************/
 
     /**
      * 详细地址
@@ -74,6 +184,41 @@ public class House extends BaseDomain {
      */
     private String addressCoordinate;
 
+
+    /**
+     * 一级地址
+     */
+    private String firstAddress;
+
+    /***************小区信息**********************/
+
+    /**
+     * 小区名称
+     */
+    private String plotName;
+
+    /**
+     * 绿化面积
+     */
+    private Double greenArea;
+
+    /**
+     * 供暖方式
+     */
+    private String heatingWay;
+
+    /***************租住规则********************/
+
+    /**
+     * 租住规则
+     */
+    private String rentRule;
+
+    /**
+     * 退租规则
+     */
+    private String exitRentRule;
+
     /**
      * 标签
      */
@@ -83,16 +228,6 @@ public class House extends BaseDomain {
      * 房屋配置
      */
     private String disposition;
-
-    /**
-     * 面积
-     */
-    private Double area;
-
-    /**
-     * 朝向
-     */
-    private String exposition;
 
     /**
      * 介绍
@@ -122,7 +257,7 @@ public class House extends BaseDomain {
     /**
      * 房东芝麻信用分
      */
-    private Integer landLoardZhiMaScore;
+    private Integer landLardZhiMaScore;
 
     /**
      * 创建时间
@@ -135,7 +270,7 @@ public class House extends BaseDomain {
     private Date updateTime;
 
     /**
-     * 房屋状态
+     * 审核状态
      */
     private Integer state;
 

@@ -3,7 +3,6 @@ package com.team.seahouse.config;
 import com.team.seahouse.commons.filter.*;
 import com.team.seahouse.commons.security.CustomAuthenticationProvider;
 import com.team.seahouse.commons.security.SmsCodeAuthenticationProvider;
-import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * SpringSecurity的配置
- * 通过SpringSecurity的配置，将JWTLoginFilter，JWTAuthenticationFilter组合在一起
- * @author zhaoxinguo on 2017/9/13.
+ * @Title: SpringSecurity的配置
+ * @Description: 通过SpringSecurity的配置，将JWTLoginFilter，JWTAuthenticationFilter组合在一起
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 18/7/25
  */
 @Configuration
 @EnableWebSecurity

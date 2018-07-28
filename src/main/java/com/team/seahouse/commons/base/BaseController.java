@@ -8,6 +8,7 @@ import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.repository.UserInfoRepository;
 import com.team.seahouse.repository.UserRepository;
 import com.team.seahouse.service.IUserService;
@@ -80,9 +81,9 @@ public class BaseController {
 	 * 根据请求携带的Token获得用户信息实体
 	 * @return
 	 */
-	protected UserInfo getUserInfo() throws BusinessException {
+	protected UserInfoVo getUserInfo() throws BusinessException {
 		Long userId = getUserId();
-		return userInfoRepository.findByUserId(userId);
+		return userInfoRepository.findUserInfoByUserId(userId);
 	}
 
 	/**

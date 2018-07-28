@@ -3,6 +3,7 @@ package com.team.seahouse.domain;
 import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ public class User extends BaseDomain {
     /**
      * 手机号
      */
+    @NotEmpty(message = "手机号不能为空")
     private String mobilePhone;
 
     /**
@@ -45,6 +47,7 @@ public class User extends BaseDomain {
     /**
      * 密码
      */
+    @NotEmpty(message = "密码不能为空")
     private String password;
 
     /**

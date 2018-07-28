@@ -1,6 +1,7 @@
 package com.team.seahouse.service;
 
 import com.team.seahouse.domain.Reservation;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface IReservationService {
      * @param pageable
      * @return
      */
-    List<Reservation> findReservations(Long userId, Pageable pageable);
+    Page<Reservation> findReservations(Long userId, Pageable pageable);
 
     /**
      * 修改预约看房信息

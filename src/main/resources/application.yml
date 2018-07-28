@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   profiles:
@@ -74,4 +74,8 @@ spring:
           starttls:
             enable: true
             required: true
+
+  devtools:
+    remote:
+      secret: seahousesecret
 

@@ -5,16 +5,20 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.Collection;
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.vo.Pages;
 import com.team.seahouse.repository.CollectionRepository;
 import com.team.seahouse.service.ICollectionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -39,7 +43,7 @@ public class CollectionController extends BaseController {
 
     @PostMapping("/add")
     @ApiOperation(value = "收藏出租房屋接口", notes = "收藏出租房屋信息接口")
-    public Response add(Collection collection) {
+    public Response add(@RequestBody Collection collection) {
         try {
             collectionService.add(collection);
             return new Response(CommonReturnCode.OK);
@@ -64,14 +68,11 @@ public class CollectionController extends BaseController {
     @GetMapping("/my/{userId}")
     @ApiOperation(value = "查看我的收藏接口", notes = "根据用户编号查看收藏的出租房屋信息列表")
     public Response getMyCollections(@PathVariable("userId") Long userId,
-                                     @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                     @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        //以创建时间降序排序
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        //封装分页对象
-        Pageable pageable = new PageRequest(page, size, sort);
+                                     @RequestBody Pages pages) {
+        //创建Pageable对象
+        Pageable pageable = PagesUtils.createPageRequest(pages);
         try {
-            List<House> houseList = collectionService.getMyCollections(userId, pageable);
+            Page<House> houseList = collectionService.getMyCollections(userId, pageable);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());

@@ -44,16 +44,13 @@ public class CollectionServiceImpl implements ICollectionService {
     }
 
     @Override
-    public List<House> getMyCollections(Long userId, Pageable pageable) {
+    public Page<House> getMyCollections(Long userId, Pageable pageable) {
         List<House> houseList = new ArrayList<>();
         try {
             Page<House> housePages = houseRepository.findCollectedHouseByUserId(userId, pageable);
-            for(House house : housePages) {
-                houseList.add(house);
-            }
+            return housePages;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }
-        return houseList;
     }
 }

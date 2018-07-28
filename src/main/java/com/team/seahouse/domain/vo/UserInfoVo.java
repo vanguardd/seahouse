@@ -15,56 +15,56 @@ import java.util.Date;
  * @Version: 1.0
  * @Date: 2018/07/24
  */
-@Getter@Setter
-public class UserInfoVo {
+public interface UserInfoVo {
 
     /**
      * 用户编号
      */
-    private Long userId;
+    Long getUserId();
 
     /**
      * 昵称
      */
-    private String userName;
+    String getUserName();
 
     /**
      * 手机号
      */
-    private String mobilePhone;
+    String getMobilePhone();
 
     /**
      * 邮箱
      */
-    private String email;
+    String getEmail();
 
     /**
      * 性别
      */
-    private Integer sex;
+    Integer getSex();
 
     /**
      * 出生年月
+     * @return
      */
-    private Date bornDate;
+    Date getBornDate();
 
     /**
      * 真实姓名
      */
-    private String realName;
+    String getRealName();
 
     /**
      * 头像
      */
-    private String avatar;
+    String getAvatar();
 
     /**
      * 公司地址
      */
-    private String companyAddress;
+    String getCompanyAddress();
 
     /**
      * 芝麻信用分
      */
-    private Integer zmScore;
+    Integer getZmScore();
 }

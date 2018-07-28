@@ -14,6 +14,12 @@ import org.springframework.data.repository.query.Param;
  * @date 18/7/18
  */
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
+
+    public String baseSql = "select u.userId as userId, u.userName as userName, u.avatar as avatar, " +
+            "u.bornDate as bornDate, u.companyAddress as companyAddress, u.email as email, u.mobilePhone as mobilePhone, " +
+            "u.realName as realName, u.sex as sex, z.zmScore as zmScore from UserInfo u, ZhiMaAuth z " +
+            "where u.userId=z.userId";
+
     /**
      * 根据用户编号查询用户信息
      * @param userId
@@ -44,8 +50,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
      * @param userId
      * @return
      */
-    @Query("select u.userId, u.userName, u.avatar, u.bornDate, u.companyAddress, u.email, u.mobilePhone, " +
-            "u.realName, u.sex, z.zmScore from UserInfo u, ZhimaAuth z where u.userId=z.userId and userId=:userId")
+    @Query(baseSql + " and u.userId=:userId")
     UserInfoVo findUserInfoByUserId(@Param("userId") Long userId);
 
 }

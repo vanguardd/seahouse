@@ -54,13 +54,14 @@ public class HouseServiceImpl implements IHouseService {
         //设置房东姓名
         house.setLandlordName(landLoadInfo.getRealName());
         //设置房东芝麻信用分
-        house.setLandLoardZhiMaScore(landLoadInfo.getZmScore());
+        house.setLandLardZhiMaScore(landLoadInfo.getZmScore());
         //设置审核状态默认为未审核
         house.setState(StatusEnum.UN_AUDIT.getStatus());
         //设置创建时间
         house.setCreateTime(new Date());
         //设置更新时间
         house.setUpdateTime(new Date());
+
         try {
             houseRepository.save(house);
         } catch (Exception e) {
@@ -82,19 +83,17 @@ public class HouseServiceImpl implements IHouseService {
 
     @Override
     public House findByHouseId(Long houseId) {
-        try {
-            House house = houseRepository.findByHouseId(houseId);
-            return house;
-        } catch (Exception e) {
+        House house = houseRepository.findByHouseId(houseId);
+        if(house == null) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }
+        return house;
 
     }
 
     @Override
-    public List<House> search(QueryVo queryVo, Pageable pageable) {
+    public Page<House> search(QueryVo queryVo, Pageable pageable) {
 
-        List<House> houseList = null;
         try {
             Page<House> housePage = houseRepository.findAll(new Specification<House>() {
                 @Override
@@ -139,26 +138,38 @@ public class HouseServiceImpl implements IHouseService {
                 }
             }, pageable);
 
-            //遍历获取的Page对象，将数据添加到List集合中
-            for(House house : housePage) {
-                houseList.add(house);
-            }
-            return houseList;
+            return housePage;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public List<House> findByType(Integer type, Pageable pageable) {
+    public Page<House> findByType(Integer type, Pageable pageable) {
 
         List<House> houseList = null;
         try {
             Page<House> housePage = houseRepository.findHousesByType(type, pageable);
-            for(House house : housePage) {
-                houseList.add(house);
-            }
-            return houseList;
+
+            return housePage;
+        } catch (Exception e) {
+            throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public Page<House> recommend(UserInfoVo userInfo, Pageable pageable) {
+        //获得用户的芝麻信用分
+        Integer zmCode = userInfo.getZmScore();
+        //获得用户的公司地址
+        String companyAddress = userInfo.getCompanyAddress();
+        //获得用户的性别
+        Integer sex = userInfo.getSex();
+        //获得用户的出生年月
+        Date bornDate = userInfo.getBornDate();
+        try {
+            Page<House> housePage = houseRepository.findByUserInfo(zmCode, pageable);
+            return housePage;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
