@@ -49,4 +49,9 @@ sms:
 REDIS_TRACKS_PRE: "TRACKS"
 REDIS_SMS_PRE: "SMS"
 
+#七牛云
+ACCESS_KEY: "5G2mrt4e3LrBZdjLeFgG7y5iB1A12hUplVKWKbS5"
+SECRET_KEY: "7qAbiCfjxyk8OquqsEOIZXX8amNbUY0VdHnhqQov"
+BUCKET: "seahouse"
+
 

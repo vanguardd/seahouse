@@ -17,6 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @Title: 认证过滤器
+ * @Description: 认证过滤器
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 18/7/28
+ */
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {

@@ -1,5 +1,7 @@
 package com.team.seahouse.controller;
 
+import com.qiniu.util.Auth;
+import com.qiniu.util.StringMap;
 import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.enums.WebSiteFileBelongEnum;
 import com.team.seahouse.commons.response.CommonReturnCode;
@@ -10,6 +12,8 @@ import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.ServletUtils;
 import io.swagger.annotations.Api;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +31,27 @@ import org.springframework.web.util.HtmlUtils;
 @RequestMapping(value="/uploads")
 @Api(value = "文件上传", description = "文件上传")
 public class UploadController extends BaseController {
+
+	@Value("${ACCESS_KEY}")
+	private String ACCESS_KEY;
+
+	@Value("${SECRET_KEY}")
+	private String SECRET_KEY;
+
+	@Value("${BUCKET}")
+	private String BUCKET;
+
+	@GetMapping("/getUploadToken")
+	public Response getUploadToken() {
+		Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+		StringMap putPolicy = new StringMap();
+		putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize)}");
+		long expireSeconds = 3600;
+		String uploadToken = auth.uploadToken(BUCKET, null, expireSeconds, putPolicy);
+		LoggerUtils.info(UserController.class, "uploadToken:" + uploadToken);
+		return new Response(CommonReturnCode.OK, uploadToken);
+	}
+
 
 	/**
 	 * POST 广告图片上传
