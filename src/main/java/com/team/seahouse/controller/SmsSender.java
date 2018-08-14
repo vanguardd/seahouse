@@ -5,12 +5,15 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.vo.SmsCodeVo;
 import com.team.seahouse.service.ISmsSenderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 
 /**
  * @title 发送短信接口
@@ -33,11 +36,14 @@ public class SmsSender {
      * @param type 发送验证码的类型：注册、登录和其他
      * @return
      */
-    @PostMapping("/sendMessage/{mobilePhone}/{type}")
+    @PostMapping("/sendMessage")
     @ApiOperation(value = "发送短信验证码的接口", notes = "发送短信验证码的接口")
-    public Response sendMessage(@PathVariable("mobilePhone") String mobilePhone,
-                                @PathVariable("type") String type) {
+    public Response sendMessage(@RequestParam("mobilePhone") String mobilePhone,
+                                @RequestParam("type") Integer type) {
         try {
+            if(!StringUtils.isNotBlank(mobilePhone)) {
+                return new Response(UserReturnCode.ACCOUNT_NULL);
+            }
             smsSenderService.sendMessage(mobilePhone, type);
         } catch (ValidateException e) {
             LoggerUtils.error(SmsSender.class, e.getMessage());

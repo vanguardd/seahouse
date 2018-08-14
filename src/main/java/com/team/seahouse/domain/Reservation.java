@@ -54,6 +54,16 @@ public class Reservation extends BaseDomain {
     private Date reservationTime;
 
     /**
+     * 时间段
+     */
+    private String TimeRange;
+
+    /**
+     * 留言
+     */
+    private String message;
+
+    /**
      * 创建时间
      */
     private Date createTime;

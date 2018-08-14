@@ -9,7 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @title 用户实体类
@@ -36,18 +39,19 @@ public class User extends BaseDomain {
     /**
      * 手机号
      */
-    @NotEmpty(message = "手机号不能为空")
+    @NotNull(message = "手机号不能为空")
     private String mobilePhone;
 
     /**
      * 邮箱
      */
+    @Email
     private String email;
 
     /**
      * 密码
      */
-    @NotEmpty(message = "密码不能为空")
+    @NotNull(message = "密码不能为空")
     private String password;
 
     /**

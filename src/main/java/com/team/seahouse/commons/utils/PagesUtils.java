@@ -35,7 +35,7 @@ public class PagesUtils {
      * @return
      */
     public static Pageable createPageRequest(Pages pages) {
-        return new PageRequest(pages.getPage() <= 0 ? PAGE : pages.getPage(),
+        return PageRequest.of(pages.getPage() <= 0 ? PAGE : pages.getPage(),
                 pages.getSize() <= 0 ? SIZE:pages.getSize(),
                 new Sort(StringUtils.isNotBlank(pages.getDirection()) && pages.getDirection().equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,
                         StringUtils.isBlank(pages.getSortColumn()) ? SORT: pages.getSortColumn()));

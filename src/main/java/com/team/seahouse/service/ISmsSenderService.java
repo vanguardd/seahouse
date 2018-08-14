@@ -15,7 +15,7 @@ public interface ISmsSenderService {
      * @param type 发送验证码的类型：登录、注册、其他
      * @return
      */
-    String sendMessage(String phoneNumber, String type);
+    void sendMessage(String phoneNumber, Integer type);
 
     /**
      * 判断验证码是否正确

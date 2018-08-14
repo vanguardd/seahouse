@@ -20,11 +20,14 @@ spring:
 jwt:
   header: Authorization
   secret: "spring-security-@Jwt!&Secret^#"
-  expiration: 604800
+  access_token:
+    expiration: 7200
+  refresh_token:
+    expiration: 2592000
   tokenHead: "Bearer "
   route:
     authentication:
-      refresh: "auth/refresh"
+      refresh: "auth/refresh_token"
       register: "auth/register"
       password:
         login: "auth/login"

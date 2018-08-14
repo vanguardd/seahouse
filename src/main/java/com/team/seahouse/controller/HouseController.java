@@ -40,7 +40,7 @@ public class HouseController extends BaseController {
      * @param house
      * @return
      */
-    @PostMapping("/create")
+    @PostMapping("/add")
     @ApiOperation(value = "发布出租房屋信息接口", notes = "发布出租房屋信息接口")
     public Response publish(@RequestBody House house) {
         try {

@@ -1,17 +1,18 @@
 package com.team.seahouse.commons.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.domain.vo.JwtUser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @title Jwt工具类
@@ -25,15 +26,21 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
-    private static final String CLAIM_KEY_USERNAME = "sub";
-    private static final String CLAIM_KEY_CREATED = "created";
-    private static final String CLAIM_KEY_USER_ID = "userId";
+    public static final String ROLE_REFRESH_TOKEN = "ROLE_REFRESH_TOKEN";
+    private static final String CLAIM_KEY_USER_ID = "user_id";
+    private static final String CLAIM_KEY_AUTHORITIES = "scope";
+    private static final String CLAIM_KEY_ACCOUNT_ENABLED = "enabled";
+    private static final String CLAIM_KEY_ACCOUNT_NON_LOCKED = "non_locked";
+    private static final String CLAIM_KEY_ACCOUNT_NON_EXPIRED = "non_expired";
 
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    @Value("${jwt.access_token.expiration}")
+    private Long access_token_expiration;
+
+    @Value("${jwt.refresh_token.expiration}")
+    private Long refresh_token_expiration;
 
     /**
      * 从令牌中获取用户名
@@ -67,11 +74,16 @@ public class JwtTokenUtil implements Serializable {
         return userId;
     }
 
+    /**
+     * 根据token获得token创建时间
+     * @param token
+     * @return
+     */
     public Date getCreatedDateFromToken(String token) {
         Date created;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
+            created = claims.getIssuedAt();
         } catch (Exception e) {
             created = null;
         }
@@ -116,7 +128,7 @@ public class JwtTokenUtil implements Serializable {
      *  格式化过期时间
      * @return
      */
-    private Date generateExpirationDate() {
+    private Date generateExpirationDate(long expiration) {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
@@ -131,20 +143,6 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * 生成令牌
-     * @param userDetails 用户信息
-     * @return
-     */
-    public String generateToken(UserDetails userDetails) {
-        JwtUser user = (JwtUser) userDetails;
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, user.getUsername());
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        claims.put(CLAIM_KEY_USER_ID, user.getId());
-        return generateToken(user.getUsername(), claims);
-    }
-
-    /**
      *  判断当前Token的创建时间是否在最近一次修改或重置密码的时间之前
      * @param created
      * @param lastPasswordReset
@@ -155,18 +153,91 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
+     * 生成access_token
+     * @param userDetails 用户信息
+     * @return
+     */
+    public String generateAccessToken(UserDetails userDetails) {
+        JwtUser user = (JwtUser) userDetails;
+        Map<String, Object> claims = generateClaims(user);
+        return generateAccessToken(user.getUsername(), claims);
+    }
+
+    private Map<String, Object> generateClaims(JwtUser userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_USER_ID, userDetails.getId());
+        claims.put(CLAIM_KEY_ACCOUNT_ENABLED, userDetails.isEnabled());
+        claims.put(CLAIM_KEY_ACCOUNT_NON_LOCKED, userDetails.isAccountNonLocked());
+        claims.put(CLAIM_KEY_ACCOUNT_NON_EXPIRED, userDetails.isAccountNonExpired());
+        return claims;
+    }
+
+    private String generateAccessToken(String subject, Map<String, Object> claims) {
+        return generateToken(subject, claims, access_token_expiration);
+    }
+
+    /**
      * 从数据声明中获取令牌
      * @param subject 主要信息:登录名
      * @param claims
      * @return
      */
-    private String generateToken(String subject, Map<String, Object> claims) {
+    private String generateToken(String subject, Map<String, Object> claims, Long expiration) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setExpiration(generateExpirationDate())
+                .setId(UUID.randomUUID().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(generateExpirationDate(expiration))
+                .compressWith(CompressionCodecs.DEFLATE)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+    }
+
+    /**
+     * Collection转发成List
+     * @param authorities
+     * @return
+     */
+    private List authoritiesToArray(Collection<? extends GrantedAuthority> authorities) {
+        List<String> list = new ArrayList<>();
+        for (GrantedAuthority ga : authorities) {
+            list.add(ga.getAuthority());
+        }
+        return list;
+    }
+
+    /**
+     * List集合转发成Collection
+     * @param roles
+     * @return
+     */
+    private Collection<? extends GrantedAuthority> parseArrayToAuthorities(List roles) {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        SimpleGrantedAuthority authority;
+        for (Object role : roles) {
+            authority = new SimpleGrantedAuthority(role.toString());
+            authorities.add(authority);
+        }
+        return authorities;
+    }
+
+    /**
+     * 生成refresh_token
+     * @param userDetails 用户信息
+     * @return
+     */
+    public String generateRefreshToken(UserDetails userDetails) {
+        JwtUser user = (JwtUser) userDetails;
+        Map<String, Object> claims = generateClaims(user);
+        //只授予更新Token的权限
+        String[] roles = new String[]{ROLE_REFRESH_TOKEN};
+        claims.put(CLAIM_KEY_AUTHORITIES, roles);
+        return generateRefreshToken(user.getUsername(), claims);
+    }
+
+    private String generateRefreshToken(String subject, Map<String, Object> claims) {
+        return generateToken(subject, claims, refresh_token_expiration);
     }
 
     /**
@@ -183,18 +254,17 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * 刷新令牌
-     * @param token 原令牌
+     * 使用refreshToken刷新生成accessToken
+     * @param token 刷新令牌
      * @return
      */
     public String refreshToken(String token) {
         String refreshedToken;
         try {
             final Claims claims = getClaimsFromToken(token);
-            claims.put(CLAIM_KEY_CREATED, new Date());
-            refreshedToken = generateToken(claims.getSubject(), claims);
+            refreshedToken = generateAccessToken(claims.getSubject(), claims);
         } catch (Exception e) {
-            refreshedToken = null;
+            throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
         return refreshedToken;
     }

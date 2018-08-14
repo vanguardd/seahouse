@@ -20,15 +20,15 @@ Token模式：JsonWebToken 0.7.0
 缓存框架：Spring Data Redis 2.0.8.RELEASE
 
 ### 开发环境
-开发工具： Intellij IDEA 2017.2.5
+Intellij IDEA 2017.2.5
 
-数据库：MySql 5.5.35
+MySql 5.0+
 
-MAVEN： 3.5.0
+MAVEN 3.5.0
 
-JDK：1.8
+JDK 1.8
 
-Tomcat: 8.0
+Tomcat 8.0
  
 
 #### 安装教程

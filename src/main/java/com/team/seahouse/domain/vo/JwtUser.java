@@ -23,12 +23,16 @@ public class JwtUser implements UserDetails {
     private Date lastPasswordResetDate;
     private Integer state;
 
-    public JwtUser(Long id, String userName, String password, Date lastPasswordResetDate, Integer state) {
-        this.userId = id;
-        this.userName = userName;
-        this.password = password;
-        this.lastPasswordResetDate = lastPasswordResetDate;
-        this.state = state;
+    public JwtUser(Long userId, String username, String password, Date lastPasswordResetDate, Integer state) {
+        if (username != null && !"".equals(username) && password != null) {
+            this.userId = userId;
+            this.userName = username;
+            this.password = password;
+            this.lastPasswordResetDate = lastPasswordResetDate;
+            this.state = state;
+        } else {
+            throw new IllegalArgumentException("Cannot pass null or empty values to constructor");
+        }
     }
 
     @Override

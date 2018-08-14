@@ -1,5 +1,6 @@
 package com.team.seahouse.commons.auth;
 
+import com.team.seahouse.commons.response.JwtAuthResponse;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.vo.UserVo;
 
@@ -16,7 +17,7 @@ public interface IAuthService {
      * @param userToAdd
      * @return
      */
-    User register(UserVo userToAdd);
+    JwtAuthResponse register(UserVo userToAdd);
 
     /**
      * 登录业务
@@ -25,7 +26,7 @@ public interface IAuthService {
      * @param password 密码
      * @return
      */
-    String loginByPassword(String username, String password);
+    JwtAuthResponse loginByPassword(String username, String password);
 
     /**
      * 登录业务
@@ -34,7 +35,7 @@ public interface IAuthService {
      * @param smsCode 邮箱
      * @return
      */
-    String loginBySmsCode(String mobilePhone, String smsCode);
+    JwtAuthResponse loginBySmsCode(String mobilePhone, String smsCode);
 
 
     /**
@@ -42,5 +43,5 @@ public interface IAuthService {
      * @param oldToken
      * @return
      */
-    String refresh(String oldToken);
+    JwtAuthResponse refresh(String oldToken);
 }

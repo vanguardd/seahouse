@@ -21,7 +21,7 @@ import java.util.List;
 public interface HouseRepository extends JpaRepository<House, Long>, JpaSpecificationExecutor<House> {
 
     public String collectSql = "select h.houseId, h.title, h.roomImages, h.firstAddress, h.rent, h.rentWay, h.housePattern," +
-            "h.payWay, h.address, h.addressCoordinate, h.tags, h.disposition, h.roomArea, h.exposition, h.introduce," +
+            "h.payWay, h.address, h.addressCoordinate, h.disposition, h.roomArea, h.exposition," +
             "h.houseKeeperId, h.landlordId, h.landlordName from House h, Collection c where h.houseId=c.houseId";
 
     /**

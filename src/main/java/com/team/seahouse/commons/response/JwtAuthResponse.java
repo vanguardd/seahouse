@@ -1,5 +1,8 @@
 package com.team.seahouse.commons.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @title JwtAuth数据封装
  * @describe
@@ -7,6 +10,7 @@ package com.team.seahouse.commons.response;
  * @version 1.0
  * @date 18/7/17
  */
+@Getter@Setter
 public class JwtAuthResponse {
     /**
      * 访问Token
@@ -14,15 +18,8 @@ public class JwtAuthResponse {
     private String accessToken;
 
     /**
-     *属性Token
+     * 刷新Token
      */
     private String refreshToken;
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
 }

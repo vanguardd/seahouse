@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -39,11 +41,13 @@ public class UserInfo {
     /**
      * 手机号
      */
+    @NotNull(message = "手机号不能为空")
     private String mobilePhone;
 
     /**
      * 邮箱
      */
+    @Email
     private String email;
 
     /**

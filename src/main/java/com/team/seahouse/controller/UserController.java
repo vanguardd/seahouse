@@ -45,7 +45,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "用户信息接口", notes = "获得用户信息接口")
-    @GetMapping("/userInfo")
+    @GetMapping("/user_info")
     public Response userInfo() {
         UserInfoVo userInfo = null;
         try {

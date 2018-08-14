@@ -37,7 +37,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     private String REDIS_SMS_PRE;
 
     @Resource
-    private IRedisService<SmsCodeVo> redisService;
+    private IRedisService<String> redisService;
 
     @Autowired
     private UserRepository userRepository;
@@ -54,7 +54,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
 
     @Transactional(rollbackFor = ValidateException.class)
     @Override
-    public String sendMessage(String phoneNumber, String type) {
+    public void sendMessage(String phoneNumber, Integer type) {
         User user = userRepository.findByMobilePhone(phoneNumber);
         if(CommonEnum.REGISTER_TYPE.getType().equals(type)) {
             if(user != null) {
@@ -67,44 +67,15 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
             }
         }
 
+        boolean isExist = redisService.exists(REDIS_SMS_PRE + ":" + phoneNumber);
+        if(isExist) {
+            throw new ValidateException(UserReturnCode.SMS_CODE_EXIST);
+        }
+
         System.out.println(host);
         String code = getRandNum(6);
         System.out.println("验证码是:" + code);
 
-        //------------------------模拟发送短信
-//		System.out.println("给" + phoneNumber + "发送的验证码为" +code);
-       /* try {
-            URL targetURL = new URL(this.host);
-            HttpURLConnection conn  = (HttpURLConnection) targetURL.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            StringBuilder sb = new StringBuilder(120);
-            sb.append("username=").append(username);
-            sb.append("&password=").append(password);
-            sb.append("&apiKey=").append(apiKey);
-            sb.append("&mobile=").append(phoneNumber);
-            sb.append("&content=").append("您的验证码为:").append(code).append(",三分钟内输入有效！");
-            conn.getOutputStream().write(sb.toString().getBytes());
-            String responseText = StreamUtils.copyToString(conn.getInputStream(), Charset.forName("UTF-8"));
-            //短信发送成功
-            if(responseText.contains("success")){
-                SmsCodeVo smsCodeVo = new SmsCodeVo();
-                smsCodeVo.setMobilePhone(phoneNumber);
-                smsCodeVo.setValidateCode(code);
-                smsCodeVo.setSendTime(new Date());
-
-                RedisKeyDto redisKeyDto=new RedisKeyDto();
-                redisKeyDto.setKeys(phoneNumber);
-                redisKeyDto.setValues(smsCodeVo);
-                redisService.addRedisData(redisKeyDto, EXPIRATIONTIME);
-                return responseText;
-            } else {
-                throw new BusinessException(CommonReturnCode.SEND_MESSAGE_FAILED);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException(CommonReturnCode.SEND_MESSAGE_FAILED);
-        }*/
         StringBuilder sb = new StringBuilder(120);
         sb.append("username=").append(username);
         sb.append("&password=").append(password);
@@ -112,21 +83,15 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         sb.append("&mobile=").append(phoneNumber);
         sb.append("&content=").append("您的验证码为:").append(code).append(",三分钟内输入有效！");
 
-        SmsCodeVo smsCodeVo = new SmsCodeVo();
-        smsCodeVo.setMobilePhone(phoneNumber);
-        smsCodeVo.setValidateCode(code);
-        smsCodeVo.setSendTime(new Date());
-
-        redisService.set(REDIS_SMS_PRE + ":" + phoneNumber, smsCodeVo, expireTime);
-        return sb.toString();
+        redisService.set(REDIS_SMS_PRE + ":" + phoneNumber, code, expireTime);
     }
 
     @Override
     public boolean checkIsCorrectCode(String phone, String code) {
         //根据手机号获得存入redis中的验证码
-        SmsCodeVo result= redisService.get(REDIS_SMS_PRE + ":" + phone);
+        String smsCode = redisService.get(REDIS_SMS_PRE + ":" + phone);
         //校验验证码
-        if(result != null && result.getValidateCode().equals(String.valueOf(code))) {
+        if(smsCode != null && smsCode.equals(String.valueOf(code))) {
             //验证成功后，手动删除redis中的验证码
             redisService.del(REDIS_SMS_PRE + ":" + phone);
             return true;

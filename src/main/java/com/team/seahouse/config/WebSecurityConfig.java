@@ -46,7 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/auth/**",
             "/sms/**",
-            "/uploads/**"
+            "/house/search",
+            "/uploads/**",
+            "/pass/**"
     };
 
     @Autowired

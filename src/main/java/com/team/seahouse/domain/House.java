@@ -63,7 +63,6 @@ public class House extends BaseDomain {
     private String leaseContractImages;
 
 
-
     /**************公共空间配置**************/
     /**
      * 客厅
@@ -88,24 +87,59 @@ public class House extends BaseDomain {
     /***************物业&水电费等***********/
 
     /**
-     * 物业费（月付）
+     * 物业费
      */
     private BigDecimal propertyFee;
 
     /**
-     * 水费（月付）
+     * 物业费单位
+     */
+    private String propertyFeeType;
+
+    /**
+     * 水费
      */
     private BigDecimal waterFee;
 
     /**
-     * 电费（月付）
+     * 水费单位
      */
-    private BigDecimal electricCharge;
+    private String waterFeeType;
 
     /**
-     * 自定义费用（月付）
+     * 电费
      */
-    private BigDecimal customFee;
+    private BigDecimal electricFee;
+
+    /**
+     * 电费单位
+     */
+    private String electricFeeType;
+
+    /**
+     * 暖气费
+     */
+    private BigDecimal heatingValue;
+
+    /**
+     * 暖气费单位
+     */
+    private String heatingPayType;
+
+    /**
+     * 自定义费用名称
+     */
+    private String customName;
+
+    /**
+     * 自定义费用值
+     */
+    private BigDecimal customValue;
+
+    /**
+     * 自定义费用单位
+     */
+    private String customPayType;
 
     /****************其他******************/
 
@@ -207,6 +241,26 @@ public class House extends BaseDomain {
      */
     private String heatingWay;
 
+    /**
+     * 地下停车场
+     */
+    private String parking;
+
+    /**
+     * 物业公司
+     */
+    private String property;
+
+    /**
+     * 建筑年代
+     */
+    private String years;
+
+    /**
+     * 小区简介
+     */
+    private String introduction;
+
     /***************租住规则********************/
 
     /**
@@ -220,19 +274,9 @@ public class House extends BaseDomain {
     private String exitRentRule;
 
     /**
-     * 标签
-     */
-    private String tags;
-
-    /**
      * 房屋配置
      */
     private String disposition;
-
-    /**
-     * 介绍
-     */
-    private String introduce;
 
     /**
      * 房屋类型1：整租,2:合租

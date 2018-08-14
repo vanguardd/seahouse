@@ -2,6 +2,7 @@ package com.team.seahouse.commons.auth;
 
 
 import com.team.seahouse.commons.response.CommonReturnCode;
+import com.team.seahouse.commons.response.JwtAuthResponse;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.security.SmsCodeAuthenticationToken;
@@ -62,7 +63,7 @@ public class AuthServiceImpl implements IAuthService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public User register(UserVo userToAdd) throws ValidateException {
+    public JwtAuthResponse register(UserVo userToAdd) throws ValidateException {
         final String mobilePhone = userToAdd.getMobilePhone();
         if(userRepository.findByMobilePhone(mobilePhone) != null) {
             throw new ValidateException(UserReturnCode.ACCOUNT_ERROR.getStatus(), UserReturnCode.ACCOUNT_ERROR.getMessage());
@@ -77,34 +78,33 @@ public class AuthServiceImpl implements IAuthService {
         user.setUserName(userToAdd.getUserName());
 
         //保存用户登录信息
-        User registerUser = null;
         try {
-            registerUser = userRepository.save(user);
+            User registerUser = userRepository.save(user);
+            //创建用户详细信息，并设置详细信息
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(registerUser.getUserId());
+            userInfo.setUserName(registerUser.getUserName());
+            userInfo.setMobilePhone(registerUser.getMobilePhone());
+            userInfo.setEmail(registerUser.getEmail());
+            userInfo.setAvatar(userToAdd.getAvatar());
+            userInfo.setSex(userToAdd.getSex());
+            userInfo.setBornDate(userToAdd.getBornDate());
+            userInfo.setCompanyAddress(userToAdd.getCompanyAddress());
+            userInfo.setCreateDate(new Date());
+            userInfo.setUpdateDate(new Date());
+
+            //保存用户详细信息
+            userInfoRepository.save(userInfo);
+
+            //注册成功后，自动登录操作
+            return loginByPassword(userToAdd.getMobilePhone(), userToAdd.getPassword());
         } catch (Exception e) {
             throw new ValidateException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
-
-        //创建用户详细信息，并设置详细信息
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(registerUser.getUserId());
-        userInfo.setUserName(registerUser.getUserName());
-        userInfo.setMobilePhone(registerUser.getMobilePhone());
-        userInfo.setEmail(registerUser.getEmail());
-        userInfo.setAvatar(userToAdd.getAvatar());
-        userInfo.setSex(userToAdd.getSex());
-        userInfo.setBornDate(userToAdd.getBornDate());
-        userInfo.setCompanyAddress(userToAdd.getCompanyAddress());
-        userInfo.setCreateDate(new Date());
-        userInfo.setUpdateDate(new Date());
-
-        //保存用户详细信息
-        userInfoRepository.save(userInfo);
-
-        return registerUser;
     }
 
     @Override
-    public String loginByPassword(String userName, String password) throws ValidateException {
+    public JwtAuthResponse loginByPassword(String userName, String password) throws ValidateException {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(userName, password);
         try {
             return authenticateToken(upToken, userName);
@@ -115,7 +115,7 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public String loginBySmsCode(String mobilePhone, String smsCode) {
+    public JwtAuthResponse loginBySmsCode(String mobilePhone, String smsCode) {
         SmsCodeAuthenticationToken upToken = new SmsCodeAuthenticationToken(mobilePhone, smsCode);
         try {
             return authenticateToken(upToken, mobilePhone);
@@ -125,14 +125,20 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public String refresh(String oldToken) {
-        final String token = oldToken.substring(tokenHead.length());
+    public JwtAuthResponse refresh(String refreshToken) {
+        final String token = refreshToken.substring(tokenHead.length());
         String userName = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(userName);
+        JwtAuthResponse response = new JwtAuthResponse();
+        response.setRefreshToken(refreshToken);
+        String accessToken = "";
         if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            return jwtTokenUtil.refreshToken(token);
+            accessToken = jwtTokenUtil.refreshToken(token);
+            response.setAccessToken(accessToken);
+        } else {
+            throw new ValidateException(CommonReturnCode.UNAUTHORIZED);
         }
-        return null;
+        return response;
     }
 
     /**
@@ -141,15 +147,20 @@ public class AuthServiceImpl implements IAuthService {
      * @param userName
      * @return
      */
-    public String authenticateToken(AbstractAuthenticationToken upToken, String userName) {
+    public JwtAuthResponse authenticateToken(AbstractAuthenticationToken upToken, String userName) {
         //验证认证逻辑
         final Authentication authentication = authenticationManager.authenticate(upToken);
         //将Authentication存入SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //根据用户名查询用户信息
         final UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-        //生成Token
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        return token;
+        JwtAuthResponse response = new JwtAuthResponse();
+        //生成AccessToken
+        final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+        //生成RefreshToken
+        final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+        response.setAccessToken(accessToken);
+        response.setRefreshToken(refreshToken);
+        return response;
     }
 }

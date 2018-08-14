@@ -1,8 +1,10 @@
 package com.team.seahouse.commons.auth;
 
 import com.team.seahouse.commons.base.BaseController;
+import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
+import com.team.seahouse.commons.response.JwtAuthResponse;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.security.*;
@@ -35,10 +37,6 @@ public class AuthController extends BaseController {
     @Autowired
     private IAuthService authService;
 
-    @Autowired
-    private ISmsSenderService smsSenderService;
-
-
     /**
      * @title 登录接口
      * @describe 包括密码登录
@@ -48,9 +46,9 @@ public class AuthController extends BaseController {
      */
     @ApiOperation(value = "登录接口", notes = "密码登录接口")
     @PostMapping("${jwt.route.authentication.password.login}")
-    public Response createAuthenticationToken(@RequestBody JwtAuthVo jwtAuthVo) {
+    public Response createAuthenticationToken(@RequestParam("userName") String userName, @RequestParam("password") String password) {
         try {
-            final String token = authService.loginByPassword(jwtAuthVo.getUserName(), jwtAuthVo.getPassword());
+            JwtAuthResponse token = authService.loginByPassword(userName, password);
             // Return the token
             return new Response(CommonReturnCode.OK ,token);
         } catch(ValidateException e) {
@@ -68,9 +66,9 @@ public class AuthController extends BaseController {
      */
     @ApiOperation(value = "登录接口", notes = "短信验证码登录接口")
     @PostMapping("${jwt.route.authentication.mobilePhone.login}")
-    public Response createAuthenticationToken2(@RequestBody JwtAuthVo jwtAuthVo) {
+    public Response createAuthenticationToken2(@RequestParam("mobilePhone") String mobilePhone, @RequestParam("smsCode") String smsCode) {
         try {
-            final String token = authService.loginBySmsCode(jwtAuthVo.getUserName(), jwtAuthVo.getPassword());
+            JwtAuthResponse token = authService.loginBySmsCode(mobilePhone, smsCode);
             // Return the token
             return new Response(CommonReturnCode.OK ,token);
         } catch(ValidateException e) {
@@ -81,18 +79,18 @@ public class AuthController extends BaseController {
 
 
     /**
-     * 刷新Token
+     * 根据refreshToken刷新accessToken
+     * @param refreshToken 刷新Token
      * @return
      */
     @ApiOperation(value = "刷新Token接口", notes = "刷新Token接口")
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
-    public Response refreshAndGetAuthenticationToken() {
-        String token = getRequest().getHeader(tokenHeader);
-        String refreshedToken = authService.refresh(token);
-        if(refreshedToken == null) {
-            return new Response(CommonReturnCode.UNAUTHORIZED);
-        } else {
-            return new Response(CommonReturnCode.OK ,refreshedToken);
+    public Response refreshAndGetAuthenticationToken(@RequestParam("refresh_token") String refreshToken) {
+        try {
+            JwtAuthResponse response = authService.refresh(refreshToken);
+            return new Response(CommonReturnCode.OK, response);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
         }
     }
 
@@ -101,11 +99,12 @@ public class AuthController extends BaseController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "用户注册", notes = "手机号密码注册并自动登录")
     @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
     public Response register(@RequestBody UserVo userVo) {
         try {
-            User user = authService.register(userVo);
-            return new Response(CommonReturnCode.OK, user);
+            JwtAuthResponse response = authService.register(userVo);
+            return new Response(CommonReturnCode.OK, response);
         } catch(ValidateException e) {
             LoggerUtils.error(AuthController.class, e.getMessage(), e);
             return new Response(e.getCode(), e.getMessage());
