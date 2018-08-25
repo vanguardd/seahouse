@@ -18,15 +18,15 @@ import java.util.Date;
 public class JwtUser implements UserDetails {
 
     private final Long userId;
-    private final String userName;
+    private final String loginName;
     private final String password;
     private Date lastPasswordResetDate;
     private Integer state;
 
-    public JwtUser(Long userId, String username, String password, Date lastPasswordResetDate, Integer state) {
-        if (username != null && !"".equals(username) && password != null) {
+    public JwtUser(Long userId, String loginName, String password, Date lastPasswordResetDate, Integer state) {
+        if (loginName != null && !"".equals(loginName) && password != null) {
             this.userId = userId;
-            this.userName = username;
+            this.loginName = loginName;
             this.password = password;
             this.lastPasswordResetDate = lastPasswordResetDate;
             this.state = state;
@@ -54,7 +54,7 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public String getUsername() {
-        return userName;
+        return loginName;
     }
 
     @JsonIgnore

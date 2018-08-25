@@ -1,7 +1,7 @@
 package com.team.seahouse.service;
 
 import com.team.seahouse.domain.Collection;
-import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.vo.HouseVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -27,5 +27,5 @@ public interface ICollectionService {
      * @param pageable
      * @return
      */
-    Page<House> getMyCollections(Long userId, Pageable pageable);
+    Page<HouseVo> getMyCollections(Long userId, Pageable pageable);
 }

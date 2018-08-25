@@ -5,13 +5,18 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.Pages;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ITrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,14 +39,16 @@ public class TrackController extends BaseController {
 
     /**
      * 查询我的足迹
-     * @param userId
+     * @param pages
      * @return
      */
-    @GetMapping("/myTrack/{userId}")
+    @GetMapping("/myTrack")
     @ApiOperation(value = "查询我的足迹", notes = "根据用户编号查询足迹信息")
-    public Response myTrack(@PathVariable("userId") Long userId) {
+    public Response myTrack(@RequestBody Pages pages) {
         try {
-            List<House> houseList = trackService.myTracks(userId);
+            Long userId = getUserId();
+            Pageable pageable = PagesUtils.createPageRequest(pages);
+            Page<HouseVo> houseList = trackService.myTracks(userId, pageable);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(TrackController.class, e.getMessage());

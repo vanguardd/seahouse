@@ -4,6 +4,7 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.domain.Collection;
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.vo.HouseVo;
 import com.team.seahouse.repository.CollectionRepository;
 import com.team.seahouse.repository.HouseRepository;
 import com.team.seahouse.service.ICollectionService;
@@ -44,10 +45,10 @@ public class CollectionServiceImpl implements ICollectionService {
     }
 
     @Override
-    public Page<House> getMyCollections(Long userId, Pageable pageable) {
+    public Page<HouseVo> getMyCollections(Long userId, Pageable pageable) {
         List<House> houseList = new ArrayList<>();
         try {
-            Page<House> housePages = houseRepository.findCollectedHouseByUserId(userId, pageable);
+            Page<HouseVo> housePages = houseRepository.findCollectedHouseByUserId(userId, pageable);
             return housePages;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);

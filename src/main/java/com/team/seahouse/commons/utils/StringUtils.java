@@ -398,5 +398,15 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 			return serializable.toString();
 		}
 	}
+
+	/**
+	 * 集合list转发成逗号分隔的字符串
+	 * @param data
+	 * @return
+	 */
+	public static String arrayToString(String[] data) {
+		List<String> list = Arrays.asList(data);
+		return String.join(",", list);
+	}
    
 }

@@ -7,11 +7,7 @@ import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.House;
-import com.team.seahouse.domain.UserInfo;
-import com.team.seahouse.domain.vo.Pages;
-import com.team.seahouse.domain.vo.QueryVo;
-import com.team.seahouse.domain.vo.UserInfoVo;
-import com.team.seahouse.repository.HouseRepository;
+import com.team.seahouse.domain.vo.*;
 import com.team.seahouse.service.IHouseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -93,11 +89,11 @@ public class HouseController extends BaseController {
      */
     @GetMapping("/search")
     @ApiOperation(value = "搜索房屋接口", notes = "根据关键字模糊查询和筛选房屋信息接口")
-    public Response search(@RequestBody QueryVo queryVo, Pages pages) {
+    public Response search(QueryVo queryVo) {
         //创建Pageable对象
-        Pageable pageable = PagesUtils.createPageRequest(pages);
+        Pageable pageable = PagesUtils.createPageRequest(queryVo);
         try {
-            Page<House> houseList = houseService.search(queryVo, pageable);
+            Page<HouseVo> houseList = houseService.search(queryVo, pageable);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -117,7 +113,7 @@ public class HouseController extends BaseController {
         //创建Pageable对象
         Pageable pageable = PagesUtils.createPageRequest(pages);
         try {
-            Page<House> houseList = houseService.findByType(type, pageable);
+            Page<HouseVo> houseList = houseService.findByType(type, pageable);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -138,7 +134,7 @@ public class HouseController extends BaseController {
         //获得携带Token的用户信息
         UserInfoVo userInfo = getUserInfo();
         try {
-            Page<House> houseList = houseService.recommend(userInfo, pageable);
+            Page<HouseVo> houseList = houseService.recommend(userInfo, pageable);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());

@@ -34,8 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * 需要放行的URL
      */
     private static final String[] AUTH_WHITELIST = {
-            // -- register url
-            "/users/register",
             // -- swagger ui
             "/v2/api-docs",
             "/swagger-resources",
@@ -44,9 +42,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
+            //-- 用户注册、登录
             "/auth/**",
+            //-- 发送短信
             "/sms/**",
+            //-- 搜索
             "/house/search",
+            "/house/*",
+            //-- 获得上传图片Token
             "/uploads/**",
             "/pass/**"
     };

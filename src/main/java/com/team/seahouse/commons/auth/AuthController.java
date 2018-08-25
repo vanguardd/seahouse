@@ -70,7 +70,7 @@ public class AuthController extends BaseController {
         try {
             JwtAuthResponse token = authService.loginBySmsCode(mobilePhone, smsCode);
             // Return the token
-            return new Response(CommonReturnCode.OK ,token);
+            return new Response(CommonReturnCode.OK, token);
         } catch(ValidateException e) {
             LoggerUtils.error(AuthController.class, e.getMessage(), e);
             return new Response(e.getCode(), e.getMessage());
@@ -84,8 +84,8 @@ public class AuthController extends BaseController {
      * @return
      */
     @ApiOperation(value = "刷新Token接口", notes = "刷新Token接口")
-    @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
-    public Response refreshAndGetAuthenticationToken(@RequestParam("refresh_token") String refreshToken) {
+    @PostMapping("${jwt.route.authentication.refresh}")
+    public Response refreshAndGetAuthenticationToken(@RequestBody String refreshToken) {
         try {
             JwtAuthResponse response = authService.refresh(refreshToken);
             return new Response(CommonReturnCode.OK, response);
@@ -100,7 +100,7 @@ public class AuthController extends BaseController {
      * @return
      */
     @ApiOperation(value = "用户注册", notes = "手机号密码注册并自动登录")
-    @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
+    @PostMapping(value = "${jwt.route.authentication.register}")
     public Response register(@RequestBody UserVo userVo) {
         try {
             JwtAuthResponse response = authService.register(userVo);

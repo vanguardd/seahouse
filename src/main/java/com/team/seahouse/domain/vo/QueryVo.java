@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * @Date: 2018/07/23
  */
 @Getter@Setter
-public class QueryVo extends BaseDomain {
+public class QueryVo extends Pages {
     /**
      * 搜索关键字
      */
@@ -38,7 +38,7 @@ public class QueryVo extends BaseDomain {
     /**
      * 标签
      */
-    private String tags;
+    private String label;
 
     /**
      * 朝向

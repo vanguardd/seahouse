@@ -2,6 +2,8 @@ package com.team.seahouse.service;
 
 import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.domain.vo.HouseDetailVo;
+import com.team.seahouse.domain.vo.HouseVo;
 import com.team.seahouse.domain.vo.QueryVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import org.springframework.data.domain.Page;
@@ -44,7 +46,7 @@ public interface IHouseService {
      * @param pageable
      * @return
      */
-    Page<House> search(QueryVo queryVo, Pageable pageable);
+    Page<HouseVo> search(QueryVo queryVo, Pageable pageable);
 
     /**
      * 根据类型查询房屋信息
@@ -52,7 +54,7 @@ public interface IHouseService {
      * @param pageable
      * @return
      */
-    Page<House> findByType(Integer type, Pageable pageable);
+    Page<HouseVo> findByType(Integer type, Pageable pageable);
 
     /**
      * 根据用户信息智能推荐房屋信息
@@ -60,5 +62,5 @@ public interface IHouseService {
      * @param pageable
      * @return
      */
-    Page<House> recommend(UserInfoVo userInfo, Pageable pageable);
+    Page<HouseVo> recommend(UserInfoVo userInfo, Pageable pageable);
 }

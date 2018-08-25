@@ -8,6 +8,7 @@ import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.Collection;
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.vo.HouseVo;
 import com.team.seahouse.domain.vo.Pages;
 import com.team.seahouse.repository.CollectionRepository;
 import com.team.seahouse.service.ICollectionService;
@@ -72,7 +73,7 @@ public class CollectionController extends BaseController {
         //创建Pageable对象
         Pageable pageable = PagesUtils.createPageRequest(pages);
         try {
-            Page<House> houseList = collectionService.getMyCollections(userId, pageable);
+            Page<HouseVo> houseList = collectionService.getMyCollections(userId, pageable);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());

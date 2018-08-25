@@ -83,8 +83,8 @@
 
     <dependency>
       <groupId>com.alibaba</groupId>
-      <artifactId>druid</artifactId>
-      <version>1.1.6</version>
+      <artifactId>druid-spring-boot-starter</artifactId>
+      <version>1.1.9</version>
     </dependency>
 
     <!-- spring-security 和 jwt -->
@@ -92,6 +92,7 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
+
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
@@ -177,6 +178,7 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.3.2</version>
     </dependency>
+
     <dependency>
       <groupId>com.vaadin.external.google</groupId>
       <artifactId>android-json</artifactId>

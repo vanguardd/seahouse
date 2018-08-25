@@ -33,11 +33,9 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
             if(user == null) {
                 throw new UsernameNotFoundException(UserReturnCode.USER_NOT_EXIST.getMessage());
             } else {
-                user.setUserName(loginName);
                 return JwtUserFactory.create(user);
             }
         } else {
-            user.setUserName(loginName);
             return JwtUserFactory.create(user);
         }
 

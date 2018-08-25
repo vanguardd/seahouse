@@ -5,7 +5,8 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.House;
-import com.team.seahouse.domain.UserInfo;
+import com.team.seahouse.domain.vo.HouseDetailVo;
+import com.team.seahouse.domain.vo.HouseVo;
 import com.team.seahouse.domain.vo.QueryVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.repository.HouseRepository;
@@ -14,6 +15,7 @@ import com.team.seahouse.repository.UserRepository;
 import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.IUserService;
+import org.hibernate.Metamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +52,10 @@ public class HouseServiceImpl implements IHouseService {
 
     @Override
     public void publish(House house) {
+
+        //设置标题
+        house.setTitle(house.getHouseName() + " " + house.getRoomName());
+
         //根据房东用户编号查询房东信息
         UserInfoVo landLoadInfo = userInfoRepository.findUserInfoByUserId(house.getLandlordId());
 
@@ -92,52 +100,50 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public Page<House> search(QueryVo queryVo, Pageable pageable) {
+    public Page<HouseVo> search(QueryVo queryVo, Pageable pageable) {
 
         try {
-            Page<House> housePage = houseRepository.findAll(new Specification<House>() {
-                @Override
-                public Predicate toPredicate(Root<House> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-                    List<Predicate> list = new ArrayList<>();
+            Page<HouseVo> housePage = houseRepository.findAll( (Specification<HouseVo>) (root, criteriaQuery, cb) -> {
 
-                    //添加关键字搜索
-                    if(StringUtils.isNotBlank(queryVo.getKeyWord())) {
-                        list.add(cb.like(root.get("title").as(String.class), "%" + queryVo.getKeyWord() + "%"));
-                        list.add(cb.like(root.get("firstAddress").as(String.class), "%" + queryVo.getKeyWord() + "%"));
-                    }
+                List<Predicate> list = new ArrayList<>();
 
-                    //添加价格区间筛选
-                    if(queryVo.getMinPrice() != null && queryVo.getMaxPrice() != null) {
-                        list.add(cb.between(root.get("price").as(BigDecimal.class), queryVo.getMinPrice(), queryVo.getMaxPrice()));
-                    }
-
-                    //添加房屋类型筛选
-                    if(queryVo.getType() != null) {
-                        list.add(cb.equal(root.get("type").as(Integer.class), queryVo.getType()));
-                    }
-
-                    //添加房屋标签筛选
-                    if(StringUtils.isNotBlank(queryVo.getTags())) {
-                        String[] tags = queryVo.getTags().split(";");
-                        for(String tag : tags) {
-                            list.add(cb.like(root.get("tags").as(String.class), tag));
-                        }
-                    }
-
-                    //添加房屋朝向筛选
-                    if(StringUtils.isNotBlank(queryVo.getExposition())) {
-                        list.add(cb.equal(root.get("exposition").as(String.class), queryVo.getExposition()));
-                    }
-
-                    //添加房屋状态为已审核
-                    list.add(cb.equal(root.get("state").as(Integer.class), StatusEnum.AUDIT_PASS));
-
-                    Predicate[] p = new Predicate[list.size()];
-                    return cb.and(list.toArray(p));
-
+                //添加关键字搜索
+                if(StringUtils.isNotBlank(queryVo.getKeyWord())) {
+                    list.add(cb.like(root.get("address").as(String.class), "%" + queryVo.getKeyWord() + "%"));
                 }
+
+                //添加价格区间筛选
+                if(queryVo.getMinPrice() != null && queryVo.getMaxPrice() != null) {
+                    if(queryVo.getMaxPrice().equals(0)) {
+                        list.add(cb.gt(root.get("minPrice").as(BigDecimal.class), queryVo.getMinPrice()));
+                    }
+                    list.add(cb.between(root.get("rent").as(BigDecimal.class), queryVo.getMinPrice(), queryVo.getMaxPrice()));
+                }
+
+                //添加房屋类型筛选
+                if(queryVo.getType() != null) {
+                    list.add(cb.equal(root.get("type").as(Integer.class), queryVo.getType()));
+                }
+
+                //添加房屋标签筛选
+                if(StringUtils.isNotBlank(queryVo.getLabel())) {
+                    String[] tags = queryVo.getLabel().split(";");
+                    for(String tag : tags) {
+                        list.add(cb.like(root.get("labels").as(String.class), tag));
+                    }
+                }
+
+                //添加房屋朝向筛选
+                if(StringUtils.isNotBlank(queryVo.getExposition())) {
+                    list.add(cb.equal(root.get("exposition").as(String.class), queryVo.getExposition()));
+                }
+
+                //添加房屋状态为已审核
+                list.add(cb.equal(root.get("state").as(Integer.class), StatusEnum.AUDIT_PASS.getStatus()));
+
+                Predicate[] p = new Predicate[list.size()];
+                return cb.and(list.toArray(p));
             }, pageable);
-
             return housePage;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
@@ -145,12 +151,11 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public Page<House> findByType(Integer type, Pageable pageable) {
+    public Page<HouseVo> findByType(Integer type, Pageable pageable) {
 
-        List<House> houseList = null;
+        List<HouseVo> houseList = null;
         try {
-            Page<House> housePage = houseRepository.findHousesByType(type, pageable);
-
+            Page<HouseVo> housePage = houseRepository.findHousesByType(type, pageable);
             return housePage;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
@@ -158,7 +163,7 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public Page<House> recommend(UserInfoVo userInfo, Pageable pageable) {
+    public Page<HouseVo> recommend(UserInfoVo userInfo, Pageable pageable) {
         //获得用户的芝麻信用分
         Integer zmCode = userInfo.getZmScore();
         //获得用户的公司地址
@@ -168,7 +173,7 @@ public class HouseServiceImpl implements IHouseService {
         //获得用户的出生年月
         Date bornDate = userInfo.getBornDate();
         try {
-            Page<House> housePage = houseRepository.findByUserInfo(zmCode, pageable);
+            Page<HouseVo> housePage = houseRepository.findByUserInfo(zmCode, pageable);
             return housePage;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);

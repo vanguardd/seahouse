@@ -3,6 +3,8 @@ package com.team.seahouse.service.impl;
 import com.team.seahouse.commons.enums.CommonEnum;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.UserReturnCode;
+import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.controller.SmsSender;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.vo.SmsCodeVo;
 import com.team.seahouse.repository.UserRepository;
@@ -72,9 +74,9 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
             throw new ValidateException(UserReturnCode.SMS_CODE_EXIST);
         }
 
-        System.out.println(host);
+        LoggerUtils.info(SmsSenderServiceImpl.class, "host is" + host);
         String code = getRandNum(6);
-        System.out.println("验证码是:" + code);
+        LoggerUtils.info(SmsSenderServiceImpl.class, "generate smsCode success : " + code);
 
         StringBuilder sb = new StringBuilder(120);
         sb.append("username=").append(username);

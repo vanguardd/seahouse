@@ -80,7 +80,11 @@ public class BaseController {
 	 */
 	protected UserInfoVo getUserInfo() throws BusinessException {
 		Long userId = getUserId();
-		return userInfoRepository.findUserInfoByUserId(userId);
+		UserInfoVo userInfoVo  = userInfoRepository.findUserInfoByUserId(userId);
+		if(userInfoVo == null) {
+			throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+		}
+		return userInfoVo;
 	}
 
 	/**
