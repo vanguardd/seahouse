@@ -16,15 +16,9 @@ import java.util.Date;
  * @date 18/7/13
  */
 @Table(name = "tb_user_info")
-@Entity
 @Getter@Setter
 public class UserInfo {
-    /**
-     * 用户基本信息编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userInfoId;
+
     /**
      * 用户编号
      */
@@ -75,10 +69,10 @@ public class UserInfo {
     /**
      * 创建时间
      */
-    private Date createDate;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private Date updateDate;
+    private Date updateTime;
 }

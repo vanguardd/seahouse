@@ -2,18 +2,18 @@ package com.team.seahouse.controller;
 
 import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.vo.*;
 import com.team.seahouse.service.IHouseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -57,7 +57,7 @@ public class HouseController extends BaseController {
     @ApiOperation(value = "查看房屋详情", notes = "查看房屋详情接口")
     public Response detail(@PathVariable("houseId") Long houseId) {
         try {
-            House house = houseService.findByHouseId(houseId);
+            HouseDetailVo house = houseService.findByHouseId(houseId);
             return new Response(CommonReturnCode.OK, house);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -84,16 +84,14 @@ public class HouseController extends BaseController {
 
     /**
      * 根据关键字模糊查询房屋信息接口
-     * @param queryVo 搜索查询封装的对象
+     * @param searchQuery 搜索查询封装的对象
      * @return
      */
     @GetMapping("/search")
     @ApiOperation(value = "搜索房屋接口", notes = "根据关键字模糊查询和筛选房屋信息接口")
-    public Response search(QueryVo queryVo) {
-        //创建Pageable对象
-        Pageable pageable = PagesUtils.createPageRequest(queryVo);
+    public Response search(SearchQuery searchQuery) {
         try {
-            Page<HouseVo> houseList = houseService.search(queryVo, pageable);
+            PageResult<HouseVo> houseList = houseService.search(searchQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -109,11 +107,10 @@ public class HouseController extends BaseController {
     @GetMapping("/type/{type}")
     @ApiOperation(value = "根据类型查询房屋信息接口", notes = "根据类型查询房屋信息接口")
     public Response findByType(@PathVariable("type") Integer type,
-                               @RequestBody Pages pages) {
-        //创建Pageable对象
-        Pageable pageable = PagesUtils.createPageRequest(pages);
+                               @RequestBody PageQuery pageQuery) {
+
         try {
-            Page<HouseVo> houseList = houseService.findByType(type, pageable);
+            PageResult<HouseVo> houseList = houseService.findByType(type, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -123,18 +120,16 @@ public class HouseController extends BaseController {
 
     /**
      * 根据用户信息推荐房屋信息接口
-     * @param pages
+     * @param pageQuery
      * @return
      */
     @GetMapping("/recommend")
     @ApiOperation(value = "推荐房屋信息接口", notes = "根据用户信息推荐房屋信息接口")
-    public Response recommend(@RequestBody Pages pages) {
-        //创建Pageable对象
-        Pageable pageable = PagesUtils.createPageRequest(pages);
+    public Response recommend(@RequestBody PageQuery pageQuery) {
         //获得携带Token的用户信息
         UserInfoVo userInfo = getUserInfo();
         try {
-            Page<HouseVo> houseList = houseService.recommend(userInfo, pageable);
+            PageResult<HouseVo> houseList = houseService.recommend(userInfo, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());

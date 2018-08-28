@@ -14,17 +14,9 @@ import java.util.Date;
  * @describe
  * @date 2018/07/19
  */
-@Entity
 @Table(name = "tb_collection")
 @Getter@Setter
-public class Collection extends BaseDomain {
-
-    /**
-     * 收藏编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Collections extends BaseDomain {
 
     /**
      * 房屋编号

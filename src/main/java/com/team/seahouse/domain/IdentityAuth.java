@@ -14,16 +14,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/18
  */
-@Entity
 @Table(name = "tb_identity_auth")
 @Getter@Setter
 public class IdentityAuth extends BaseDomain {
-    /**
-     * 认证编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authId;
 
     /**
      * 用户编号

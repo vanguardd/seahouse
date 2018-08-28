@@ -20,10 +20,6 @@ import java.util.Date;
  */
 @Getter@Setter
 public class HouseDetailVo extends BaseDomain {
-    /**
-     * 房屋编号
-     */
-    private Long houseId;
 
     /**
      * 房屋标题
@@ -262,11 +258,6 @@ public class HouseDetailVo extends BaseDomain {
      * 退租规则
      */
     private String exitRentRule;
-
-    /**
-     * 房屋类型1：整租,2:合租
-     */
-    private Integer type;
 
     /**
      * 房东编号

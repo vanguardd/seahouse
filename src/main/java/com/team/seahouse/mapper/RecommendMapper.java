@@ -1,7 +1,7 @@
-package com.team.seahouse.repository;
+package com.team.seahouse.mapper;
 
+import com.team.seahouse.commons.base.BaseMapper;
 import com.team.seahouse.domain.House;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @Title: 房屋推荐
@@ -11,5 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @Version: 1.0
  * @Date: 2018/07/24
  */
-public interface RecommendRepository extends JpaRepository<House, Long> {
+public interface RecommendMapper extends BaseMapper<House> {
 }

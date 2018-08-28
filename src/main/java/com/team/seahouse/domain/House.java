@@ -2,8 +2,11 @@ package com.team.seahouse.domain;
 
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.utils.StringUtils;
+import com.team.seahouse.mapper.typehandler.StringArrayTypeHandler;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.TypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,16 +19,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/18
  */
-@Entity
 @Table(name = "tb_house")
 @Getter@Setter
 public class House extends BaseDomain {
-    /**
-     * 房屋编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long houseId;
 
     /**
      * 房屋标题
@@ -36,7 +32,8 @@ public class House extends BaseDomain {
     /**
      * 房产证照片
      */
-    private String propertyCardImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] propertyCardImages;
 
     /**
      * 房产证号
@@ -58,7 +55,8 @@ public class House extends BaseDomain {
     /**
      * 租赁合同照片
      */
-    private String leaseContractImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] leaseContractImages;
 
 
     /**************公共空间配置**************/
@@ -71,30 +69,38 @@ public class House extends BaseDomain {
     /**
      * 客厅
      */
-    private String livingRoom;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] livingRoom;
 
-    private String livingRoomImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] livingRoomImages;
 
     /**
      * 卫生间
      */
-    private String bathRoom;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] bathRoom;
 
-    private String bathRoomImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] bathRoomImages;
 
     /**
      * 餐厅
      */
-    private String kitchen;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] kitchen;
 
-    private String kitchenImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] kitchenImages;
 
     /**
      * 阳台
      */
-    private String balcony;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] balcony;
 
-    private String balconyImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] balconyImages;
 
     /***************物业&水电费等***********/
 
@@ -190,7 +196,8 @@ public class House extends BaseDomain {
     /**
      * 房间设施
      */
-    private String roomFacilities;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] roomFacilities;
 
     /**
      * 详情首页照片
@@ -201,7 +208,8 @@ public class House extends BaseDomain {
     /**
      * 房间照片
      */
-    private String roomImages;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] roomImages;
 
     /**
      * 朝向
@@ -221,9 +229,11 @@ public class House extends BaseDomain {
     /**
      * 支付方式
      */
-    private String payWay;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] payWay;
 
-    private String labels;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] labels;
 
     private String introduction;
 
@@ -237,7 +247,8 @@ public class House extends BaseDomain {
     /**
      * 地址坐标
      */
-    private String addressCoordinate;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] addressCoordinate;
 
 
     /**
@@ -287,12 +298,14 @@ public class House extends BaseDomain {
     /**
      * 租住规则
      */
-    private String rentRule;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] rentRule;
 
     /**
      * 退租规则
      */
-    private String exitRentRule;
+    @ColumnType(typeHandler = StringArrayTypeHandler.class)
+    private String[] exitRentRule;
 
     /**
      * 房屋类型1：整租,2:合租
@@ -349,7 +362,7 @@ public class House extends BaseDomain {
      */
     private Long auditor;
 
-    public void setPropertyCardImages(String[] propertyCardImages) {
+    /*public void setPropertyCardImages(String[] propertyCardImages) {
         this.propertyCardImages = StringUtils.arrayToString(propertyCardImages);;
     }
 
@@ -498,5 +511,5 @@ public class House extends BaseDomain {
 
     public String[] getExitRentRule() {
         return exitRentRule.split(",");
-    }
+    }*/
 }

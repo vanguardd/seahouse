@@ -1,10 +1,9 @@
 package com.team.seahouse.service;
 
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Reservation;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 /**
  * @Title: 预约看房业务接口
@@ -24,10 +23,10 @@ public interface IReservationService {
     /**
      * 根据用户名获得预约信息集合
      * @param userId
-     * @param pageable
+     * @param pageInfo
      * @return
      */
-    Page<Reservation> findReservations(Long userId, Pageable pageable);
+    PageResult<Reservation> findReservations(Long userId, PageQuery pageInfo);
 
     /**
      * 修改预约看房信息

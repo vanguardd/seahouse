@@ -3,6 +3,9 @@ package com.team.seahouse.domain;
 import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
+import tk.mybatis.mapper.annotation.KeySql;
+import tk.mybatis.mapper.annotation.NameStyle;
+import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,17 +17,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/19
  */
-@Entity
-@Table(name = "tb_track")
 @Getter@Setter
+@Table(name = "tb_track")
 public class Track extends BaseDomain {
-
-    /**
-     * 足迹编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long trackId;
 
     /**
      * 房屋编号

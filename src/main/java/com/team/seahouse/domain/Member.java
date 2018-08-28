@@ -14,17 +14,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/18
  */
-@Entity
 @Table(name = "tb_member")
 @Getter@Setter
 public class Member extends BaseDomain {
-
-    /**
-     * 会员编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memId;
 
     /**
      * 用户编号

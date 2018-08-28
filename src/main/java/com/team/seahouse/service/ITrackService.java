@@ -1,11 +1,8 @@
 package com.team.seahouse.service;
 
-import com.team.seahouse.domain.House;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.vo.HouseVo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 /**
  * @Title: 足迹业务接口
@@ -26,9 +23,10 @@ public interface ITrackService {
     /**
      * 查看我的足迹
      * @param userId
+     * @param page
      * @return
      */
-    Page<HouseVo> myTracks(Long userId, Pageable pageable);
+    PageResult<HouseVo> myTracks(Long userId, PageQuery page);
 
     /**
      * 清空足迹记录

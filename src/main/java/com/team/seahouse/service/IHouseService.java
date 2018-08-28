@@ -1,15 +1,12 @@
 package com.team.seahouse.service;
 
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.House;
-import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.vo.HouseDetailVo;
 import com.team.seahouse.domain.vo.HouseVo;
-import com.team.seahouse.domain.vo.QueryVo;
+import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.domain.vo.UserInfoVo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 /**
  * @title 房屋业务接口
@@ -37,30 +34,29 @@ public interface IHouseService {
      * @param houseId
      * @return
      */
-    House findByHouseId(Long houseId);
+    HouseDetailVo findByHouseId(Long houseId);
 
     /**
      * 房屋搜索功能
      * 包含关键字搜索，筛选等功能
-     * @param queryVo
-     * @param pageable
+     * @param searchQuery
      * @return
      */
-    Page<HouseVo> search(QueryVo queryVo, Pageable pageable);
+    PageResult<HouseVo> search(SearchQuery searchQuery);
 
     /**
      * 根据类型查询房屋信息
      * @param type
-     * @param pageable
+     * @param pageInfo
      * @return
      */
-    Page<HouseVo> findByType(Integer type, Pageable pageable);
+    PageResult<HouseVo> findByType(Integer type, PageQuery pageInfo);
 
     /**
      * 根据用户信息智能推荐房屋信息
      * @param userInfo
-     * @param pageable
+     * @param pageInfo
      * @return
      */
-    Page<HouseVo> recommend(UserInfoVo userInfo, Pageable pageable);
+    PageResult<HouseVo> recommend(UserInfoVo userInfo, PageQuery pageInfo);
 }

@@ -2,17 +2,19 @@ package com.team.seahouse.service.impl;
 
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
-import com.team.seahouse.commons.utils.JwtTokenUtil;
+import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.domain.IdentityAuth;
+import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
-import com.team.seahouse.repository.IdentityAuthRepository;
-import com.team.seahouse.repository.UserInfoRepository;
-import com.team.seahouse.repository.ZhiMaAuthRepository;
+import com.team.seahouse.mapper.IdentityAuthMapper;
+import com.team.seahouse.mapper.UserInfoMapper;
+import com.team.seahouse.mapper.UserMapper;
+import com.team.seahouse.mapper.ZhiMaAuthMapper;
 import com.team.seahouse.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -27,24 +29,26 @@ import java.util.Date;
 public class UserServiceImpl implements IUserService {
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private UserInfoMapper userInfoMapper;
 
     @Autowired
-    private ZhiMaAuthRepository zhiMaAuthRepository;
+    private UserMapper userMapper;
 
     @Autowired
-    private IdentityAuthRepository identityAuthRepository;
+    private ZhiMaAuthMapper zhiMaAuthMapper;
+
+    @Autowired
+    private IdentityAuthMapper identityAuthMapper;
 
     @Override
     public UserInfo updateUserInfo(UserInfo userInfo) throws BusinessException {
-        userInfo.setUpdateDate(new Date());
-        UserInfo save = null;
+        userInfo.setUpdateTime(new Date());
         try {
-            save = userInfoRepository.save(userInfo);
+            userInfoMapper.updateByPrimaryKey(userInfo);
+            return userInfo;
         } catch (BusinessException e) {
             throw new BusinessException(CommonReturnCode.REQUEST_TIMEOUT);
         }
-        return save;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class UserServiceImpl implements IUserService {
         //设置更新时间
         zhiMaAuth.setUpdateTime(new Date());
         try {
-            zhiMaAuthRepository.save(zhiMaAuth);
+            zhiMaAuthMapper.insert(zhiMaAuth);
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
@@ -65,9 +69,35 @@ public class UserServiceImpl implements IUserService {
         //设置创建时间
         identityAuth.setCreateTime(new Date());
         try {
-            identityAuthRepository.save(identityAuth);
+            identityAuthMapper.insert(identityAuth);
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public Boolean isExistUserName(String userName) {
+        User user = userMapper.findByUserName(userName);
+        if(user == null) {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Transactional(rollbackFor = BusinessException.class)
+    @Override
+    public void updateUserName(String userName, Long userId) {
+        //判断昵称时候存在
+        Boolean isExist = isExistUserName(userName);
+        if(isExist) {
+            throw new BusinessException(UserReturnCode.USERNAME_EXIST);
+        }
+        try {
+            userMapper.setUsername(userName, userId);
+            userInfoMapper.setUserName(userName, userId);
+        } catch (BusinessException e) {
+            throw new BusinessException(e);
         }
     }
 }

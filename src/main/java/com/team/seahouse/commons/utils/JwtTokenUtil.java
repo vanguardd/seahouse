@@ -1,9 +1,8 @@
 package com.team.seahouse.commons.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
-import com.team.seahouse.domain.vo.JwtUser;
+import com.team.seahouse.commons.auth.JwtUser;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;

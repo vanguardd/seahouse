@@ -1,19 +1,19 @@
 package com.team.seahouse.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
-import com.team.seahouse.domain.Collection;
-import com.team.seahouse.domain.House;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
+import com.team.seahouse.domain.Collections;
 import com.team.seahouse.domain.vo.HouseVo;
-import com.team.seahouse.repository.CollectionRepository;
-import com.team.seahouse.repository.HouseRepository;
+import com.team.seahouse.mapper.CollectionMapper;
+import com.team.seahouse.mapper.HouseMapper;
 import com.team.seahouse.service.ICollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,28 +28,32 @@ import java.util.List;
 public class CollectionServiceImpl implements ICollectionService {
 
     @Autowired
-    private CollectionRepository collectionRepository;
+    private CollectionMapper collectionMapper;
 
     @Autowired
-    private HouseRepository houseRepository;
+    private HouseMapper houseMapper;
 
     @Override
-    public void add(Collection collection) {
+    public void add(Collections collections) {
         //设置创建时间
-        collection.setCreateTime(new Date());
+        collections.setCreateTime(new Date());
         try {
-            collectionRepository.save(collection);
+            collectionMapper.insert(collections);
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public Page<HouseVo> getMyCollections(Long userId, Pageable pageable) {
-        List<House> houseList = new ArrayList<>();
+    public PageResult<HouseVo> getMyCollections(Long userId, PageQuery page) {
         try {
-            Page<HouseVo> housePages = houseRepository.findCollectedHouseByUserId(userId, pageable);
-            return housePages;
+            //设置分页信息
+            PageHelper.startPage(page.getPage(), page.getSize());
+            //设置排序条件
+            PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
+            List<HouseVo> houseList = houseMapper.findCollectedHouseByUserId(userId);
+            PageResult<HouseVo> result = new PageResult<>(houseList);
+            return result;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }

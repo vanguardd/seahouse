@@ -1,11 +1,9 @@
 package com.team.seahouse.service;
 
-import com.team.seahouse.domain.Collection;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
+import com.team.seahouse.domain.Collections;
 import com.team.seahouse.domain.vo.HouseVo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 /**
  * @Title: 收藏业务接口
@@ -17,15 +15,15 @@ import java.util.List;
 public interface ICollectionService {
     /**
      * 添加收藏信息
-     * @param collection
+     * @param collections
      */
-    void add(Collection collection);
+    void add(Collections collections);
 
     /**
      * 查看我的收藏的出租房屋信息列表
      * @param userId
-     * @param pageable
+     * @param page
      * @return
      */
-    Page<HouseVo> getMyCollections(Long userId, Pageable pageable);
+    PageResult<HouseVo> getMyCollections(Long userId, PageQuery page);
 }

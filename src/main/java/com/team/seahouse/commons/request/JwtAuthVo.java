@@ -1,4 +1,4 @@
-package com.team.seahouse.domain.vo;
+package com.team.seahouse.commons.request;
 
 import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;

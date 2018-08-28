@@ -1,6 +1,6 @@
-package com.team.seahouse.domain.vo;
+package com.team.seahouse.commons.request;
 
-import com.team.seahouse.commons.base.BaseDomain;
+import com.team.seahouse.commons.support.page.PageQuery;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * @Date: 2018/07/23
  */
 @Getter@Setter
-public class QueryVo extends Pages {
+public class SearchQuery extends PageQuery {
     /**
      * 搜索关键字
      */

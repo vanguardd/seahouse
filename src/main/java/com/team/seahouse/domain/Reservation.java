@@ -14,16 +14,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/20
  */
-@Entity
 @Table(name = "tb_reservation")
 @Getter@Setter
 public class Reservation extends BaseDomain {
-    /**
-     * 预约编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reservationId;
 
     /**
      * 房屋编号

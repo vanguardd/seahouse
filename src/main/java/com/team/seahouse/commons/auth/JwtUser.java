@@ -1,4 +1,4 @@
-package com.team.seahouse.domain.vo;
+package com.team.seahouse.commons.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.enums.StatusEnum;

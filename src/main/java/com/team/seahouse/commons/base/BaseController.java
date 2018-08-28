@@ -7,8 +7,8 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.vo.UserInfoVo;
-import com.team.seahouse.repository.UserInfoRepository;
-import com.team.seahouse.repository.UserRepository;
+import com.team.seahouse.mapper.UserInfoMapper;
+import com.team.seahouse.mapper.UserMapper;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,10 +38,10 @@ public class BaseController {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
-	private UserInfoRepository userInfoRepository;
+	private UserInfoMapper userInfoMapper;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserMapper userMapper;
 
 
 	/**
@@ -80,7 +80,7 @@ public class BaseController {
 	 */
 	protected UserInfoVo getUserInfo() throws BusinessException {
 		Long userId = getUserId();
-		UserInfoVo userInfoVo  = userInfoRepository.findUserInfoByUserId(userId);
+		UserInfoVo userInfoVo  = userInfoMapper.findUserInfoByUserId(userId);
 		if(userInfoVo == null) {
 			throw new BusinessException(CommonReturnCode.BAD_REQUEST);
 		}
@@ -93,7 +93,7 @@ public class BaseController {
 	 */
 	protected User getUser() {
 		  Long userId = getUserId();
-		return userRepository.findByUserId(userId);
+		return userMapper.findByUserId(userId);
 	}
 
 	/**

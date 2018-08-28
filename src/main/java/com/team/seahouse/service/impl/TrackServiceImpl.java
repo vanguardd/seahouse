@@ -1,18 +1,18 @@
 package com.team.seahouse.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
-import com.team.seahouse.domain.House;
-import com.team.seahouse.domain.vo.HouseDetailVo;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.vo.HouseVo;
-import com.team.seahouse.repository.HouseRepository;
+import com.team.seahouse.mapper.HouseMapper;
 import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -39,13 +39,11 @@ public class TrackServiceImpl implements ITrackService {
     private IHouseService houseService;
 
     @Autowired
-    private HouseRepository houseRepository;
+    private HouseMapper houseMapper;
 
     @Override
     public void add(Long userId, Long houseId) {
         try {
-            //根据房屋编号查询房屋详细信息
-            House house = houseService.findByHouseId(houseId);
             //创建Set集合存放房屋Id
             Set<Long> ids = new  HashSet<Long>();
             ids.add(userId);
@@ -57,12 +55,17 @@ public class TrackServiceImpl implements ITrackService {
     }
 
     @Override
-    public Page<HouseVo> myTracks(Long userId, Pageable pageable) {
+    public PageResult<HouseVo> myTracks(Long userId, PageQuery page) {
         try {
             //查询该用户编号对应的足迹信息
             Set<Long> ids = redisService.get(REDIS_TRACKS_PRE + ":" + userId);
-            Page<HouseVo> houseList = houseRepository.findByHouseIdIn(ids, pageable);
-            return houseList;
+            //设置分页信息
+            PageHelper.startPage(page.getPage(), page.getSize());
+            //设置排序条件
+            PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
+            List<HouseVo> houseList = houseMapper.findByHouseIdIn(ids);
+            PageResult<HouseVo> result = new PageResult<>(houseList);
+            return result;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }

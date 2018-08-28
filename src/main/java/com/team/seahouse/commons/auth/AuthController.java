@@ -6,20 +6,13 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.JwtAuthResponse;
 import com.team.seahouse.commons.response.Response;
-import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.commons.security.*;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import com.team.seahouse.domain.User;
-import com.team.seahouse.domain.vo.JwtAuthVo;
 import com.team.seahouse.domain.vo.UserVo;
-import com.team.seahouse.service.ISmsSenderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @title Auth验证控制器

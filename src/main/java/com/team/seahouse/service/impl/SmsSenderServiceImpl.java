@@ -4,10 +4,8 @@ import com.team.seahouse.commons.enums.CommonEnum;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import com.team.seahouse.controller.SmsSender;
 import com.team.seahouse.domain.User;
-import com.team.seahouse.domain.vo.SmsCodeVo;
-import com.team.seahouse.repository.UserRepository;
+import com.team.seahouse.mapper.UserMapper;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Random;
 
 /**
@@ -42,7 +39,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     private IRedisService<String> redisService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @Value("${sms.host}")
     private String host;
@@ -57,7 +54,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     @Transactional(rollbackFor = ValidateException.class)
     @Override
     public void sendMessage(String phoneNumber, Integer type) {
-        User user = userRepository.findByMobilePhone(phoneNumber);
+        User user = userMapper.findByMobilePhone(phoneNumber);
         if(CommonEnum.REGISTER_TYPE.getType().equals(type)) {
             if(user != null) {
                 throw new ValidateException(UserReturnCode.ACCOUNT_ERROR);

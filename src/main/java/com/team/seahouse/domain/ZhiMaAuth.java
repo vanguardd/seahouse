@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -18,17 +15,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/19
  */
-@Entity
-@Table(name = "tb_zhima_auth")
+@Table(name = "tb_zhiMa_auth")
 @Getter@Setter
 public class ZhiMaAuth extends BaseDomain {
-
-    /**
-     * 芝麻编号
-     */
-    @Id
-    @GeneratedValue
-    private Long zmId;
 
     /**
      * 用户编号

@@ -4,23 +4,17 @@ import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import com.team.seahouse.commons.utils.PagesUtils;
 import com.team.seahouse.domain.Reservation;
-import com.team.seahouse.domain.vo.Pages;
-import com.team.seahouse.repository.ReservationRepository;
+import com.team.seahouse.mapper.ReservationMapper;
 import com.team.seahouse.service.IReservationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @Title: 预约看房模块接口
@@ -38,7 +32,7 @@ public class ReservationController extends BaseController {
     private IReservationService reservationService;
 
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationMapper reservationMapper;
 
     /**
      * 新增预约看房信息
@@ -67,11 +61,9 @@ public class ReservationController extends BaseController {
     @GetMapping("list/{userId}")
     @ApiOperation(value = "查询用户预约看房信息接口", notes = "根据用户编号查询预约看房信息")
     public Response getReservations(@PathVariable("userId") Long userId,
-                                    @RequestBody Pages pages) {
-        //创建Pageable对象
-        Pageable pageable = PagesUtils.createPageRequest(pages);
+                                    @RequestBody PageQuery pages) {
         try {
-            Page<Reservation> reservations = reservationService.findReservations(userId, pageable);
+            PageResult<Reservation> reservations = reservationService.findReservations(userId, pages);
             return new Response(CommonReturnCode.OK, reservations);
         } catch (BusinessException e) {
             LoggerUtils.error(ReservationController.class, e.getMessage());
@@ -88,7 +80,7 @@ public class ReservationController extends BaseController {
     @ApiOperation(value = "查看预约详情接口", notes = "根据预约编号查看预约信息详情")
     public Response detail(@PathVariable("reservationId") Long reservationId) {
         try {
-            Reservation reservation = reservationRepository.findByReservationId(reservationId);
+            Reservation reservation = reservationMapper.findByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
         } catch (Exception e) {
             LoggerUtils.error(ReservationController.class,

@@ -14,17 +14,9 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/19
  */
-@Entity
 @Table(name = "tb_contract")
 @Getter@Setter
 public class Contract extends BaseDomain {
-
-    /**
-     * 合同编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long contractId;
 
     /**
      * 合同书

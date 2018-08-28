@@ -33,4 +33,18 @@ public interface IUserService {
      */
     void identityAuth(IdentityAuth identityAuth);
 
+    /**
+     * 校验昵称时候存在
+     * @param userName
+     * @return
+     */
+    Boolean isExistUserName(String userName);
+
+    /**
+     * 更新昵称
+     * @param userName
+     * @param userId
+     */
+    void updateUserName(String userName, Long userId);
+
 }

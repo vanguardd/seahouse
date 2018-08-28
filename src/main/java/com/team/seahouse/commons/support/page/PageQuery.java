@@ -1,4 +1,4 @@
-package com.team.seahouse.domain.vo;
+package com.team.seahouse.commons.support.page;
 
 import com.alibaba.fastjson.JSON;
 import com.team.seahouse.commons.base.BaseDomain;
@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * @Title: 封装的分页对象
@@ -17,31 +19,35 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter@Setter
-public class Pages extends BaseDomain {
+public class PageQuery implements Serializable {
+
+    protected static final long serialVersionUID = 1L;
 
     /**
      * 第几页
      */
-    private int page;
+    private Integer page = 1;
 
     /**
      * 每页显示几条内容
      */
-    private int size;
+    private Integer size = 10;
 
     /**
      * 排序字段
      */
-    private String sortColumn;
+    private String sortColumn = "create_time";
 
     /**
      * 排序方式
      */
-    private String direction;
+    private String direction = "DESC";
 
     @Override
     public String toString() {
         return JSON.toJSONString(this, true);
     }
+
+
 
 }

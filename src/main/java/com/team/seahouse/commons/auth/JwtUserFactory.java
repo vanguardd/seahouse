@@ -1,4 +1,4 @@
-package com.team.seahouse.domain.vo;
+package com.team.seahouse.commons.auth;
 
 import com.team.seahouse.domain.User;
 
@@ -16,7 +16,7 @@ public class JwtUserFactory {
 
     public static JwtUser create(User user) {
         return new JwtUser(
-                user.getUserId(),
+                user.getId(),
                 user.getMobilePhone(),
                 user.getPassword(),
                 user.getLastPasswordResetDate(),

@@ -9,13 +9,11 @@ import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.security.SmsCodeAuthenticationToken;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import com.team.seahouse.domain.vo.JwtUser;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.vo.UserVo;
-import com.team.seahouse.repository.UserInfoRepository;
-import com.team.seahouse.repository.UserRepository;
-import jdk.net.SocketFlow;
+import com.team.seahouse.mapper.UserInfoMapper;
+import com.team.seahouse.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -44,8 +42,8 @@ public class AuthServiceImpl implements IAuthService {
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
-    private UserRepository userRepository;
-    private UserInfoRepository userInfoRepository;
+    private UserMapper userMapper;
+    private UserInfoMapper userInfoMapper;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -55,20 +53,20 @@ public class AuthServiceImpl implements IAuthService {
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
             JwtTokenUtil jwtTokenUtil,
-            UserRepository userRepository,
-            UserInfoRepository userInfoRepository) {
+            UserMapper userMapper,
+            UserInfoMapper userInfoMapper) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userRepository = userRepository;
-        this.userInfoRepository = userInfoRepository;
+        this.userMapper = userMapper;
+        this.userInfoMapper = userInfoMapper;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = ValidateException.class)
     @Override
     public JwtAuthResponse register(UserVo userToAdd) throws ValidateException {
         final String mobilePhone = userToAdd.getMobilePhone();
-        if(userRepository.findByMobilePhone(mobilePhone) != null) {
+        if(userMapper.findByMobilePhone(mobilePhone) != null) {
             throw new ValidateException(UserReturnCode.ACCOUNT_ERROR.getStatus(), UserReturnCode.ACCOUNT_ERROR.getMessage());
         }
         //创建用户对象，并设置用户登录信息
@@ -85,22 +83,22 @@ public class AuthServiceImpl implements IAuthService {
 
         //保存用户登录信息
         try {
-            User registerUser = userRepository.save(user);
+            userMapper.insert(user);
             //创建用户详细信息，并设置详细信息
             UserInfo userInfo = new UserInfo();
-            userInfo.setUserId(registerUser.getUserId());
-            userInfo.setUserName(registerUser.getUserName());
-            userInfo.setMobilePhone(registerUser.getMobilePhone());
-            userInfo.setEmail(registerUser.getEmail());
+            userInfo.setUserId(user.getId());
+            userInfo.setUserName(user.getUserName());
+            userInfo.setMobilePhone(user.getMobilePhone());
+            userInfo.setEmail(user.getEmail());
             userInfo.setAvatar(userToAdd.getAvatar());
             userInfo.setSex(userToAdd.getSex());
             userInfo.setBornDate(userToAdd.getBornDate());
             userInfo.setCompanyAddress(userToAdd.getCompanyAddress());
-            userInfo.setCreateDate(new Date());
-            userInfo.setUpdateDate(new Date());
+            userInfo.setCreateTime(new Date());
+            userInfo.setUpdateTime(new Date());
 
             //保存用户详细信息
-            userInfoRepository.save(userInfo);
+            userInfoMapper.insert(userInfo);
 
             LoggerUtils.info(AuthServiceImpl.class, "register success : " + userToAdd.getMobilePhone());
 

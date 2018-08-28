@@ -1,19 +1,19 @@
 package com.team.seahouse.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
-import com.team.seahouse.commons.response.Response;
+import com.team.seahouse.commons.support.page.PageQuery;
+import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Reservation;
-import com.team.seahouse.repository.ReservationRepository;
+import com.team.seahouse.mapper.ReservationMapper;
 import com.team.seahouse.service.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +28,7 @@ import java.util.List;
 public class ReservationServiceImpl implements IReservationService {
 
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationMapper reservationMapper;
 
     @Override
     public void add(Reservation reservation) {
@@ -37,14 +37,17 @@ public class ReservationServiceImpl implements IReservationService {
         //设置修改时间
         reservation.setUpdateTime(new Date());
         //执行保存操作
-        reservationRepository.save(reservation);
+        reservationMapper.insert(reservation);
     }
 
     @Override
-    public Page<Reservation> findReservations(Long userId, Pageable pageable) {
+    public PageResult<Reservation> findReservations(Long userId, PageQuery page) {
         try {
-            Page<Reservation> reservationPage = reservationRepository.findAllByUserId(userId, pageable);
-            return reservationPage;
+            PageHelper.startPage(page.getPage(), page.getSize());
+            PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
+            List<Reservation> reservationList = reservationMapper.findAllByUserId(userId);
+            PageResult<Reservation> result = new PageResult<Reservation>(reservationList);
+            return result;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }
@@ -55,7 +58,7 @@ public class ReservationServiceImpl implements IReservationService {
     public void update(Reservation reservation) {
         reservation.setUpdateTime(new Date());
         try {
-            reservationRepository.save(reservation);
+            reservationMapper.insert(reservation);
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }

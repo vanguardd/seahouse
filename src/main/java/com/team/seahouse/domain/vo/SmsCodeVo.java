@@ -14,7 +14,7 @@ import java.util.Date;
  * @date 18/7/17
  */
 @Getter@Setter
-public class SmsCodeVo extends BaseDomain {
+public class SmsCodeVo {
     /**
      * 手机号
      */

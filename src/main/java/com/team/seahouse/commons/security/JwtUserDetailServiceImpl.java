@@ -1,9 +1,9 @@
 package com.team.seahouse.commons.security;
 
 import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.domain.vo.JwtUserFactory;
+import com.team.seahouse.commons.auth.JwtUserFactory;
 import com.team.seahouse.domain.User;
-import com.team.seahouse.repository.UserRepository;
+import com.team.seahouse.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,15 +21,15 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
         //根据手机号去查询用户信息
-        User user = userRepository.findByMobilePhone(loginName);
+        User user = userMapper.findByMobilePhone(loginName);
         if(user == null) {
             //根据邮箱查询用户信息
-            user = userRepository.findByEmail(loginName);
+            user = userMapper.findByEmail(loginName);
             if(user == null) {
                 throw new UsernameNotFoundException(UserReturnCode.USER_NOT_EXIST.getMessage());
             } else {

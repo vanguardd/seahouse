@@ -23,7 +23,8 @@ public enum UserReturnCode implements ReturnCode {
 	USERNAME_LENGTH_LIMIT(10009, "昵称超过最大长度"),
 	USERNAME_SAME(10010, "昵称相同"),
 	MOBILE_PHONE_NOT_EXIST(10011, "该手机号未注册，请注册后登录！"),
-	SMS_CODE_EXIST(10012, "验证码已发送！");
+	SMS_CODE_EXIST(10012, "验证码已发送！"),
+	USERNAME_EXIST(10013, "昵称已存在");
 	
 	/** 返回状态码 */
 	private Integer status;

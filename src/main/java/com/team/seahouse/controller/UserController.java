@@ -4,6 +4,7 @@ import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
+import com.team.seahouse.commons.response.ReturnCode;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.IdentityAuth;
@@ -11,8 +12,8 @@ import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
 import com.team.seahouse.domain.vo.UserInfoVo;
-import com.team.seahouse.repository.UserInfoRepository;
-import com.team.seahouse.repository.UserRepository;
+import com.team.seahouse.mapper.UserInfoMapper;
+import com.team.seahouse.mapper.UserMapper;
 import com.team.seahouse.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,10 +36,10 @@ public class UserController extends BaseController {
     private IUserService userService;
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private UserInfoMapper userInfoMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     /**
      * 获得用户信息
@@ -87,7 +88,7 @@ public class UserController extends BaseController {
     public Response updateAvatar(String avatarPath) {
         try {
             Long userId = getUserId();
-            userInfoRepository.setAvatar(avatarPath, userId);
+            userInfoMapper.setAvatar(avatarPath, userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
@@ -115,9 +116,13 @@ public class UserController extends BaseController {
             LoggerUtils.error(UserController.class, UserReturnCode.USERNAME_LENGTH_LIMIT.getMessage());
             return new Response(UserReturnCode.USERNAME_LENGTH_LIMIT);
         }
-        userRepository.setUsername(userName, user.getUserId());
-        userInfoRepository.setUserName(userName, user.getUserId());
-        return new Response(CommonReturnCode.OK);
+        try {
+            userService.updateUserName(userName, user.getId());
+            return new Response(CommonReturnCode.OK);
+        } catch (BusinessException e) {
+            LoggerUtils.error(UserController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
     }
 
     /**
