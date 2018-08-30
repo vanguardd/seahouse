@@ -35,7 +35,6 @@ public class UserInfoVo extends BaseDomain {
     /**
      * 手机号
      */
-    @NotNull(message = "手机号不能为空")
     private String mobilePhone;
 
     /**
@@ -73,4 +72,24 @@ public class UserInfoVo extends BaseDomain {
      * 芝麻信用分
      */
     private Integer zmScore;
+
+    /**
+     * 订单个数
+     */
+    private Integer orderCount;
+
+    /**
+     * 收藏个数
+     */
+    private Integer collectionCount;
+
+    /**
+     * 预约个数
+     */
+    private Integer reservationCount;
+
+    /**
+     * 足迹个数
+     */
+    private Integer trackCount;
 }

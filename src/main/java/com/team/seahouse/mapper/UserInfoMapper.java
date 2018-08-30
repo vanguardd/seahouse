@@ -40,7 +40,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
      * @return
      */
     @Update("UPDATE tb_user_info SET user_name=#{userName} WHERE user_id=#{userId}")
-    int setUserName(String userName, Long userId);
+    int setUserName(@Param("userName") String userName, @Param("userId") Long userId);
 
     /**
      * 根据用户编号查询用户信息包括基本信息和芝麻信用分等

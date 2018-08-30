@@ -7,7 +7,7 @@ import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.JwtAuthResponse;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.utils.LoggerUtils;
-import com.team.seahouse.domain.vo.UserVo;
+import com.team.seahouse.commons.request.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

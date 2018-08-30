@@ -408,5 +408,19 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 		List<String> list = Arrays.asList(data);
 		return String.join(",", list);
 	}
+
+	/**
+	 * 逗号分隔的字符串字符串转化成集合list
+	 * @param data 逗号分隔的字符串
+	 * @return
+	 */
+	public static List<Long> stringToArray(String data) {
+		String[] array = data.split(",");
+		List<Long> list = new ArrayList<>();
+		for(String item : array) {
+			list.add(Long.decode(item));
+		}
+		return list;
+	}
    
 }

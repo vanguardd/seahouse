@@ -1,5 +1,6 @@
 package com.team.seahouse.domain;
 
+import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +18,7 @@ import java.util.Date;
  */
 @Table(name = "tb_user_info")
 @Getter@Setter
-public class UserInfo {
+public class UserInfo extends BaseDomain {
 
     /**
      * 用户编号

@@ -32,7 +32,7 @@ public interface HouseMapper extends BaseMapper<House> {
      * @param houseIds
      * @return
      */
-    List<HouseVo> findByHouseIdIn(Set<Long> houseIds);
+    List<HouseVo> findByHouseIdIn(List<Long> houseIds);
 
     /**
      * 根据用户编号查询收藏的房屋列表

@@ -80,20 +80,11 @@ public class BaseController {
 	 */
 	protected UserInfoVo getUserInfo() throws BusinessException {
 		Long userId = getUserId();
-		UserInfoVo userInfoVo  = userInfoMapper.findUserInfoByUserId(userId);
-		if(userInfoVo == null) {
+		UserInfoVo userInfo  = userInfoMapper.findUserInfoByUserId(userId);
+		if(userInfo == null) {
 			throw new BusinessException(CommonReturnCode.BAD_REQUEST);
 		}
-		return userInfoVo;
-	}
-
-	/**
-	 * 根据请求携带的Token获得用户实体
-	 * @return
-	 */
-	protected User getUser() {
-		  Long userId = getUserId();
-		return userMapper.findByUserId(userId);
+		return userInfo;
 	}
 
 	/**
@@ -105,10 +96,6 @@ public class BaseController {
 		final String tokenStr = getRequest().getHeader(tokenHeader);
 		final String token = tokenStr.substring(tokenHead.length());
 		Long userId = jwtTokenUtil.getUserIdFromToken(token);
-		if(userId == null) {
-			throw new ValidateException(CommonReturnCode.UNAUTHORIZED);
-		}
 		return userId;
-
 	}
 }

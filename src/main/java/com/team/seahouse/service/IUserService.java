@@ -4,6 +4,7 @@ import com.team.seahouse.domain.IdentityAuth;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
+import com.team.seahouse.domain.vo.UserInfoVo;
 
 /**
  * @title 用户业务层接口
@@ -47,4 +48,10 @@ public interface IUserService {
      */
     void updateUserName(String userName, Long userId);
 
+    /**
+     * 根据用户编号查询用户信息
+     * @param userId
+     * @return
+     */
+    UserInfoVo findUserInfoByUserId(Long userId);
 }

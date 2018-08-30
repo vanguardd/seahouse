@@ -147,9 +147,11 @@
     <result column="electric_value" property="electricValue" jdbcType="DECIMAL" />
     <result column="house_name" property="houseName" jdbcType="VARCHAR" />
     <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
-    <result column="real_name" property="landlordName" jdbcType="VARCHAR" />
-    <result column="mobile_phone" property="landLardMobilePhone" />
-    <result column="create_time" property="landLardCreateDate" />
+    <result column="real_name" property="landLordName" jdbcType="VARCHAR" />
+    <result column="mobile_phone" property="landLordMobilePhone" />
+    <result column="avatar" property="landLordAvatar" jdbcType="VARCHAR" />
+    <result column="create_time" property="landLordCreateDate" />
+    <result column="house_id" property="collection" jdbcType="BIGINT" />
   </resultMap>
 
   <sql id="houseListColumn">
@@ -168,7 +170,10 @@
         AND type = #{type}
       </if>
       <if test="exposition != null and exposition != ''">
-        AND exposition = #{exposition}
+        AND
+        <foreach collection="exposition" index="index" item="item" open="(" separator="or" close=")">
+          exposition = #{item}
+        </foreach>
       </if>
       <if test="minPrice != null and minPrice != 0 and maxPrice != null and maxPrice != 0">
         AND rent BETWEEN #{minPrice} AND #{maxPrice}
@@ -193,9 +198,11 @@
            h.address_coordinate, h.first_address, h.plot_name, h.green_area,
            h.heating_way, h.parking, h.property, h.years, h.village_introduction,
            h.rent_rule, h.exit_rent_rule, h.landlord_id, h.land_lard_zhi_ma_score,
-           u.real_name, u.mobile_phone, u.create_time
-      from tb_house h, tb_user_info u
-      where h.landlord_id = u.user_id and h.id=#{houseId}
+           u.real_name, u.mobile_phone, u.create_time, u.avatar, c.house_id
+      from tb_house h
+      LEFT JOIN tb_user_info u ON h.landlord_id = u.user_id
+      LEFT JOIN tb_collection c ON h.id = c.house_id
+      where h.id=#{houseId}
   </select>
 
   <!--根据房屋编号集合查询房屋列表-->

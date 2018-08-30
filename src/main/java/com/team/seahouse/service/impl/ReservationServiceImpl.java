@@ -63,4 +63,12 @@ public class ReservationServiceImpl implements IReservationService {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public int selectCountByUserId(Long userId) {
+        Reservation reservation = new Reservation();
+        reservation.setUserId(userId);
+        int count = reservationMapper.selectCount(reservation);
+        return count;
+    }
 }

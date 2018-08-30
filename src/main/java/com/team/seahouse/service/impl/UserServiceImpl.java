@@ -3,19 +3,15 @@ package com.team.seahouse.service.impl;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.domain.IdentityAuth;
-import com.team.seahouse.domain.User;
-import com.team.seahouse.domain.UserInfo;
-import com.team.seahouse.domain.ZhiMaAuth;
-import com.team.seahouse.mapper.IdentityAuthMapper;
-import com.team.seahouse.mapper.UserInfoMapper;
-import com.team.seahouse.mapper.UserMapper;
-import com.team.seahouse.mapper.ZhiMaAuthMapper;
-import com.team.seahouse.service.IUserService;
+import com.team.seahouse.domain.*;
+import com.team.seahouse.domain.vo.UserInfoVo;
+import com.team.seahouse.mapper.*;
+import com.team.seahouse.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -39,6 +35,15 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private IdentityAuthMapper identityAuthMapper;
+
+    @Autowired
+    private ICollectionService collectionService;
+
+    @Autowired
+    private IReservationService reservationService;
+
+    @Autowired
+    private ITrackService trackService;
 
     @Override
     public UserInfo updateUserInfo(UserInfo userInfo) throws BusinessException {
@@ -99,5 +104,20 @@ public class UserServiceImpl implements IUserService {
         } catch (BusinessException e) {
             throw new BusinessException(e);
         }
+    }
+
+    @Override
+    public UserInfoVo findUserInfoByUserId(Long userId) {
+        UserInfoVo userInfo = userInfoMapper.findUserInfoByUserId(userId);
+        //获得收藏个数
+        int collectionCount = collectionService.selectCountByUserId(userId);
+        userInfo.setCollectionCount(collectionCount);
+        //获得预约个数
+        int reservationCount = reservationService.selectCountByUserId(userId);
+        userInfo.setReservationCount(reservationCount);
+        //获得足迹个数
+        int trackCount = trackService.selectCountByUserId(userId);
+        userInfo.setTrackCount(trackCount);
+        return userInfo;
     }
 }

@@ -17,8 +17,8 @@ public enum  CommonEnum {
      * 出租房屋类型
      */
     ALL_TYPE(1, "整租"),
-    SHARE_TYPE(2, "合租");
-
+    SHARE_TYPE(2, "合租"),
+    APARTMENT_TYPE(3, "公寓");
 
     private Integer type;
 

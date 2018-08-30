@@ -1,8 +1,7 @@
 package com.team.seahouse.commons.auth;
 
 import com.team.seahouse.commons.response.JwtAuthResponse;
-import com.team.seahouse.domain.User;
-import com.team.seahouse.domain.vo.UserVo;
+import com.team.seahouse.commons.request.UserVo;
 
 /**
  * @title Auth Service接口

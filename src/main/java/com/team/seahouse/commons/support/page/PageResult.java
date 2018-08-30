@@ -2,6 +2,7 @@ package com.team.seahouse.commons.support.page;
 
 import com.github.pagehelper.PageInfo;
 import com.team.seahouse.commons.base.BaseDomain;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @Date: 2018/08/27
  */
 @Getter@Setter
+@AllArgsConstructor
 public class PageResult<T> implements Serializable {
     protected static final long serialVersionUID = 1L;
 

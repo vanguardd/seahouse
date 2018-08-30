@@ -38,19 +38,17 @@ public class UserController extends BaseController {
     @Autowired
     private UserInfoMapper userInfoMapper;
 
-    @Autowired
-    private UserMapper userMapper;
-
     /**
-     * 获得用户信息
+     * 获得我的用户信息
      * @return
      */
     @ApiOperation(value = "用户信息接口", notes = "获得用户信息接口")
     @GetMapping("/user_info")
     public Response userInfo() {
         UserInfoVo userInfo = null;
+        Long userId = getUserId();
         try {
-            userInfo = getUserInfo();
+            userInfo = userService.findUserInfoByUserId(userId);
             return new Response(CommonReturnCode.OK, userInfo);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
@@ -107,7 +105,7 @@ public class UserController extends BaseController {
     public Response updateUserName(String userName) {
         //昵称最大长度
         Integer userNameLengthLimit = 12;
-        User user = getUser();
+        UserInfoVo user = getUserInfo();
         if(null != user.getUserName() && userName.equals(user.getUserName())) {
             LoggerUtils.error(UserController.class, UserReturnCode.USERNAME_SAME.getMessage());
             return new Response(UserReturnCode.USERNAME_SAME);
@@ -117,7 +115,7 @@ public class UserController extends BaseController {
             return new Response(UserReturnCode.USERNAME_LENGTH_LIMIT);
         }
         try {
-            userService.updateUserName(userName, user.getId());
+            userService.updateUserName(userName, user.getUserId());
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());

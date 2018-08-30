@@ -2,11 +2,13 @@ package com.team.seahouse.service.impl;
 
 import com.team.seahouse.service.IRedisService;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +31,9 @@ public class RedisServiceImpl<Object> implements IRedisService<Object> {
 
     @Resource
     private HashOperations<String, String, Object> hashOperations;
+
+    @Resource
+    private ListOperations<String, Object> listOperations;
 
 
     @Override
@@ -101,4 +106,47 @@ public class RedisServiceImpl<Object> implements IRedisService<Object> {
         Set<String> set = hashOperations.keys(key);
         set.stream().forEach(hkey -> hashOperations.delete(key, hkey));
     }
+
+    @Override
+    public void leftPush(String key, Object value) {
+        listOperations.leftPush(key, value);
+    }
+
+    @Override
+    public void leftPushAll(String key, Collection<Object> values) {
+        listOperations.leftPushAll(key, values);
+    }
+
+    @Override
+    public void rightPushAll(String key, Collection<Object> values) {
+        listOperations.rightPushAll(key, values);
+    }
+
+    @Override
+    public void rightPush(String key, Object value) {
+        listOperations.rightPush(key, value);
+    }
+
+    @Override
+    public List<Object> range(String key, int start, int end) {
+        List<Object> list = listOperations.range(key, start, end);
+        return list;
+    }
+
+    @Override
+    public Long size(String key) {
+        Long size = listOperations.size(key);
+        return size;
+    }
+
+    @Override
+    public void remove(String key, int count, Object value) {
+        listOperations.remove(key, count, value);
+    }
+
+    @Override
+    public void trim(String key, int start, int end) {
+        listOperations.trim(key, start, end);
+    }
+
 }

@@ -33,4 +33,11 @@ public interface IReservationService {
      * @param reservation
      */
     void update(Reservation reservation);
+
+    /**
+     * 根据用户编号查询预约个数
+     * @param userId
+     * @return
+     */
+    int selectCountByUserId(Long userId);
 }

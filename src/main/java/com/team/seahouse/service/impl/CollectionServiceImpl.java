@@ -58,4 +58,12 @@ public class CollectionServiceImpl implements ICollectionService {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
         }
     }
+
+    @Override
+    public int selectCountByUserId(Long userId) {
+        Collections collections = new Collections();
+        collections.setUserId(userId);
+        int count = collectionMapper.selectCount(collections);
+        return count;
+    }
 }

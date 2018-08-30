@@ -38,10 +38,26 @@ public class SearchQuery extends PageQuery {
     /**
      * 标签
      */
-    private String label;
+    private String[] labels;
 
     /**
      * 朝向
      */
-    private String exposition;
+    private String[] exposition;
+
+    public void setLabels(String labels) {
+        if(labels != null) {
+            this.labels = labels.split(",");
+        } else {
+            this.labels = null;
+        }
+    }
+
+    public void setExposition(String exposition) {
+        if(exposition != null) {
+            this.exposition = exposition.split(",");
+        } else {
+            this.exposition = null;
+        }
+    }
 }

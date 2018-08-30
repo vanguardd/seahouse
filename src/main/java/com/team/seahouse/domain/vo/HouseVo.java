@@ -70,14 +70,14 @@ public class HouseVo extends BaseDomain {
     private String addressCoordinate;
 
     public String[] getLabels() {
-        if(labels != null) {
+        if(labels != null && !labels.equals("")) {
             return labels.split(",");
         }
         return null;
     }
 
     public String[] getAddressCoordinate() {
-        if(addressCoordinate != null) {
+        if(addressCoordinate != null && !addressCoordinate.equals("")) {
             return addressCoordinate.split(",");
         }
         return null;

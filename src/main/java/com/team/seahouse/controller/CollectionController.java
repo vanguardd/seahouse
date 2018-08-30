@@ -36,7 +36,10 @@ public class CollectionController extends BaseController {
     @PostMapping("/add")
     @ApiOperation(value = "收藏出租房屋接口", notes = "收藏出租房屋信息接口")
     public Response add(@RequestBody Collections collections) {
+
         try {
+            Long userId = getUserId();
+            collections.setUserId(userId);
             collectionService.add(collections);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
@@ -45,9 +48,9 @@ public class CollectionController extends BaseController {
         }
     }
 
-    @DeleteMapping("remove/{collectionId}")
+    @DeleteMapping("remove/{houseId}")
     @ApiOperation(value = "取消收藏接口", notes = "取消收藏出租信息接口")
-    public Response remove(@PathVariable Long houseId) {
+    public Response remove(@PathVariable("houseId") Long houseId) {
         try {
             collectionMapper.deleteCollectionByHouseId(houseId);
             return new Response(CommonReturnCode.SUCCESS);
@@ -57,11 +60,10 @@ public class CollectionController extends BaseController {
         }
     }
 
-    @GetMapping("/my/{userId}")
+    @GetMapping("/myCollection")
     @ApiOperation(value = "查看我的收藏接口", notes = "根据用户编号查看收藏的出租房屋信息列表")
-    public Response getMyCollections(@PathVariable("userId") Long userId,
-                                     @RequestBody PageQuery pageQuery) {
-
+    public Response getMyCollections(@RequestBody PageQuery pageQuery) {
+        Long userId = getUserId();
         try {
             PageResult<HouseVo> houseList = collectionService.getMyCollections(userId, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);

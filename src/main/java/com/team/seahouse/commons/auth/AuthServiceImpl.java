@@ -11,7 +11,7 @@ import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
-import com.team.seahouse.domain.vo.UserVo;
+import com.team.seahouse.commons.request.UserVo;
 import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;

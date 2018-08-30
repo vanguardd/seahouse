@@ -26,4 +26,11 @@ public interface ICollectionService {
      * @return
      */
     PageResult<HouseVo> getMyCollections(Long userId, PageQuery page);
+
+    /**
+     * 根据用户编号查询收藏个数
+     * @param userId
+     * @return
+     */
+    int selectCountByUserId(Long userId);
 }

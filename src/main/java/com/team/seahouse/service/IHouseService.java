@@ -34,7 +34,7 @@ public interface IHouseService {
      * @param houseId
      * @return
      */
-    HouseDetailVo findByHouseId(Long houseId);
+    HouseDetailVo findByHouseId(Long houseId, Long userId);
 
     /**
      * 房屋搜索功能

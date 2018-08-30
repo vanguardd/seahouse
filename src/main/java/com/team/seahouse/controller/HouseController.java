@@ -57,7 +57,9 @@ public class HouseController extends BaseController {
     @ApiOperation(value = "查看房屋详情", notes = "查看房屋详情接口")
     public Response detail(@PathVariable("houseId") Long houseId) {
         try {
-            HouseDetailVo house = houseService.findByHouseId(houseId);
+            //获得已经登录的用户编号
+            Long userId = getUserId();
+            HouseDetailVo house = houseService.findByHouseId(houseId, userId);
             return new Response(CommonReturnCode.OK, house);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());

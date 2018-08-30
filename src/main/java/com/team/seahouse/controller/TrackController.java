@@ -7,12 +7,15 @@ import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.vo.HouseVo;
 import com.team.seahouse.service.ITrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Title: 足迹模块接口
@@ -48,16 +51,17 @@ public class TrackController extends BaseController {
     }
 
     /**
-     * 访问房屋信息详情时，添加浏览足迹
-     * @param houseId
-     * @param userId
+     * 添加客户端保存的足迹记录
+     * @param houseIds
      * @return
      */
-    @PostMapping("/add")
+    @PostMapping("/addList")
     @ApiOperation(value = "添加足迹", notes = "访问房屋信息详情时，添加浏览足迹")
-    public Response addTrack(Long houseId, Long userId) {
+    public Response addTrack(@RequestBody String houseIds) {
+        List<Long> houseIdList = StringUtils.stringToArray(houseIds);
         try {
-            trackService.add(userId, houseId);
+            Long userId = getUserId();
+            trackService.addList(userId, houseIdList);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());

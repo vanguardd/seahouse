@@ -35,7 +35,7 @@
 
   <!--根据用户编号查询用户信息-->
   <select id="findUserInfoByUserId" resultMap="UserInfoResultMap" parameterType="Long" >
-    select u.user_id, u.user_name, u.avatar,u.born_date, u.company_address,
+    select u.id, u.user_id, u.user_name, u.avatar,u.born_date, u.company_address,
            u.email, u.mobile_phone,u.real_name, u.sex, z.zm_score
       from tb_user_info u
       left join tb_zhima_auth z

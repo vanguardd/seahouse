@@ -1,9 +1,11 @@
 package com.team.seahouse.service.impl;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import com.team.seahouse.commons.enums.CommonEnum;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
+import com.team.seahouse.commons.utils.RedisKeyUtils;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.mapper.UserMapper;
 import com.team.seahouse.service.IRedisService;
@@ -65,14 +67,20 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
                 throw new ValidateException(UserReturnCode.MOBILE_PHONE_NOT_EXIST);
             }
         }
-
-        boolean isExist = redisService.exists(REDIS_SMS_PRE + ":" + phoneNumber);
-        if(isExist) {
-            throw new ValidateException(UserReturnCode.SMS_CODE_EXIST);
-        }
-
+        //生成key
+        String key = RedisKeyUtils.generateKeyWithPlaceHolder(REDIS_SMS_PRE, phoneNumber);
+        boolean isExist = redisService.exists(key);
         LoggerUtils.info(SmsSenderServiceImpl.class, "host is" + host);
-        String code = getRandNum(6);
+        String code = "";
+        //该手机号验证码已经验证
+        if(!isExist) {
+            //生成验证码
+            code = getRandNum(6);
+            //存入redis中并设置过期时间
+            redisService.set(key, code, expireTime);
+        } else {
+            code = redisService.get(key);
+        }
         LoggerUtils.info(SmsSenderServiceImpl.class, "generate smsCode success : " + code);
 
         StringBuilder sb = new StringBuilder(120);
@@ -82,17 +90,19 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         sb.append("&mobile=").append(phoneNumber);
         sb.append("&content=").append("您的验证码为:").append(code).append(",三分钟内输入有效！");
 
-        redisService.set(REDIS_SMS_PRE + ":" + phoneNumber, code, expireTime);
+        //发送验证码
+        //TODO 发送验证码的实现
     }
 
     @Override
     public boolean checkIsCorrectCode(String phone, String code) {
+        String key = RedisKeyUtils.generateKeyWithPlaceHolder(REDIS_SMS_PRE, phone);
         //根据手机号获得存入redis中的验证码
-        String smsCode = redisService.get(REDIS_SMS_PRE + ":" + phone);
+        String smsCode = redisService.get(key);
         //校验验证码
         if(smsCode != null && smsCode.equals(String.valueOf(code))) {
             //验证成功后，手动删除redis中的验证码
-            redisService.del(REDIS_SMS_PRE + ":" + phone);
+            redisService.del(key);
             return true;
         }
         return false;

@@ -26,7 +26,7 @@ public class Contract extends BaseDomain {
     /**
      * 签订时间
      */
-    private Date SigningTime;
+    private Date signingTime;
 
     /**
      * 生效时间

@@ -15,6 +15,7 @@ import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.mapper.HouseMapper;
 import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.service.IHouseService;
+import com.team.seahouse.service.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,9 @@ public class HouseServiceImpl implements IHouseService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private ITrackService trackService;
 
     @Override
     public void publish(House house) {
@@ -78,10 +82,14 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public HouseDetailVo findByHouseId(Long houseId) {
+    public HouseDetailVo findByHouseId(Long houseId, Long userId) {
         HouseDetailVo house = houseMapper.findByHouseId(houseId);
         if(house == null) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+        }
+        //用户编号不为空，代表已经登录，添加浏览记录
+        if(userId != null) {
+            trackService.add(userId, houseId);
         }
         return house;
 

@@ -265,24 +265,50 @@ public class HouseDetailVo extends BaseDomain {
     private Long landlordId;
 
     /**
+     * 房东头像
+     */
+    private String landLordAvatar;
+
+    /**
      * 房东姓名
      */
-    private String landlordName;
+    private String landLordName;
 
     /**
      * 房东芝麻信用分
      */
-    private Integer landLardZhiMaScore;
+    private Integer landLordZhiMaScore;
 
     /**
      * 房东手机号
      */
-    private String landLardMobilePhone;
+    private String landLordMobilePhone;
 
     /**
      * 房东注册时间
      */
-    private Date landLardCreateDate;
+    private Date landLordCreateDate;
+
+    private Boolean isCollection;
+
+    public void setCollection(Long collection) {
+        if(collection == null) {
+            setIsCollection(false);
+        } else {
+            setIsCollection(true);
+        }
+    }
+
+    public void setIsCollection(Boolean isCollection) {
+        this.isCollection = isCollection;
+    }
+
+    public Boolean getIsCollection() {
+        if(isCollection == null) {
+            return false;
+        }
+        return isCollection;
+    }
 
     public String[] getLivingRoom() {
         if(livingRoom != null) {

@@ -78,8 +78,10 @@ mybatis:
       mapper-locations: classpath:mapper/*.xml
       typeHandlersPackage: com.team.seahouse.mapper.typehandler
       configuration:
-        #开启驼峰shi
+        #开启驼峰式属性和字段映射
         mapUnderscoreToCamelCase: true
+        #打印运行的SQL语句到控制台
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 mapper:
     mappers:

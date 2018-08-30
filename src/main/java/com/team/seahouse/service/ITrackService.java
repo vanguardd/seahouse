@@ -4,6 +4,8 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.vo.HouseVo;
 
+import java.util.List;
+
 /**
  * @Title: 足迹业务接口
  * @Description: 足迹业务接口
@@ -21,6 +23,13 @@ public interface ITrackService {
     void add(Long userId, Long houseId);
 
     /**
+     * 批量添加房屋足迹
+     * @param userId
+     * @param houseIds
+     */
+    void addList(Long userId, List<Long> houseIds);
+
+    /**
      * 查看我的足迹
      * @param userId
      * @param page
@@ -33,4 +42,11 @@ public interface ITrackService {
      * @param userId
      */
     void clearTracks(Long userId);
+
+    /**
+     * 根据用户编号查询足迹个数
+     * @param userId
+     * @return
+     */
+    int selectCountByUserId(Long userId);
 }
