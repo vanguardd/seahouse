@@ -7,6 +7,7 @@ import com.team.seahouse.domain.vo.HouseVo;
 import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public interface HouseMapper extends BaseMapper<House> {
      * @param houseIds
      * @return
      */
-    List<HouseVo> findByHouseIdIn(List<Long> houseIds);
+    List<HouseVo> findByHouseIdIn(@Param("houseIds") List<Long> houseIds);
 
     /**
      * 根据用户编号查询收藏的房屋列表

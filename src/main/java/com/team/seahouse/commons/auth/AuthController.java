@@ -73,13 +73,13 @@ public class AuthController extends BaseController {
 
     /**
      * 根据refreshToken刷新accessToken
-     * @param refreshToken 刷新Token
      * @return
      */
     @ApiOperation(value = "刷新Token接口", notes = "刷新Token接口")
     @PostMapping("${jwt.route.authentication.refresh}")
-    public Response refreshAndGetAuthenticationToken(@RequestBody String refreshToken) {
+    public Response refreshAndGetAuthenticationToken() {
         try {
+            String refreshToken = getToken();
             JwtAuthResponse response = authService.refresh(refreshToken);
             return new Response(CommonReturnCode.OK, response);
         } catch (BusinessException e) {

@@ -93,9 +93,19 @@ public class BaseController {
 	 * @throws BusinessException
 	 */
 	protected Long getUserId() throws BusinessException {
-		final String tokenStr = getRequest().getHeader(tokenHeader);
-		final String token = tokenStr.substring(tokenHead.length());
+		String token = getToken();
 		Long userId = jwtTokenUtil.getUserIdFromToken(token);
 		return userId;
+	}
+
+	/**
+	 * 获得请求携带的Token
+	 * @return
+	 * @throws BusinessException
+	 */
+	protected String getToken() throws BusinessException {
+		final String tokenStr = getRequest().getHeader(tokenHeader);
+		final String token = tokenStr.substring(tokenHead.length());
+		return token;
 	}
 }

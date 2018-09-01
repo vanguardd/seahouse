@@ -30,7 +30,7 @@ public interface ITrackService {
     void addList(Long userId, List<Long> houseIds);
 
     /**
-     * 查看我的足迹
+     * 查询我的足迹
      * @param userId
      * @param page
      * @return
@@ -42,6 +42,13 @@ public interface ITrackService {
      * @param userId
      */
     void clearTracks(Long userId);
+
+    /**
+     * 删除多个或单个足迹
+     * @param userId
+     * @param houseId
+     */
+    void deleteTracks(Long userId, List<Long> houseId);
 
     /**
      * 根据用户编号查询足迹个数

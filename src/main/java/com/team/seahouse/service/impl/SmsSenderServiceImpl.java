@@ -102,6 +102,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         //校验验证码
         if(smsCode != null && smsCode.equals(String.valueOf(code))) {
             //验证成功后，手动删除redis中的验证码
+            redisService.expire(key, 1L);
             redisService.del(key);
             return true;
         }

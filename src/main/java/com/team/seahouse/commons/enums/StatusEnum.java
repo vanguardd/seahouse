@@ -56,6 +56,9 @@ public enum StatusEnum {
 
 	FINISHED(3, "交易完成");
 
+	/** 订单状态 */
+
+
 
 	
 	private Integer status;

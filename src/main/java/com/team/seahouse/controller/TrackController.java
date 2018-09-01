@@ -9,9 +9,12 @@ import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.mapper.HouseMapper;
+import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.ITrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +35,9 @@ public class TrackController extends BaseController {
     @Autowired
     private ITrackService trackService;
 
+    @Autowired
+    private HouseMapper houseMapper;
+
     /**
      * 查询我的足迹
      * @param page
@@ -39,7 +45,7 @@ public class TrackController extends BaseController {
      */
     @GetMapping("/myTrack")
     @ApiOperation(value = "查询我的足迹", notes = "根据用户编号查询足迹信息")
-    public Response myTrack(@RequestBody PageQuery page) {
+    public Response myTrack(PageQuery page) {
         try {
             Long userId = getUserId();
             PageResult<HouseVo> houseList = trackService.myTracks(userId, page);
@@ -65,22 +71,40 @@ public class TrackController extends BaseController {
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());
-        }
+        } 
     }
 
     /**
      * 根据用户编号清空所有足迹信息
-     * @param userId
      * @return
      */
     @DeleteMapping("/clear")
     @ApiOperation(value = "清空所有足迹信息", notes = "根据用户编号清空所有足迹信息")
-    public Response clearTracks(Long userId) {
+    public Response clearTracks() {
         try {
+            Long userId = getUserId();
             trackService.clearTracks(userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());
         }
+    }
+
+    /**
+     * 删除足迹
+     * @param houseIds
+     * @return
+     */
+    @DeleteMapping("/deleteTracks")
+    @ApiOperation(value = "删除足迹", notes = "删除单个或多个足迹")
+    public Response deleteTracks(String houseIds) {
+        List<Long> houseIdList = StringUtils.stringToArray(houseIds);
+        Long userId = getUserId();
+        try {
+            trackService.deleteTracks(userId, houseIdList);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+        return new Response(CommonReturnCode.OK);
     }
 }

@@ -24,53 +24,61 @@
         <javaModelGenerator targetPackage="com.team.seahouse.domain" targetProject="src/main/java"/>
 
 
-        <sqlMapGenerator targetPackage="com.team.seahouse.mapper" targetProject="src/main/resources"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
-        <!--<javaClientGenerator targetPackage="com.team.seahouse.mapper" targetProject="src/main/java"
-                             type="XMLMAPPER"/>-->
+        <javaClientGenerator targetPackage="com.team.seahouse.mapper" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
 
-        <table tableName="tb_user">
-            <!--mysql 配置-->
+       <!-- <table tableName="tb_user">
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
        </table>
 
         <table tableName="tb_user_info">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_house">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_collection">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_contract">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_reservation">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_track">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_identity_auth">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
         <table tableName="tb_zhiMa_auth">
-            <!--mysql 配置-->
+            &lt;!&ndash;mysql 配置&ndash;&gt;
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+
+        <table tableName="tb_order" domainObjectName="Order">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+        <table tableName="tb_evaluation" domainObjectName="Evaluation">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

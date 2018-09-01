@@ -62,7 +62,7 @@ public class CollectionController extends BaseController {
 
     @GetMapping("/myCollection")
     @ApiOperation(value = "查看我的收藏接口", notes = "根据用户编号查看收藏的出租房屋信息列表")
-    public Response getMyCollections(@RequestBody PageQuery pageQuery) {
+    public Response getMyCollections(PageQuery pageQuery) {
         Long userId = getUserId();
         try {
             PageResult<HouseVo> houseList = collectionService.getMyCollections(userId, pageQuery);

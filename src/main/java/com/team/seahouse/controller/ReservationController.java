@@ -41,7 +41,7 @@ public class ReservationController extends BaseController {
      */
     @PostMapping("/add")
     @ApiOperation(value = "创建预约看房信息", notes = "创建预约看房信息")
-    public Response create(Reservation reservation) {
+    public Response create(@RequestBody Reservation reservation) {
         try {
             reservation.setUserId(getUserId());
             reservationService.add(reservation);
@@ -55,14 +55,13 @@ public class ReservationController extends BaseController {
 
     /**
      * 用户查看自己预约看房记录
-     * @param userId
      * @return
      */
-    @GetMapping("list/{userId}")
+    @GetMapping("list")
     @ApiOperation(value = "查询用户预约看房信息接口", notes = "根据用户编号查询预约看房信息")
-    public Response getReservations(@PathVariable("userId") Long userId,
-                                    @RequestBody PageQuery pages) {
+    public Response getReservations(PageQuery pages) {
         try {
+            Long userId = getUserId();
             PageResult<Reservation> reservations = reservationService.findReservations(userId, pages);
             return new Response(CommonReturnCode.OK, reservations);
         } catch (BusinessException e) {
@@ -76,7 +75,7 @@ public class ReservationController extends BaseController {
      * @param reservationId
      * @return
      */
-    @GetMapping("detail/{reservationId}")
+    @GetMapping("/detail/{reservationId}")
     @ApiOperation(value = "查看预约详情接口", notes = "根据预约编号查看预约信息详情")
     public Response detail(@PathVariable("reservationId") Long reservationId) {
         try {
@@ -96,7 +95,7 @@ public class ReservationController extends BaseController {
      */
     @PutMapping("/update")
     @ApiOperation(value = "修改预约信息", notes = "修改预约信息")
-    public Response update(Reservation reservation) {
+    public Response update(@RequestBody Reservation reservation) {
         try {
             reservationService.update(reservation);
             return new Response(CommonReturnCode.OK);

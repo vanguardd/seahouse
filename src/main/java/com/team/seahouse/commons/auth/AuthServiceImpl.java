@@ -45,9 +45,6 @@ public class AuthServiceImpl implements IAuthService {
     private UserMapper userMapper;
     private UserInfoMapper userInfoMapper;
 
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
@@ -133,15 +130,14 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public JwtAuthResponse refresh(String refreshToken) {
-        final String token = refreshToken.substring(tokenHead.length());
-        String userName = jwtTokenUtil.getUsernameFromToken(token);
+        String userName = jwtTokenUtil.getUsernameFromToken(refreshToken);
         LoggerUtils.info(AuthServiceImpl.class, " authentication : " + userName);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(userName);
         JwtAuthResponse response = new JwtAuthResponse();
         response.setRefreshToken(refreshToken);
         String accessToken = "";
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            accessToken = jwtTokenUtil.refreshToken(token);
+        if (jwtTokenUtil.canTokenBeRefreshed(refreshToken, user.getLastPasswordResetDate())) {
+            accessToken = jwtTokenUtil.refreshToken(refreshToken);
             response.setAccessToken(accessToken);
         } else {
             throw new ValidateException(CommonReturnCode.UNAUTHORIZED);

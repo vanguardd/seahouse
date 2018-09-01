@@ -108,8 +108,7 @@ public class HouseController extends BaseController {
      */
     @GetMapping("/type/{type}")
     @ApiOperation(value = "根据类型查询房屋信息接口", notes = "根据类型查询房屋信息接口")
-    public Response findByType(@PathVariable("type") Integer type,
-                               @RequestBody PageQuery pageQuery) {
+    public Response findByType(@PathVariable("type") Integer type, PageQuery pageQuery) {
 
         try {
             PageResult<HouseVo> houseList = houseService.findByType(type, pageQuery);
@@ -127,7 +126,7 @@ public class HouseController extends BaseController {
      */
     @GetMapping("/recommend")
     @ApiOperation(value = "推荐房屋信息接口", notes = "根据用户信息推荐房屋信息接口")
-    public Response recommend(@RequestBody PageQuery pageQuery) {
+    public Response recommend(PageQuery pageQuery) {
         //获得携带Token的用户信息
         UserInfoVo userInfo = getUserInfo();
         try {

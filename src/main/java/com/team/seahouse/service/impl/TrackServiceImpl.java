@@ -107,6 +107,20 @@ public class TrackServiceImpl implements ITrackService {
     }
 
     @Override
+    public void deleteTracks(Long userId, List<Long> houseIds) {
+        try {
+            String key = RedisKeyUtils.generateKeyWithPlaceHolder(REDIS_TRACKS_PRE, userId);
+            //循环遍历房屋编号从redis中移除
+            for(Long houseId : houseIds) {
+                redisService.remove(key, 1, houseId);
+            }
+        } catch (Exception e) {
+            throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @Override
     public int selectCountByUserId(Long userId) {
         String key = RedisKeyUtils.generateKeyWithPlaceHolder(REDIS_TRACKS_PRE, userId);
         Long count = redisService.size(key);

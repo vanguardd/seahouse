@@ -217,7 +217,8 @@
 
   <!-- 根据用户编号查询我的收藏房屋列表 -->
   <select id="findCollectedHouseByUserId" resultMap="houseListResultMap">
-    SELECT <include refid="houseListColumn" />
+    SELECT h.id, h.room_image, h.title, h.fixtures, h.room_area, h.rent, h.rent_way,
+          h.first_address, h.labels, h.address, h.address_coordinate, c.create_time
       FROM tb_house h
     LEFT JOIN tb_collection c
     ON h.id = c.house_id

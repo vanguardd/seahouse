@@ -45,6 +45,9 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private ITrackService trackService;
 
+    @Autowired
+    private IOrderService orderService;
+
     @Override
     public UserInfo updateUserInfo(UserInfo userInfo) throws BusinessException {
         userInfo.setUpdateTime(new Date());
@@ -115,6 +118,9 @@ public class UserServiceImpl implements IUserService {
         //获得预约个数
         int reservationCount = reservationService.selectCountByUserId(userId);
         userInfo.setReservationCount(reservationCount);
+        //获得订单个数
+        int orderCount = orderService.selectCountByUserId(userId);
+        userInfo.setOrderCount(orderCount);
         //获得足迹个数
         int trackCount = trackService.selectCountByUserId(userId);
         userInfo.setTrackCount(trackCount);
