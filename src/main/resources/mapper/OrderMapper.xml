@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.team.seahouse.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.team.seahouse.domain.Order" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="renter_sign_state" property="renterSignState" jdbcType="INTEGER" />
+    <result column="landLord_id" property="landlordId" jdbcType="BIGINT" />
+    <result column="landLord_sign_state" property="landlordSignState" jdbcType="INTEGER" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="contract_id" property="contractId" jdbcType="BIGINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="pay_way" property="payWay" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="discount_amount" property="discountAmount" jdbcType="DECIMAL" />
+    <result column="business_amount" property="businessAmount" jdbcType="DECIMAL" />
+    <result column="renter_sign_time" property="renterSignTime" jdbcType="TIMESTAMP" />
+    <result column="landLord_sign_time" property="landlordSignTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="business_time" property="businessTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
