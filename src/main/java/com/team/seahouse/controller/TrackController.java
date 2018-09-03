@@ -15,6 +15,7 @@ import com.team.seahouse.service.ITrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +64,7 @@ public class TrackController extends BaseController {
      */
     @PostMapping("/addList")
     @ApiOperation(value = "添加足迹", notes = "访问房屋信息详情时，添加浏览足迹")
-    public Response addTrack(@RequestBody String houseIds) {
+    public Response addTrack(@RequestParam("houseIds") String houseIds) {
         List<Long> houseIdList = StringUtils.stringToArray(houseIds);
         try {
             Long userId = getUserId();
