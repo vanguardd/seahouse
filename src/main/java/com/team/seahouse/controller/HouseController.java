@@ -9,7 +9,9 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.House;
-import com.team.seahouse.domain.vo.*;
+import com.team.seahouse.domain.vo.HouseDetailVo;
+import com.team.seahouse.domain.vo.HouseListVo;
+import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.service.IHouseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -93,7 +95,7 @@ public class HouseController extends BaseController {
     @ApiOperation(value = "搜索房屋接口", notes = "根据关键字模糊查询和筛选房屋信息接口")
     public Response search(SearchQuery searchQuery) {
         try {
-            PageResult<HouseVo> houseList = houseService.search(searchQuery);
+            PageResult<HouseListVo> houseList = houseService.search(searchQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -111,7 +113,7 @@ public class HouseController extends BaseController {
     public Response findByType(@PathVariable("type") Integer type, PageQuery pageQuery) {
 
         try {
-            PageResult<HouseVo> houseList = houseService.findByType(type, pageQuery);
+            PageResult<HouseListVo> houseList = houseService.findByType(type, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -130,7 +132,7 @@ public class HouseController extends BaseController {
         //获得携带Token的用户信息
         UserInfoVo userInfo = getUserInfo();
         try {
-            PageResult<HouseVo> houseList = houseService.recommend(userInfo, pageQuery);
+            PageResult<HouseListVo> houseList = houseService.recommend(userInfo, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());

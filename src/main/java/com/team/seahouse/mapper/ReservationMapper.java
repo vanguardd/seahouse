@@ -2,6 +2,9 @@ package com.team.seahouse.mapper;
 
 import com.team.seahouse.commons.base.BaseMapper;
 import com.team.seahouse.domain.Reservation;
+import com.team.seahouse.domain.vo.LandlordReservationVo;
+import com.team.seahouse.domain.vo.UserReservationVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.data.domain.Page;
 
@@ -25,9 +28,16 @@ public interface ReservationMapper extends BaseMapper<Reservation> {
     Reservation findByReservationId(Long reservationId);
 
     /**
-     * 根据用户编号分页查询预约信息集合
+     * 根据用户编号查询用户预约信息
      * @param userId
      * @return
      */
-    List<Reservation> findAllByUserId(Long userId);
+    List<UserReservationVo> findUserReservation(@Param("userId") Long userId);
+
+    /**
+     * 根据用户编号查询房东预约信息
+     * @param userId
+     * @return
+     */
+    List<LandlordReservationVo> findLandlordReservation(@Param("userId") Long userId);
 }

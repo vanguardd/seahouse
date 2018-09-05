@@ -1,24 +1,19 @@
 package com.team.seahouse.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.RedisKeyUtils;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.mapper.HouseMapper;
-import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Title: 足迹业务
@@ -71,7 +66,7 @@ public class TrackServiceImpl implements ITrackService {
     }
 
     @Override
-    public PageResult<HouseVo> myTracks(Long userId, PageQuery page) {
+    public PageResult<HouseListVo> myTracks(Long userId, PageQuery page) {
         try {
             //生成redisKey
             String key = RedisKeyUtils.generateKeyWithPlaceHolder(REDIS_TRACKS_PRE, userId);
@@ -81,13 +76,13 @@ public class TrackServiceImpl implements ITrackService {
             //查询该用户编号对应的足迹信息
             List<Long> ids = redisService.range(key, start, end);
             //查询足迹房屋列表
-            List<HouseVo> houseList = houseMapper.findByHouseIdIn(ids);
+            List<HouseListVo> houseList = houseMapper.findByHouseIdIn(ids);
             //计算总记录数
             final Long total = redisService.size(key);
             //计算总页数
             Long totalPage = total % page.getSize() == 0 ? total / page.getSize() : total / page.getSize() + 1;
             //封装分页结果对象
-            PageResult<HouseVo> result = new PageResult<>(total, totalPage.intValue(), page.getPage(), page.getSize(), houseList);
+            PageResult<HouseListVo> result = new PageResult<>(total, totalPage.intValue(), page.getPage(), page.getSize(), houseList);
             return result;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);

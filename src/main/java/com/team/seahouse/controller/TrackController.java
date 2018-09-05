@@ -8,14 +8,11 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.StringUtils;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.mapper.HouseMapper;
-import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.ITrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +46,7 @@ public class TrackController extends BaseController {
     public Response myTrack(PageQuery page) {
         try {
             Long userId = getUserId();
-            PageResult<HouseVo> houseList = trackService.myTracks(userId, page);
+            PageResult<HouseListVo> houseList = trackService.myTracks(userId, page);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             LoggerUtils.error(TrackController.class, e.getMessage());

@@ -1,12 +1,14 @@
-package com.team.seahouse.domain;
+package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.seahouse.commons.base.BaseDomain;
+import com.team.seahouse.commons.utils.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,12 +20,37 @@ import java.util.Date;
  */
 @Table(name = "tb_reservation")
 @Getter@Setter
-public class Reservation extends BaseDomain {
+public class LandlordReservationVo extends BaseDomain {
 
     /**
      * 房屋编号
      */
     private Long houseId;
+
+    /**
+     * 房屋照片
+     */
+    private String roomImage;
+
+    /**
+     * 房屋标题
+     */
+    private String title;
+
+    /**
+     * 房屋地址
+     */
+    private String address;
+
+    /**
+     * 房屋租金
+     */
+    private BigDecimal rent;
+
+    /**
+     * 房东编号
+     */
+    private Long landlordId;
 
     /**
      * 用户编号
@@ -46,16 +73,21 @@ public class Reservation extends BaseDomain {
     private Integer sex;
 
     /**
+     * 用户头像
+     */
+    private String avatar;
+
+    /**
      * 预约日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date reservationDate;
+    private String reservationDate;
 
     /**
-     * 预约信息状态
+     * 预约日期星期
      */
-    private Integer state;
+    private String reservationWeek;
 
     /**
      * 时间段
@@ -63,17 +95,13 @@ public class Reservation extends BaseDomain {
     private Integer timeRange;
 
     /**
+     * 预约状态
+     */
+    private Integer state;
+
+    /**
      * 留言
      */
     private String message;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 }

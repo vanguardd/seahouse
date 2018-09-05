@@ -6,10 +6,12 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Reservation;
+import com.team.seahouse.domain.vo.LandlordReservationVo;
+import com.team.seahouse.domain.vo.UserReservationVo;
+import com.team.seahouse.mapper.HouseMapper;
 import com.team.seahouse.mapper.ReservationMapper;
 import com.team.seahouse.service.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,9 @@ public class ReservationServiceImpl implements IReservationService {
     @Autowired
     private ReservationMapper reservationMapper;
 
+    @Autowired
+    private HouseMapper houseMapper;
+
     @Override
     public void add(Reservation reservation) {
         //设置创建时间
@@ -37,19 +42,36 @@ public class ReservationServiceImpl implements IReservationService {
         //设置修改时间
         reservation.setUpdateTime(new Date());
         //执行保存操作
-        reservationMapper.insert(reservation);
+        try {
+            reservationMapper.insert(reservation);
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getCode(), e.getMessage());
+        }
     }
 
     @Override
-    public PageResult<Reservation> findReservations(Long userId, PageQuery page) {
+    public PageResult<UserReservationVo> findUserReservationList(Long userId, PageQuery page) {
         try {
             PageHelper.startPage(page.getPage(), page.getSize());
             PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
-            List<Reservation> reservationList = reservationMapper.findAllByUserId(userId);
-            PageResult<Reservation> result = new PageResult<Reservation>(reservationList);
+            List<UserReservationVo> reservationList = reservationMapper.findUserReservation(userId);
+            PageResult<UserReservationVo> result = new PageResult<>(reservationList);
             return result;
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public PageResult<LandlordReservationVo> findLandlordReservationList(Long userId, PageQuery pageQuery) {
+        try {
+            PageHelper.startPage(pageQuery.getPage(), pageQuery.getSize());
+            PageHelper.orderBy(pageQuery.getSortColumn() + " " + pageQuery.getDirection());
+            List<LandlordReservationVo> reservationVoList = reservationMapper.findLandlordReservation(userId);
+            PageResult<LandlordReservationVo> result = new PageResult<LandlordReservationVo>(reservationVoList);
+            return result;
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getCode(), e.getMessage());
         }
     }
 

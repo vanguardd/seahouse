@@ -8,12 +8,75 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="house_id" property="houseId" jdbcType="BIGINT" />
-    <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
-    <result column="reservation_time" property="reservationTime" jdbcType="TIMESTAMP" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="reservation_date" property="reservationDate" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="message" property="message" jdbcType="VARCHAR" />
-    <result column="time_range" property="timeRange" jdbcType="VARCHAR" />
+    <result column="time_range" property="timeRange" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+
   </resultMap>
+  
+  <resultMap id="UserReservationResultMap" type="com.team.seahouse.domain.vo.UserReservationVo">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="rent" property="rent" jdbcType="DECIMAL" />
+    <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
+    <result column="landlord_name" property="landlordName" jdbcType="VARCHAR" />
+    <result column="landlord_mobile_phone" property="landlordMobilePhone" jdbcType="VARCHAR" />
+    <result column="landlord_avatar" property="landlordAvatar" jdbcType="VARCHAR" />
+    <result column="reservation_date" property="reservationDate" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="time_range" property="timeRange" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="LandlordReservationResultMap" type="com.team.seahouse.domain.vo.UserReservationVo">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="rent" property="rent" jdbcType="DECIMAL" />
+    <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <result column="reservation_date" property="reservationDate" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="time_range" property="timeRange" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+
+  <!-- 租客查询自己预约看房的信息 -->
+  <select id="findUserReservation" resultMap="UserReservationResultMap">
+    SELECT r.*, h.room_image, h.title, h.address, h.rent, h.landlord_id, u.real_name AS landlord_name,
+      u.mobile_phone AS landlord_mobile_phone, u.avatar AS landlord_avatar
+      FROM tb_reservation r
+    LEFT JOIN tb_house h ON r.house_id=h.id
+    LEFT JOIN tb_user_info u ON h.landlord_id=u.user_id
+    WHERE r.user_id=#{userId}
+  </select>
+
+  <!-- 房东查询自己的房屋被预约看房的信息 -->
+  <select id="findLandlordReservation" resultMap="LandlordReservationResultMap">
+    SELECT r.*, h.room_image, h.title, h.address, h.rent, h.landlord_id, u.avatar
+      FROM tb_reservation r
+    LEFT JOIN tb_house h ON r.house_id=h.id
+    LEFT JOIN tb_user_info u ON r.user_id=u.user_id
+    WHERE h.landlord_id=#{userId}
+  </select>
+
 </mapper>

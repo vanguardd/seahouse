@@ -1,7 +1,6 @@
 package com.team.seahouse.service;
 
 import com.team.seahouse.domain.IdentityAuth;
-import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
 import com.team.seahouse.domain.vo.UserInfoVo;

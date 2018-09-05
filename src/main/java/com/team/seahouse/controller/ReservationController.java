@@ -8,12 +8,13 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Reservation;
+import com.team.seahouse.domain.vo.LandlordReservationVo;
+import com.team.seahouse.domain.vo.UserReservationVo;
 import com.team.seahouse.mapper.ReservationMapper;
 import com.team.seahouse.service.IReservationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -46,9 +47,8 @@ public class ReservationController extends BaseController {
             reservation.setUserId(getUserId());
             reservationService.add(reservation);
             return new Response(CommonReturnCode.OK);
-        } catch (Exception e) {
-            LoggerUtils.error(ReservationController.class,
-                    CommonReturnCode.INTERNAL_SERVER_ERROR.getMessage());
+        } catch (BusinessException e) {
+            LoggerUtils.error(ReservationController.class, e.getMessage());
             return new Response(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,13 +57,26 @@ public class ReservationController extends BaseController {
      * 用户查看自己预约看房记录
      * @return
      */
-    @GetMapping("list")
-    @ApiOperation(value = "查询用户预约看房信息接口", notes = "根据用户编号查询预约看房信息")
-    public Response getReservations(PageQuery pages) {
+    @GetMapping("/user/list")
+    @ApiOperation(value = "用户查看预约看房信息接口", notes = "用户查看自己预约看房的信息接口")
+    public Response userReservations(PageQuery pages) {
         try {
             Long userId = getUserId();
-            PageResult<Reservation> reservations = reservationService.findReservations(userId, pages);
+            PageResult<UserReservationVo> reservations = reservationService.findUserReservationList(userId, pages);
             return new Response(CommonReturnCode.OK, reservations);
+        } catch (BusinessException e) {
+            LoggerUtils.error(ReservationController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/landlord/list")
+    @ApiOperation(value = "房东查看预约看房信息", notes = "房东查询出租房屋预约看房信息接口")
+    public Response landlordReservation(PageQuery pageQuery) {
+        try {
+            Long userId = getUserId();
+            PageResult<LandlordReservationVo> reservationList = reservationService.findLandlordReservationList(userId, pageQuery);
+            return new Response(CommonReturnCode.OK, reservationList);
         } catch (BusinessException e) {
             LoggerUtils.error(ReservationController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());

@@ -54,9 +54,19 @@ public enum StatusEnum {
 
 	AUDIT_FAIL(2, "审核未通过"),
 
-	FINISHED(3, "交易完成");
+	FINISHED(3, "交易完成"),
 
 	/** 订单状态 */
+
+
+	/** 预约看房时间段 */
+	ALL_DAY(1, "全天"),
+	MORNING(2, "上午(9:00-12:00)"),
+	AFTERNOON(3, "下午(12:00-6:00)"),
+	EVENING(4, "晚上(6:00-10:00)");
+
+
+	/** 预约看房信息状态 */
 
 
 

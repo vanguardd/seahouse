@@ -22,7 +22,7 @@ import java.util.List;
  * @Date: 2018/07/24
  */
 @Getter@Setter
-public class HouseVo extends BaseDomain {
+public class HouseListVo extends BaseDomain {
 
     /**
      * 详情首页照片和列表照片

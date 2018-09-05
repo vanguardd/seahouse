@@ -2,10 +2,8 @@ package com.team.seahouse.commons.base;
 
 
 import com.team.seahouse.commons.exception.BusinessException;
-import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
-import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.mapper.UserMapper;

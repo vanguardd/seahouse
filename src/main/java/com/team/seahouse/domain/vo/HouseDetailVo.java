@@ -289,7 +289,34 @@ public class HouseDetailVo extends BaseDomain {
      */
     private Date landLordCreateDate;
 
+    /**
+     * 是否收藏
+     */
     private Boolean isCollection;
+
+    /**
+     * 是否预约
+     */
+    private Boolean isReservation;
+
+    public void setReservationId(Long reservationId) {
+        if(reservationId == null) {
+            setIsReservation(false);
+        } else {
+            setIsReservation(true);
+        }
+    }
+
+    public void setIsReservation(Boolean isReservation) {
+        this.isReservation = isReservation;
+    }
+
+    public Boolean getIsReservation() {
+        if(isReservation == null) {
+            return false;
+        }
+        return isReservation;
+    }
 
     public void setCollection(Long collection) {
         if(collection == null) {

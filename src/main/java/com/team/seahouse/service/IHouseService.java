@@ -4,7 +4,7 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.vo.HouseDetailVo;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.domain.vo.UserInfoVo;
 
@@ -42,7 +42,7 @@ public interface IHouseService {
      * @param searchQuery
      * @return
      */
-    PageResult<HouseVo> search(SearchQuery searchQuery);
+    PageResult<HouseListVo> search(SearchQuery searchQuery);
 
     /**
      * 根据类型查询房屋信息
@@ -50,7 +50,7 @@ public interface IHouseService {
      * @param pageInfo
      * @return
      */
-    PageResult<HouseVo> findByType(Integer type, PageQuery pageInfo);
+    PageResult<HouseListVo> findByType(Integer type, PageQuery pageInfo);
 
     /**
      * 根据用户信息智能推荐房屋信息
@@ -58,5 +58,5 @@ public interface IHouseService {
      * @param pageInfo
      * @return
      */
-    PageResult<HouseVo> recommend(UserInfoVo userInfo, PageQuery pageInfo);
+    PageResult<HouseListVo> recommend(UserInfoVo userInfo, PageQuery pageInfo);
 }

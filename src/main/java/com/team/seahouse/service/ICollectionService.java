@@ -3,7 +3,7 @@ package com.team.seahouse.service;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Collections;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 
 /**
  * @Title: 收藏业务接口
@@ -25,7 +25,7 @@ public interface ICollectionService {
      * @param page
      * @return
      */
-    PageResult<HouseVo> getMyCollections(Long userId, PageQuery page);
+    PageResult<HouseListVo> getMyCollections(Long userId, PageQuery page);
 
     /**
      * 根据用户编号查询收藏个数

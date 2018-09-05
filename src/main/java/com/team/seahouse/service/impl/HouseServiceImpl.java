@@ -1,7 +1,6 @@
 package com.team.seahouse.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.team.seahouse.commons.enums.StatusEnum;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
@@ -9,7 +8,7 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.vo.HouseDetailVo;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.mapper.HouseMapper;
@@ -83,27 +82,30 @@ public class HouseServiceImpl implements IHouseService {
 
     @Override
     public HouseDetailVo findByHouseId(Long houseId, Long userId) {
-        HouseDetailVo house = houseMapper.findByHouseId(houseId);
+        HouseDetailVo house = null;
+        if(userId != null) {
+            house = houseMapper.findByHouseIdLogin(houseId, userId);
+            //已经登录，添加浏览记录
+            trackService.add(userId, houseId);
+        } else {
+            house = houseMapper.findByHouseId(houseId);
+        }
         if(house == null) {
             throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-        }
-        //用户编号不为空，代表已经登录，添加浏览记录
-        if(userId != null) {
-            trackService.add(userId, houseId);
         }
         return house;
 
     }
 
     @Override
-    public PageResult<HouseVo> search(SearchQuery searchQuery) {
+    public PageResult<HouseListVo> search(SearchQuery searchQuery) {
 
         try {
             PageHelper.startPage(searchQuery.getPage(), searchQuery.getSize());
             PageHelper.orderBy(searchQuery.getSortColumn() + " " + searchQuery.getDirection());
 
-            List<HouseVo> houseList = houseMapper.search(searchQuery);
-            PageResult<HouseVo> result = new PageResult<>(houseList);
+            List<HouseListVo> houseList = houseMapper.search(searchQuery);
+            PageResult<HouseListVo> result = new PageResult<>(houseList);
             return result;
         } catch (Exception e) {
             throw new BusinessException(e);
@@ -111,15 +113,15 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public PageResult<HouseVo> findByType(Integer type, PageQuery page) {
+    public PageResult<HouseListVo> findByType(Integer type, PageQuery page) {
 
         try {
             //设置分页信息
             PageHelper.startPage(page.getPage(), page.getSize());
             //设置排序条件
             PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
-            List<HouseVo> houseList = houseMapper.findHousesByType(type);
-            PageResult<HouseVo> result = new PageResult<>(houseList);
+            List<HouseListVo> houseList = houseMapper.findHousesByType(type);
+            PageResult<HouseListVo> result = new PageResult<>(houseList);
             return result;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
@@ -127,15 +129,15 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public PageResult<HouseVo> recommend(UserInfoVo userInfo, PageQuery page) {
+    public PageResult<HouseListVo> recommend(UserInfoVo userInfo, PageQuery page) {
 
         try {
             //设置分页信息
             PageHelper.startPage(page.getPage(), page.getSize());
             //设置排序条件
             PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
-            List<HouseVo> houseList = houseMapper.findByUserInfo(userInfo);
-            PageResult<HouseVo> result = new PageResult<>(houseList);
+            List<HouseListVo> houseList = houseMapper.findByUserInfo(userInfo);
+            PageResult<HouseListVo> result = new PageResult<>(houseList);
             return result;
         } catch (Exception e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);

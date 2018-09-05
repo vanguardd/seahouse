@@ -51,10 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/house/*",
             //-- 获得上传图片Token
             "/uploads/**",
-            "/pass/**",
             "/order/**",
             "/collection/**",
-            "/track/**"
+            "/track/**",
+            "/pass/**",
+            "/reservation/**"
     };
 
     @Autowired

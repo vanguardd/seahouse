@@ -8,7 +8,7 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Collections;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.mapper.CollectionMapper;
 import com.team.seahouse.service.ICollectionService;
 import io.swagger.annotations.Api;
@@ -65,7 +65,7 @@ public class CollectionController extends BaseController {
     public Response getMyCollections(PageQuery pageQuery) {
         Long userId = getUserId();
         try {
-            PageResult<HouseVo> houseList = collectionService.getMyCollections(userId, pageQuery);
+            PageResult<HouseListVo> houseList = collectionService.getMyCollections(userId, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());

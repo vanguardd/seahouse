@@ -6,6 +6,7 @@ import com.team.seahouse.domain.Collections;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.mapper.CollectionMapper;
 import com.team.seahouse.mapper.UserMapper;
+import com.team.seahouse.service.IRedisService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class SpringbootDemo2ApplicationTests {
 
 	@Autowired
 	private CollectionMapper collectionMapper;
+
+	@Autowired
+	private IRedisService<String> redisService;
 	@Test
 	public void contextLoads() {
 		User user = userMapper.findByMobilePhone("17691229633");
@@ -55,6 +59,15 @@ public class SpringbootDemo2ApplicationTests {
 		JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
 		String username = jwtTokenUtil.getUsernameFromToken(token);
 		System.out.println(username);
+	}
+
+	@Test
+	public void testRedisService() {
+		redisService.set("user", "wang");
+		boolean isExist = redisService.exists("user");
+		System.out.println(isExist);
+		System.out.println(redisService.get("user"));
+
 	}
 
 }

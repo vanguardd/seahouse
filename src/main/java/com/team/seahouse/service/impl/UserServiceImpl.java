@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -111,6 +110,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserInfoVo findUserInfoByUserId(Long userId) {
+        if(userId == null) {
+            throw new BusinessException(CommonReturnCode.UNAUTHORIZED);
+        }
         UserInfoVo userInfo = userInfoMapper.findUserInfoByUserId(userId);
         //获得收藏个数
         int collectionCount = collectionService.selectCountByUserId(userId);

@@ -3,7 +3,8 @@ package com.team.seahouse.service;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Reservation;
-import org.springframework.data.domain.Page;
+import com.team.seahouse.domain.vo.LandlordReservationVo;
+import com.team.seahouse.domain.vo.UserReservationVo;
 
 /**
  * @Title: 预约看房业务接口
@@ -22,11 +23,19 @@ public interface IReservationService {
 
     /**
      * 根据用户名获得预约信息集合
-     * @param userId
-     * @param pageInfo
+     * @param userId 房客用户编号
+     * @param pageInfo 分页信息
      * @return
      */
-    PageResult<Reservation> findReservations(Long userId, PageQuery pageInfo);
+    PageResult<UserReservationVo> findUserReservationList(Long userId, PageQuery pageInfo);
+
+    /**
+     * 根据房东用户编号查询预约看房信息
+     * @param userId 房东用户编号
+     * @param pageQuery 分页信息
+     * @return
+     */
+    PageResult<LandlordReservationVo> findLandlordReservationList(Long userId, PageQuery pageQuery);
 
     /**
      * 修改预约看房信息

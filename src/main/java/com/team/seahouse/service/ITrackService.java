@@ -2,7 +2,7 @@ package com.team.seahouse.service;
 
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
-import com.team.seahouse.domain.vo.HouseVo;
+import com.team.seahouse.domain.vo.HouseListVo;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public interface ITrackService {
      * @param page
      * @return
      */
-    PageResult<HouseVo> myTracks(Long userId, PageQuery page);
+    PageResult<HouseListVo> myTracks(Long userId, PageQuery page);
 
     /**
      * 清空足迹记录

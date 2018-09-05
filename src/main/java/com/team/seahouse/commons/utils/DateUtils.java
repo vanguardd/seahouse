@@ -233,4 +233,68 @@ public class DateUtils {
 	public static long getBetweenTime(Date current, Date other){
 		return Math.abs((current.getTime() - other.getTime())/1000);
 	}
+
+	/**
+	 * 日期转星期
+	 *
+	 * @param datetime
+	 * @return
+	 */
+	public static String dateToWeek(String datetime) {
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+		String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+		// 获得一个日历
+		Calendar cal = Calendar.getInstance();
+		Date date = null;
+		try {
+			date = f.parse(datetime);
+			cal.setTime(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		// 指示一个星期中的某天。
+		int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (w < 0) {
+			w = 0;
+		}
+		return weekDays[w];
+	}
+
+	/**
+	 * 计算两个日期的时间差（date2 - date1）
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	public static int differentDays(Date date1,Date date2) {
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(date1);
+
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(date2);
+		int day1= cal1.get(Calendar.DAY_OF_YEAR);
+		int day2 = cal2.get(Calendar.DAY_OF_YEAR);
+
+		int year1 = cal1.get(Calendar.YEAR);
+		int year2 = cal2.get(Calendar.YEAR);
+		//不同年
+		if(year1 != year2) {
+			int timeDistance = 0 ;
+			for(int i = year1 ; i < year2 ; i ++) {
+				//闰年
+				if(i%4==0 && i%100!=0 || i%400==0) {
+					timeDistance += 366;
+				}
+				else {
+					timeDistance += 365;
+				}
+			}
+			return timeDistance + (day2-day1) ;
+		}
+		else { //同一年
+			return day2-day1;
+		}
+	}
+
 }
