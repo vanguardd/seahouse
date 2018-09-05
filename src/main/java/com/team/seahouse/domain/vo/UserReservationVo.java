@@ -134,10 +134,10 @@ public class UserReservationVo extends BaseDomain {
         String reservationDate = "";
         switch (day) {
             case 0:
-                reservationDate = "今天";
+                reservationDate = "今天 " + DateUtils.formatDate(date);;
                 break;
             case 1:
-                reservationDate = "明天";
+                reservationDate = "明天 " + DateUtils.formatDate(date);;
                 break;
             default:
                 reservationDate = DateUtils.formatDate(date);

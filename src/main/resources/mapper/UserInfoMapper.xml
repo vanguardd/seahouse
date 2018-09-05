@@ -31,15 +31,16 @@
     <result column="avatar" property="avatar" jdbcType="VARCHAR" />
     <result column="company_address" property="companyAddress" jdbcType="VARCHAR" />
     <result column="zm_score" property="zmScore" jdbcType="INTEGER" />
+    <result column="identity_id" property="identityId" jdbcType="BIGINT" />
   </resultMap>
 
   <!--根据用户编号查询用户信息-->
   <select id="findUserInfoByUserId" resultMap="UserInfoResultMap" parameterType="Long" >
-    select u.id, u.user_id, u.user_name, u.avatar,u.born_date, u.company_address,
-           u.email, u.mobile_phone,u.real_name, u.sex, z.zm_score
-      from tb_user_info u
-      left join tb_zhima_auth z
-      on u.user_id = z.user_id
+    SELECT u.id, u.user_id, u.user_name, u.avatar,u.born_date, u.company_address,
+           u.email, u.mobile_phone,u.real_name, u.sex, z.zm_score, i.id AS identity_id
+      FROM tb_user_info u
+      LEFT JOIN tb_zhima_auth z ON u.user_id = z.user_id
+      LEFT JOIN tb_identity_auth i ON i.user_id=u.user_id AND i.state='1'
       where u.user_id = #{userId}
   </select>
 </mapper>

@@ -49,4 +49,13 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
      */
     UserInfoVo findUserInfoByUserId(Long userId);
 
+    /**
+     * 根据用户编号更新用户信息的真实姓名
+     * @param realName
+     * @param userId
+     * @return
+     */
+    @Update("UPDATE tb_user_info SET real_name=#{realName} WHERE user_id=#{userId}")
+    int setRealName(@Param("realName") String realName, @Param("userId") Long userId);
+
 }

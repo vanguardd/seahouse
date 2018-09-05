@@ -79,6 +79,11 @@ public class UserInfoVo extends BaseDomain {
     private Integer orderCount;
 
     /**
+     * 是否实名认证
+     */
+    private Boolean isAuth;
+
+    /**
      * 收藏个数
      */
     private Integer collectionCount;
@@ -92,4 +97,23 @@ public class UserInfoVo extends BaseDomain {
      * 足迹个数
      */
     private Integer trackCount;
+
+     public void setIdentityId(Long identityId) {
+         if(identityId == null) {
+            setIsAuth(false);
+         } else {
+             setIsAuth(true);
+         }
+     }
+
+     public void setIsAuth(Boolean isAuth) {
+         this.isAuth = isAuth;
+     }
+
+     public Boolean getIsAuth() {
+         if(isAuth == null) {
+             return false;
+         }
+         return isAuth;
+     }
 }

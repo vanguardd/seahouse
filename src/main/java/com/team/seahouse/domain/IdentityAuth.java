@@ -61,7 +61,7 @@ public class IdentityAuth extends BaseDomain {
     /**
      * 审核状态
      */
-    private String state;
+    private Integer state;
 
     /**
      * 创建时间

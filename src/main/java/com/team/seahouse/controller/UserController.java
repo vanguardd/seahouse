@@ -145,6 +145,8 @@ public class UserController extends BaseController {
     @ApiOperation(value = "实名认证接口", notes = "实名认证接口")
     public Response identityAuth(@RequestBody IdentityAuth identityAuth) {
         try {
+            Long userId = getUserId();
+            identityAuth.setUserId(userId);
             userService.identityAuth(identityAuth);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {

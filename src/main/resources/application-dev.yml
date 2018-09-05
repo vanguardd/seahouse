@@ -22,7 +22,7 @@ jwt:
   header: Authorization
   secret: "spring-security-@Jwt!&Secret^#"
   access_token:
-    expiration: 7200
+    expiration: 3600
   refresh_token:
     expiration: 2592000
   tokenHead: "Bearer "
