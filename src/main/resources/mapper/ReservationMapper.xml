@@ -24,7 +24,8 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="house_id" property="houseId" jdbcType="BIGINT" />
     <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="rent" property="rent" jdbcType="DECIMAL" />
     <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
@@ -45,7 +46,8 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="house_id" property="houseId" jdbcType="BIGINT" />
     <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="rent" property="rent" jdbcType="DECIMAL" />
     <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
@@ -62,19 +64,21 @@
 
   <!-- 租客查询自己预约看房的信息 -->
   <select id="findUserReservation" resultMap="UserReservationResultMap">
-    SELECT r.*, h.room_image, h.title, h.address, h.rent, h.landlord_id, u.real_name AS landlord_name,
+    SELECT r.*, m.room_image, h.house_name, m.room_name, h.address, m.rent, h.landlord_id, u.real_name AS landlord_name,
       u.mobile_phone AS landlord_mobile_phone, u.avatar AS landlord_avatar
       FROM tb_reservation r
-    LEFT JOIN tb_house h ON r.house_id=h.id
+    LEFT JOIN tb_room m ON m.id=r.house_id
+    LEFT JOIN tb_house h ON h.id=m.house_id
     LEFT JOIN tb_user_info u ON h.landlord_id=u.user_id
     WHERE r.user_id=#{userId}
   </select>
 
   <!-- 房东查询自己的房屋被预约看房的信息 -->
   <select id="findLandlordReservation" resultMap="LandlordReservationResultMap">
-    SELECT r.*, h.room_image, h.title, h.address, h.rent, h.landlord_id, u.avatar
+    SELECT r.*, m.room_image, h.house_name, m.room_name, h.address, m.rent, h.landlord_id, u.avatar
       FROM tb_reservation r
-    LEFT JOIN tb_house h ON r.house_id=h.id
+    LEFT JOIN tb_room m ON m.id=r.house_id
+    LEFT JOIN tb_house h ON h.id=m.house_id
     LEFT JOIN tb_user_info u ON r.user_id=u.user_id
     WHERE h.landlord_id=#{userId}
   </select>

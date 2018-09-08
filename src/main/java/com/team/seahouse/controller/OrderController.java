@@ -52,7 +52,7 @@ public class OrderController extends BaseController {
      * 我的订单
      * @return
      */
-    @GetMapping("/my")
+    @GetMapping("/myOrder")
     @ApiOperation(value = "我的订单", notes = "查询我的订单列表")
     public Response myOrder(PageQuery pageQuery) {
         Long userId = getUserId();

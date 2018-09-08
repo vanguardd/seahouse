@@ -1,6 +1,7 @@
 package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.enums.StatusEnum;
 import com.team.seahouse.commons.utils.DateUtils;
@@ -37,6 +38,12 @@ public class UserReservationVo extends BaseDomain {
      * 房屋标题
      */
     private String title;
+
+    @JsonIgnore
+    private String houseName;
+
+    @JsonIgnore
+    private String roomName;
 
     /**
      * 房屋地址
@@ -120,6 +127,10 @@ public class UserReservationVo extends BaseDomain {
     public void setReservationDate(String reservationDate) {
         this.reservationDate = parseReservationDate(reservationDate);
         this.reservationWeek = DateUtils.dateToWeek(reservationDate);
+    }
+
+    public String getTitle() {
+        return houseName + " " + roomName;
     }
 
     /**

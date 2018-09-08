@@ -75,6 +75,7 @@
     <result column="first_address" property="firstAddress" jdbcType="VARCHAR" />
     <result column="labels" property="labels" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="first_address" property="firstAddress" jdbcType="VARCHAR" />
     <result column="address_coordinate" property="addressCoordinate" jdbcType="VARCHAR" />
   </resultMap>
   
@@ -193,8 +194,8 @@
       FROM tb_room m
     LEFT JOIN tb_house h ON m.house_id=h.id
     LEFT JOIN tb_user_info u ON h.landlord_id = u.user_id
-    LEFT JOIN tb_collection c ON h.id = c.house_id AND c.user_id=#{userId}
-    LEFT JOIN tb_reservation r ON r.house_id=h.id AND r.user_id=#{userId}
+    LEFT JOIN tb_collection c ON m.id = c.house_id AND c.user_id=#{userId}
+    LEFT JOIN tb_reservation r ON r.house_id=m.id AND r.user_id=#{userId}
     WHERE m.id=#{roomId}
   </select>
 
@@ -231,11 +232,11 @@
 
   <!-- 根据用户编号查询我的收藏房屋列表 -->
   <select id="findCollectedHouseByUserId" resultMap="houseListResultMap">
-    SELECT h.id, h.room_image, h.house_name, r.room_name, h.fixtures, r.room_area, r.rent, r.rent_way,
+    SELECT r.id, r.room_image, h.house_name, r.room_name, h.fixtures, r.room_area, r.rent, r.rent_way,
           h.first_address, r.labels, h.address, h.address_coordinate, c.create_time
       FROM tb_room r
     LEFT JOIN tb_house h ON r.house_id=h.id
-    LEFT JOIN tb_collection c ON h.id = c.house_id
+    LEFT JOIN tb_collection c ON r.id = c.house_id
     WHERE c.user_id=#{userId}
   </select>
 

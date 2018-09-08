@@ -1,6 +1,7 @@
 package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.utils.StringUtils;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class HouseDetailVo extends BaseDomain {
     /**
      * 房屋名称
      */
+    @JsonIgnore
     private String houseName;
 
     /**
@@ -302,6 +304,10 @@ public class HouseDetailVo extends BaseDomain {
      * 是否预约
      */
     private Boolean isReservation;
+
+    public String getTitle() {
+        return houseName + " " + roomName;
+    }
 
     public void setReservationId(Long reservationId) {
         if(reservationId == null) {

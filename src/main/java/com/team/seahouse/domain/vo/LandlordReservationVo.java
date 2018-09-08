@@ -1,6 +1,7 @@
 package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.utils.DateUtils;
 import lombok.Getter;
@@ -33,8 +34,17 @@ public class LandlordReservationVo extends BaseDomain {
     private String roomImage;
 
     /**
-     * 房屋标题
+     * 房屋名称
      */
+    @JsonIgnore
+    private String houseName;
+
+    /**
+     * 房间名称
+     */
+    @JsonIgnore
+    private String roomName;
+
     private String title;
 
     /**
@@ -103,5 +113,9 @@ public class LandlordReservationVo extends BaseDomain {
      * 留言
      */
     private String message;
+
+    public String getTitle() {
+        return houseName + " " + roomName;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.team.seahouse.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.domain.House;
 import com.team.seahouse.mapper.typehandler.StringArrayTypeHandler;
@@ -32,11 +33,15 @@ public class HouseListVo extends BaseDomain {
     /**
      * 标题
      */
+    private String title;
+
+    @JsonIgnore
     private String houseName;
 
     /**
      * 房间名称
      */
+    @JsonIgnore
     private String roomName;
 
     /**
@@ -69,6 +74,8 @@ public class HouseListVo extends BaseDomain {
      */
     private String address;
 
+    private String firstAddress;
+
     /**
      * 地址坐标
      */
@@ -86,5 +93,9 @@ public class HouseListVo extends BaseDomain {
             return addressCoordinate.split(",");
         }
         return null;
+    }
+
+    public String getTitle() {
+        return houseName + " " + roomName;
     }
 }
