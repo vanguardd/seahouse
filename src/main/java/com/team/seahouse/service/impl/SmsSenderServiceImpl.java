@@ -1,7 +1,6 @@
 package com.team.seahouse.service.impl;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import com.team.seahouse.commons.enums.CommonEnum;
+import com.team.seahouse.commons.enums.TypeEnum;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.utils.LoggerUtils;
@@ -57,12 +56,12 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
     @Override
     public void sendMessage(String phoneNumber, Integer type) {
         User user = userMapper.findByMobilePhone(phoneNumber);
-        if(CommonEnum.REGISTER_TYPE.getType().equals(type)) {
+        if(TypeEnum.REGISTER_TYPE.getType().equals(type)) {
             if(user != null) {
                 throw new ValidateException(UserReturnCode.ACCOUNT_ERROR);
             }
         }
-        if(CommonEnum.LOGIN_TYPE.getType().equals(type)) {
+        if(TypeEnum.LOGIN_TYPE.getType().equals(type)) {
             if(user == null) {
                 throw new ValidateException(UserReturnCode.MOBILE_PHONE_NOT_EXIST);
             }

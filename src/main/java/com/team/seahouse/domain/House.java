@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @title 房屋实体
- * @describe
+ * @title 合租房屋实体
+ * @describe 房屋的公共信息，和房间为一对多
  * @author vanguard
  * @version 1.0
  * @date 18/7/18
@@ -22,11 +22,6 @@ import java.util.Date;
 @Table(name = "tb_house")
 @Getter@Setter
 public class House extends BaseDomain {
-
-    /**
-     * 房屋标题
-     */
-    private String title;
 
     /******* 认证材料 1、房产证 type=1***********/
     /**
@@ -181,61 +176,6 @@ public class House extends BaseDomain {
      */
     private String housePattern;
 
-    /******************房间信息*************/
-
-    /**
-     * 房间名称
-     */
-    private String roomName;
-
-    /**
-     * 房间面积
-     */
-    private Double roomArea;
-
-    /**
-     * 房间设施
-     */
-    @ColumnType(typeHandler = StringArrayTypeHandler.class)
-    private String[] roomFacilities;
-
-    /**
-     * 详情首页照片
-     */
-    private String roomImage;
-
-
-    /**
-     * 房间照片
-     */
-    @ColumnType(typeHandler = StringArrayTypeHandler.class)
-    private String[] roomImages;
-
-    /**
-     * 朝向
-     */
-    private String exposition;
-
-    /**
-     * 租金
-     */
-    private BigDecimal rent;
-
-    /**
-     * 租房方式
-     */
-    private String rentWay;
-
-    /**
-     * 支付方式
-     */
-    @ColumnType(typeHandler = StringArrayTypeHandler.class)
-    private String[] payWay;
-
-    @ColumnType(typeHandler = StringArrayTypeHandler.class)
-    private String[] labels;
-
-    private String introduction;
 
     /****************地址信息**********************/
 
@@ -332,6 +272,8 @@ public class House extends BaseDomain {
      */
     private Integer landLardZhiMaScore;
 
+
+
     /**
      * 创建时间
      */
@@ -345,7 +287,7 @@ public class House extends BaseDomain {
     /**
      * 审核状态
      */
-    private Integer state;
+    private Integer auditState;
 
     /**
      * 审核备注信息
@@ -361,4 +303,14 @@ public class House extends BaseDomain {
      * 审核人
      */
     private Long auditor;
+
+    /**
+     * 房间Id
+     */
+    @Transient
+    private String roomIds;
+
+    private void setRoomIds(String[] roomIds) {
+        this.roomIds = StringUtils.arrayToString(roomIds);
+    }
 }

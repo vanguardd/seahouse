@@ -5,12 +5,14 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
+import com.team.seahouse.commons.utils.OrderUtils;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.mapper.OrderMapper;
 import com.team.seahouse.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +37,21 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public Order create(Order order) {
+        //生成订单号
+        String orderNumber = OrderUtils.getOrderNumber(order.getUserId());
+        order.setOrderNumber(orderNumber);
+        order.setCreateTime(new Date());
+        order.setUpdateTime(new Date());
+        try {
+            orderMapper.insert(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return order;
+    }
+
+    @Override
     public PageResult<Order> myOrder(Long userId, PageQuery page) {
         try {
             Order order = new Order();
@@ -46,9 +63,9 @@ public class OrderServiceImpl implements IOrderService {
             List<Order> orderList =  orderMapper.selectByExample(order);;
             PageResult<Order> result = new PageResult<Order>(orderList);
             return result;
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
-
     }
+
 }

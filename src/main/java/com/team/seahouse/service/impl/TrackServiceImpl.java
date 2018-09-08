@@ -76,7 +76,7 @@ public class TrackServiceImpl implements ITrackService {
             //查询该用户编号对应的足迹信息
             List<Long> ids = redisService.range(key, start, end);
             //查询足迹房屋列表
-            List<HouseListVo> houseList = houseMapper.findByHouseIdIn(ids);
+            List<HouseListVo> houseList = houseMapper.findByRoomIdIn(ids);
             //计算总记录数
             final Long total = redisService.size(key);
             //计算总页数

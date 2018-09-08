@@ -9,10 +9,12 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.Room;
 import com.team.seahouse.domain.vo.HouseDetailVo;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.service.IHouseService;
+import com.team.seahouse.service.IRoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,26 @@ public class HouseController extends BaseController {
     @Autowired
     private IHouseService houseService;
 
+    @Autowired
+    private IRoomService roomService;
+
+    /**
+     * 保存房间信息接口
+     * @param room
+     * @return
+     */
+    @PostMapping("/room/save")
+    @ApiOperation(value = "保存房间信息接口", notes = "保存房间信息，并返回保存的房间信息Id")
+    public Response saveRoom(@RequestBody Room room) {
+        try {
+            Room saveRoom = roomService.save(room);
+            return new Response(CommonReturnCode.OK, saveRoom);
+        } catch (BusinessException e) {
+            LoggerUtils.error(HouseController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
     /**
      * 发布出租房屋信息
      * @param house
@@ -52,16 +74,16 @@ public class HouseController extends BaseController {
 
     /**
      * 查看房屋详情
-     * @param houseId
+     * @param roomId
      * @return
      */
-    @GetMapping("/{houseId}")
+    @GetMapping("/{roomId}")
     @ApiOperation(value = "查看房屋详情", notes = "查看房屋详情接口")
-    public Response detail(@PathVariable("houseId") Long houseId) {
+    public Response detail(@PathVariable("roomId") Long roomId) {
         try {
             //获得已经登录的用户编号
             Long userId = getUserId();
-            HouseDetailVo house = houseService.findByHouseId(houseId, userId);
+            HouseDetailVo house = houseService.findByRoomId(roomId, userId);
             return new Response(CommonReturnCode.OK, house);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
@@ -111,6 +133,10 @@ public class HouseController extends BaseController {
     @GetMapping("/type/{type}")
     @ApiOperation(value = "根据类型查询房屋信息接口", notes = "根据类型查询房屋信息接口")
     public Response findByType(@PathVariable("type") Integer type, PageQuery pageQuery) {
+        if(type == null) {
+            LoggerUtils.error(HouseController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
 
         try {
             PageResult<HouseListVo> houseList = houseService.findByType(type, pageQuery);
@@ -131,6 +157,10 @@ public class HouseController extends BaseController {
     public Response recommend(PageQuery pageQuery) {
         //获得携带Token的用户信息
         UserInfoVo userInfo = getUserInfo();
+        if(userInfo == null) {
+            LoggerUtils.error(HouseController.class, CommonReturnCode.UNAUTHORIZED.getMessage());
+            return new Response(CommonReturnCode.UNAUTHORIZED);
+        }
         try {
             PageResult<HouseListVo> houseList = houseService.recommend(userInfo, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);

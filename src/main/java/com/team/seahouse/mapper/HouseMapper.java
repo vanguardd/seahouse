@@ -21,25 +21,25 @@ public interface HouseMapper extends BaseMapper<House> {
 
     /**
      * 根据房屋编号查询房屋信息（已经登录）
-     * @param houseId 房屋编号
+     * @param roomId 房屋编号
      * @param userId 用户编号
      * @return
      */
-    HouseDetailVo findByHouseIdLogin(@Param("houseId") Long houseId, @Param("userId") Long userId);
+    HouseDetailVo findByRoomIdLogin(@Param("roomId") Long roomId, @Param("userId") Long userId);
 
     /**
      * 根据房屋编号查询房屋信息（没有登录）
-     * @param houseId
+     * @param roomId
      * @return
      */
-    HouseDetailVo findByHouseId(@Param("houseId") Long houseId);
+    HouseDetailVo findByRoomId(@Param("roomId") Long roomId);
 
     /**
      * 根据房屋编号查询出租房屋信息列表
-     * @param houseIds
+     * @param roomIds
      * @return
      */
-    List<HouseListVo> findByHouseIdIn(@Param("houseIds") List<Long> houseIds);
+    List<HouseListVo> findByRoomIdIn(@Param("roomIds") List<Long> roomIds);
 
     /**
      * 根据用户编号查询收藏的房屋列表
@@ -68,4 +68,5 @@ public interface HouseMapper extends BaseMapper<House> {
      * @return
      */
     List<HouseListVo> findByUserInfo(UserInfoVo userInfo);
+
 }

@@ -1,9 +1,11 @@
 package com.team.seahouse.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.utils.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -287,6 +289,8 @@ public class HouseDetailVo extends BaseDomain {
     /**
      * 房东注册时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date landLordCreateDate;
 
     /**

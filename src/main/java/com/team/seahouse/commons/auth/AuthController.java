@@ -76,7 +76,7 @@ public class AuthController extends BaseController {
      * @return
      */
     @ApiOperation(value = "刷新Token接口", notes = "刷新Token接口")
-    @PostMapping("${jwt.route.authentication.refresh}")
+    @GetMapping("${jwt.route.authentication.refresh}")
     public Response refreshAndGetAuthenticationToken() {
         try {
             String refreshToken = getToken();

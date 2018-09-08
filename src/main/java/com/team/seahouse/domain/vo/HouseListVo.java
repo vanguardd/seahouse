@@ -32,7 +32,12 @@ public class HouseListVo extends BaseDomain {
     /**
      * 标题
      */
-    private String title;
+    private String houseName;
+
+    /**
+     * 房间名称
+     */
+    private String roomName;
 
     /**
      * 装修程度

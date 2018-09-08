@@ -1,6 +1,6 @@
 package com.team.seahouse.service.impl;
 
-import com.team.seahouse.commons.enums.StatusEnum;
+import com.team.seahouse.commons.enums.AuditStatusEnum;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.UserReturnCode;
@@ -72,17 +72,18 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    @Transactional(rollbackFor = BusinessException.class)
     @Override
     public void identityAuth(IdentityAuth identityAuth) {
         //设置创建时间
         identityAuth.setCreateTime(new Date());
-        identityAuth.setState(StatusEnum.UN_AUDIT.getStatus());
+        identityAuth.setState(AuditStatusEnum.UN_AUDIT.getStatus());
         try {
             //保存实名认证信息
             identityAuthMapper.insert(identityAuth);
             //更新用户信息的真实姓名
             userInfoMapper.setRealName(identityAuth.getRealName(), identityAuth.getUserId());
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             throw new BusinessException(e);
         }
     }

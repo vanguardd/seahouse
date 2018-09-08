@@ -3,7 +3,9 @@ package com.team.seahouse.service;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.House;
+import com.team.seahouse.domain.Room;
 import com.team.seahouse.domain.vo.HouseDetailVo;
+import com.team.seahouse.domain.vo.HouseInfoVo;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.domain.vo.UserInfoVo;
@@ -16,6 +18,8 @@ import com.team.seahouse.domain.vo.UserInfoVo;
  * @date 18/7/18
  */
 public interface IHouseService {
+
+
 
     /**
      * 发布出租房屋信息
@@ -31,10 +35,11 @@ public interface IHouseService {
 
     /**
      * 根据房屋编号查询出租房屋信息详情
-     * @param houseId
+     * @param roomId
+     * @param userId
      * @return
      */
-    HouseDetailVo findByHouseId(Long houseId, Long userId);
+    HouseDetailVo findByRoomId(Long roomId, Long userId);
 
     /**
      * 房屋搜索功能

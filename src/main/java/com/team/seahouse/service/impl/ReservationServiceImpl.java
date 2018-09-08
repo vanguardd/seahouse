@@ -1,6 +1,7 @@
 package com.team.seahouse.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.team.seahouse.commons.enums.ReservationStatusEnum;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.support.page.PageQuery;
@@ -37,6 +38,8 @@ public class ReservationServiceImpl implements IReservationService {
 
     @Override
     public void add(Reservation reservation) {
+        //设置预约看房的状态为待确定
+        reservation.setState(ReservationStatusEnum.UNCONFIRMED.getStatus());
         //设置创建时间
         reservation.setCreateTime(new Date());
         //设置修改时间

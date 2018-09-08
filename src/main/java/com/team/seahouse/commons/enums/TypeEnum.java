@@ -1,11 +1,13 @@
 package com.team.seahouse.commons.enums;
 
-import com.team.seahouse.commons.response.CommonReturnCode;
-
 /**
- * 通用常量枚举
+ * @Title: 类型常量枚举类
+ * @Description:
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 18/9/7
  */
-public enum  CommonEnum {
+public enum TypeEnum {
 
     /**
      * 发送短信验证码的类型
@@ -24,7 +26,7 @@ public enum  CommonEnum {
 
     private String typeInfo;
 
-    private CommonEnum(Integer type, String typeInfo) {
+    private TypeEnum(Integer type, String typeInfo) {
         this.type = type;
         this.typeInfo = typeInfo;
     }

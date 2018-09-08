@@ -6,14 +6,13 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
+import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Title: 订单业务接口
@@ -29,6 +28,25 @@ public class OrderController extends BaseController {
 
     @Autowired
     private IOrderService orderService;
+
+    /**
+     * 创建订单
+     * @param order
+     * @return
+     */
+    @PostMapping("/create")
+    @ApiOperation(value = "创建订单", notes = "创建订单")
+    public Response create(@RequestBody Order order) {
+        try {
+            Long userId = getUserId();
+            order.setUserId(userId);
+            orderService.create(order);
+        } catch (BusinessException e) {
+            LoggerUtils.error(OrderController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
+        return new Response(CommonReturnCode.OK);
+    }
 
     /**
      * 我的订单

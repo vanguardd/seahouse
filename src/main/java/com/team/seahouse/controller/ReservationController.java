@@ -92,12 +92,15 @@ public class ReservationController extends BaseController {
     @ApiOperation(value = "查看预约详情接口", notes = "根据预约编号查看预约信息详情")
     public Response detail(@PathVariable("reservationId") Long reservationId) {
         try {
+            if(reservationId == null) {
+                LoggerUtils.error(ReservationController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+                return new Response(CommonReturnCode.BAD_REQUEST);
+            }
             Reservation reservation = reservationMapper.findByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
-        } catch (Exception e) {
-            LoggerUtils.error(ReservationController.class,
-                    CommonReturnCode.INTERNAL_SERVER_ERROR.getMessage());
-            return new Response(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        } catch (BusinessException e) {
+            LoggerUtils.error(ReservationController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
         }
     }
 

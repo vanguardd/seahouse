@@ -62,6 +62,10 @@ public class TrackController extends BaseController {
     @PostMapping("/addList")
     @ApiOperation(value = "添加足迹", notes = "访问房屋信息详情时，添加浏览足迹")
     public Response addTrack(@RequestParam("houseIds") String houseIds) {
+        if(!StringUtils.isNotBlank(houseIds)) {
+            LoggerUtils.error(TrackController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
         List<Long> houseIdList = StringUtils.stringToArray(houseIds);
         try {
             Long userId = getUserId();
@@ -96,6 +100,10 @@ public class TrackController extends BaseController {
     @DeleteMapping("/deleteTracks")
     @ApiOperation(value = "删除足迹", notes = "删除单个或多个足迹")
     public Response deleteTracks(String houseIds) {
+        if(!StringUtils.isNotBlank(houseIds)) {
+            LoggerUtils.error(TrackController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
         List<Long> houseIdList = StringUtils.stringToArray(houseIds);
         Long userId = getUserId();
         try {

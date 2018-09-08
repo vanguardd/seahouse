@@ -1,9 +1,11 @@
 package com.team.seahouse.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.domain.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,6 +53,8 @@ public class UserInfoVo extends BaseDomain {
     /**
      * 出生年月
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date bornDate;
 
     /**

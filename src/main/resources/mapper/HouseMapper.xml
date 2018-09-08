@@ -6,11 +6,9 @@
       WARNING - @mbg.generated
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="first_address" property="firstAddress" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="address_coordinate" property="addressCoordinate" jdbcType="VARCHAR" />
-    <result column="audit_state" property="auditState" jdbcType="VARCHAR" />
     <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
     <result column="auditor" property="auditor" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -19,13 +17,11 @@
     <result column="house_pattern" property="housePattern" jdbcType="VARCHAR" />
     <result column="village_introduction" property="villageIntroduction" jdbcType="VARCHAR" />
     <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
-    <result column="pay_way" property="payWay" jdbcType="VARCHAR" />
-    <result column="rent_way" property="rentWay" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="landlord_name" property="landlordName" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="audit_state" property="auditState" jdbcType="INTEGER" />
     <result column="land_lord_zhi_ma_score" property="landLordZhiMaScore" jdbcType="INTEGER" />
     <result column="balcony" property="balcony" jdbcType="VARCHAR" />
     <result column="bath_room" property="bathRoom" jdbcType="VARCHAR" />
@@ -41,12 +37,7 @@
     <result column="property_card_id" property="propertyCardId" jdbcType="VARCHAR" />
     <result column="property_card_images" property="propertyCardImages" jdbcType="VARCHAR" />
     <result column="property_carder" property="propertyCarder" jdbcType="VARCHAR" />
-    <result column="rent" property="rent" jdbcType="DECIMAL" />
     <result column="rent_rule" property="rentRule" jdbcType="VARCHAR" />
-    <result column="room_facilities" property="roomFacilities" jdbcType="VARCHAR" />
-    <result column="room_images" property="roomImages" jdbcType="VARCHAR" />
-    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
-    <result column="room_area" property="roomArea" jdbcType="DOUBLE" />
     <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
     <result column="custom_name" property="customName" jdbcType="DECIMAL" />
     <result column="custom_pay_type" property="customPayType" jdbcType="VARCHAR" />
@@ -62,7 +53,6 @@
     <result column="living_room_images" property="livingRoomImages" jdbcType="VARCHAR" />
     <result column="bath_room_images" property="bathRoomImages" jdbcType="VARCHAR" />
     <result column="balcony_image" property="balconyImage" jdbcType="VARCHAR" />
-    <result column="labels" property="labels" jdbcType="VARCHAR" />
     <result column="balcony_images" property="balconyImages" jdbcType="VARCHAR" />
     <result column="kitchen_images" property="kitchenImages" jdbcType="VARCHAR" />
     <result column="property_pay_type" property="propertyPayType" jdbcType="VARCHAR" />
@@ -71,13 +61,13 @@
     <result column="water_value" property="waterValue" jdbcType="DECIMAL" />
     <result column="electric_value" property="electricValue" jdbcType="DECIMAL" />
     <result column="house_name" property="houseName" jdbcType="VARCHAR" />
-    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="houseListResultMap" type="com.team.seahouse.domain.vo.HouseListVo">
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
     <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
     <result column="room_area" property="roomArea" jdbcType="DOUBLE" />
     <result column="rent" property="rent" jdbcType="DECIMAL" />
@@ -90,7 +80,6 @@
   
   <resultMap id="houseDetailResultMap" type="com.team.seahouse.domain.vo.HouseDetailVo">
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="first_address" property="firstAddress" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="address_coordinate" property="addressCoordinate" jdbcType="VARCHAR" />
@@ -156,13 +145,14 @@
   </resultMap>
 
   <sql id="houseListColumn">
-    id, room_image, title, fixtures, room_area, rent, rent_way, first_address, labels, address, address_coordinate
+    r.id, h.house_name, r.room_name, r.room_image, h.fixtures, r.room_area, r.rent, r.rent_way, h.first_address, r.labels, h.address, h.address_coordinate, r.create_time
   </sql>
 
   <!--房屋搜索筛选-->
   <select id="search" resultMap="houseListResultMap" parameterType="com.team.seahouse.commons.request.SearchQuery" >
     SELECT <include refid="houseListColumn" />
-      FROM tb_house
+      FROM tb_room r
+    LEFT JOIN tb_house h ON r.house_id=h.id
     <where>
       <if test="keyWord != null and keyWord != ''">
         AND title LIKE '%${keyWord}%' OR address LIKE '%${keyWord})%'
@@ -186,70 +176,74 @@
   </select>
 
   <!--根据房屋编号查询房屋详情-->
-  <select id="findByHouseIdLogin" resultMap="houseDetailResultMap" parameterType="Map">
-    select h.id, h.title, h.house_name, h.living_room,
+  <select id="findByRoomIdLogin" resultMap="houseDetailResultMap" parameterType="Map">
+    select m.id, h.house_name, h.living_room,
            h.living_room_images, h.bath_room, h.bath_room_images,
            h.kitchen, h.kitchen_images, h.balcony, h.balcony_images,
            h.property_value, h.property_pay_type, h.water_value, h.water_pay_type,
            h.electric_value, h.electric_pay_type, h.heating_value, h.heating_pay_type,
            h.custom_name, h.custom_value, h.custom_pay_type, h.floor,
-           h.is_has_elevator, h.fixtures, h.house_pattern, h.room_name, h.room_area,
-           h.room_facilities, h.room_image, h.room_images, h.exposition,
-           h.rent, h.rent_way, h.pay_way, h.labels, h.introduction, h.address,
+           h.is_has_elevator, h.fixtures, h.house_pattern, m.room_name, m.room_area,
+           m.room_facilities, m.room_image, m.room_images, m.exposition,
+           m.rent, m.rent_way, m.pay_way, m.labels, m.introduction, h.address,
            h.address_coordinate, h.first_address, h.plot_name, h.green_area,
            h.heating_way, h.parking, h.property, h.years, h.village_introduction,
            h.rent_rule, h.exit_rent_rule, h.landlord_id, h.land_lard_zhi_ma_score,
            u.real_name, u.mobile_phone, u.create_time, u.avatar, c.id AS collection_id, r.id AS reservation_id
-      from tb_house h
-      LEFT JOIN tb_user_info u ON h.landlord_id = u.user_id
-      LEFT JOIN tb_collection c ON h.id = c.house_id AND c.user_id=#{userId}
-      LEFT JOIN tb_reservation r ON r.house_id=h.id AND r.user_id=#{userId}
-      where h.id=#{houseId}
+      FROM tb_room m
+    LEFT JOIN tb_house h ON m.house_id=h.id
+    LEFT JOIN tb_user_info u ON h.landlord_id = u.user_id
+    LEFT JOIN tb_collection c ON h.id = c.house_id AND c.user_id=#{userId}
+    LEFT JOIN tb_reservation r ON r.house_id=h.id AND r.user_id=#{userId}
+    WHERE m.id=#{roomId}
   </select>
 
   <select id="findByHouseId" resultMap="houseDetailResultMap" parameterType="Long">
-    select h.id, h.title, h.house_name, h.living_room,
-    h.living_room_images, h.bath_room, h.bath_room_images,
-    h.kitchen, h.kitchen_images, h.balcony, h.balcony_images,
-    h.property_value, h.property_pay_type, h.water_value, h.water_pay_type,
-    h.electric_value, h.electric_pay_type, h.heating_value, h.heating_pay_type,
-    h.custom_name, h.custom_value, h.custom_pay_type, h.floor,
-    h.is_has_elevator, h.fixtures, h.house_pattern, h.room_name, h.room_area,
-    h.room_facilities, h.room_image, h.room_images, h.exposition,
-    h.rent, h.rent_way, h.pay_way, h.labels, h.introduction, h.address,
-    h.address_coordinate, h.first_address, h.plot_name, h.green_area,
-    h.heating_way, h.parking, h.property, h.years, h.village_introduction,
-    h.rent_rule, h.exit_rent_rule, h.landlord_id, h.land_lard_zhi_ma_score,
-    u.real_name, u.mobile_phone, u.create_time, u.avatar
-    from tb_house h
+    select m.id, h.house_name, h.living_room,
+      h.living_room_images, h.bath_room, h.bath_room_images,
+      h.kitchen, h.kitchen_images, h.balcony, h.balcony_images,
+      h.property_value, h.property_pay_type, h.water_value, h.water_pay_type,
+      h.electric_value, h.electric_pay_type, h.heating_value, h.heating_pay_type,
+      h.custom_name, h.custom_value, h.custom_pay_type, h.floor,
+      h.is_has_elevator, h.fixtures, h.house_pattern, m.room_name, m.room_area,
+      m.room_facilities, m.room_image, m.room_images, m.exposition,
+      m.rent, m.rent_way, m.pay_way, m.labels, m.introduction, h.address,
+      h.address_coordinate, h.first_address, h.plot_name, h.green_area,
+      h.heating_way, h.parking, h.property, h.years, h.village_introduction,
+      h.rent_rule, h.exit_rent_rule, h.landlord_id, h.land_lard_zhi_ma_score,
+      u.real_name, u.mobile_phone, u.create_time, u.avatar
+      FROM tb_room m
+    LEFT JOIN tb_house h ON m.house_id=h.id
     LEFT JOIN tb_user_info u ON h.landlord_id = u.user_id
-    where h.id=#{houseId}
+    where m.id=#{roomId}
   </select>
 
   <!--根据房屋编号集合查询房屋列表-->
-  <select id="findByHouseIdIn" resultMap="houseListResultMap">
+  <select id="findByRoomIdIn" resultMap="houseListResultMap">
     SELECT <include refid="houseListColumn" />
-      FROM tb_house
-    WHERE id IN 
-    <foreach collection="houseIds" index="index" item="item" open="(" separator="," close=")">
+      FROM tb_room r
+    LEFT JOIN tb_house h ON r.house_id=h.id
+    WHERE r.id IN
+    <foreach collection="roomIds" index="index" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
   </select>
 
   <!-- 根据用户编号查询我的收藏房屋列表 -->
   <select id="findCollectedHouseByUserId" resultMap="houseListResultMap">
-    SELECT h.id, h.room_image, h.title, h.fixtures, h.room_area, h.rent, h.rent_way,
-          h.first_address, h.labels, h.address, h.address_coordinate, c.create_time
-      FROM tb_house h
-    LEFT JOIN tb_collection c
-    ON h.id = c.house_id
+    SELECT h.id, h.room_image, h.house_name, r.room_name, h.fixtures, r.room_area, r.rent, r.rent_way,
+          h.first_address, r.labels, h.address, h.address_coordinate, c.create_time
+      FROM tb_room r
+    LEFT JOIN tb_house h ON r.house_id=h.id
+    LEFT JOIN tb_collection c ON h.id = c.house_id
     WHERE c.user_id=#{userId}
   </select>
 
   <!--根据房屋类型查询房屋列表-->
   <select id="findHousesByType" resultMap="houseListResultMap">
     SELECT <include refid="houseListColumn" />
-      FROM tb_house
+      FROM tb_room r
+    LEFT JOIN tb_house h ON r.house_id=h.id
     WHERE type=#{type}
   </select>
 

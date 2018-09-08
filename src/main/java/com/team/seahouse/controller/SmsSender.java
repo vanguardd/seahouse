@@ -42,7 +42,12 @@ public class SmsSender {
                                 @RequestParam("type") Integer type) {
         try {
             if(!StringUtils.isNotBlank(mobilePhone)) {
+                LoggerUtils.error(SmsSender.class, UserReturnCode.ACCOUNT_NULL.getMessage());
                 return new Response(UserReturnCode.ACCOUNT_NULL);
+            }
+            if(type == null) {
+                LoggerUtils.error(SmsSender.class, CommonReturnCode.BAD_REQUEST.getMessage());
+                return new Response(CommonReturnCode.BAD_REQUEST);
             }
             smsSenderService.sendMessage(mobilePhone, type);
         } catch (ValidateException e) {

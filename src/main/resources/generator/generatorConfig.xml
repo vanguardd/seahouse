@@ -29,56 +29,11 @@
         <javaClientGenerator targetPackage="com.team.seahouse.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-       <!-- <table tableName="tb_user">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-       </table>
-
-        <table tableName="tb_user_info">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_house">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_collection">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_contract">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_reservation">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_track">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_identity_auth">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_zhiMa_auth">
-            &lt;!&ndash;mysql 配置&ndash;&gt;
+       <!-- <table tableName="tb_order" domainObjectName="Order">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
 
-        <table tableName="tb_order" domainObjectName="Order">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="tb_evaluation" domainObjectName="Evaluation">
+        <table tableName="tb_room" domainObjectName="Room">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

@@ -21,6 +21,13 @@ public interface IOrderService {
     int selectCountByUserId(Long userId);
 
     /**
+     * 生成订单
+     * @param order
+     * @return
+     */
+    Order create(Order order);
+
+    /**
      * 查询我的订单
      * @param userId 用户编号
      * @param page 分页信息

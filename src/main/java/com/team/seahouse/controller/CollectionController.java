@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.rmi.runtime.Log;
 
 /**
  * @Title: 收藏模块接口
@@ -51,6 +52,10 @@ public class CollectionController extends BaseController {
     @DeleteMapping("remove/{houseId}")
     @ApiOperation(value = "取消收藏接口", notes = "取消收藏出租信息接口")
     public Response remove(@PathVariable("houseId") Long houseId) {
+        if(houseId == null) {
+            LoggerUtils.error(CollectionController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
         try {
             collectionMapper.deleteCollectionByHouseId(houseId);
             return new Response(CommonReturnCode.SUCCESS);

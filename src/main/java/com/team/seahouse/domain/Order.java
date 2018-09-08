@@ -1,5 +1,6 @@
 package com.team.seahouse.domain;
 
+import com.team.seahouse.commons.base.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
@@ -17,12 +18,12 @@ import javax.persistence.*;
  */
 @Getter@Setter
 @Table(name = "tb_order")
-public class Order {
+public class Order extends BaseDomain {
     /**
      * 订单编号
+     * 系统生成
      */
-    @Id
-    private String id;
+    private String orderNumber;
 
     /**
      * 用户编号
@@ -31,7 +32,7 @@ public class Order {
     private Long userId;
 
     /**
-     * 租客签字状态
+     * 租客签字状态 1-签字;0-未签字
      */
     @Column(name = "renter_sign_state")
     private Integer renterSignState;
@@ -43,7 +44,7 @@ public class Order {
     private Long landlordId;
 
     /**
-     * 房东签字状态
+     * 房东签字状态 1-签字;0-未签字
      */
     @Column(name = "landLord_sign_state")
     private Integer landlordSignState;
@@ -105,6 +106,12 @@ public class Order {
      */
     @Column(name = "create_time")
     private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * 交易时间
