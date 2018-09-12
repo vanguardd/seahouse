@@ -212,7 +212,7 @@ public class HouseDetailVo extends BaseDomain {
     /**
      * 一级地址
      */
-    private String firstAddress;
+    private String region;
 
     /***************小区信息**********************/
 

@@ -8,6 +8,7 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Order;
+import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,23 @@ public class OrderController extends BaseController {
     @Autowired
     private IOrderService orderService;
 
+    @GetMapping("/contractInfo/{houseId}")
+    @ApiOperation(value = "获得提交订单的数据", notes = "获得提交订单的数据信息")
+    public Response contractInfo(@PathVariable("houseId") Long houseId) {
+        Long userId = getUserId();
+        if(userId == null) {
+            LoggerUtils.error(OrderController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+        }
+        ContractInfoVo contractInfoVo = null;
+        try {
+            contractInfoVo = orderService.getContractInfo(houseId, userId);
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getCode(), e.getMessage());
+        }
+        return new Response(CommonReturnCode.OK, contractInfoVo);
+    }
+
     /**
      * 创建订单
      * @param order
@@ -43,7 +61,7 @@ public class OrderController extends BaseController {
             orderService.create(order);
         } catch (BusinessException e) {
             LoggerUtils.error(OrderController.class, e.getMessage());
-            return new Response(e.getCode(), e.getMessage());
+            throw new BusinessException(e.getCode(), e.getMessage());
         }
         return new Response(CommonReturnCode.OK);
     }

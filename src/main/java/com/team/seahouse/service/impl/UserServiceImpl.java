@@ -5,6 +5,8 @@ import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.domain.*;
+import com.team.seahouse.domain.vo.LandlordFunction;
+import com.team.seahouse.domain.vo.TenantFunction;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.mapper.*;
 import com.team.seahouse.service.*;
@@ -47,6 +49,12 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private IOrderService orderService;
+
+    @Autowired
+    private IHouseService houseService;
+
+    @Autowired
+    private IRoomService roomService;
 
     @Override
     public UserInfo updateUserInfo(UserInfo userInfo) throws BusinessException {
@@ -115,23 +123,36 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserInfoVo findUserInfoByUserId(Long userId) {
-        if(userId == null) {
-            throw new BusinessException(CommonReturnCode.UNAUTHORIZED);
-        }
-        UserInfoVo userInfo = userInfoMapper.findUserInfoByUserId(userId);
+    public TenantFunction fundTenantByUserId(Long userId) {
+        TenantFunction tenantFunction = new TenantFunction();
         //获得收藏个数
         int collectionCount = collectionService.selectCountByUserId(userId);
-        userInfo.setCollectionCount(collectionCount);
+        tenantFunction.setCollectionCount(collectionCount);
         //获得预约个数
         int reservationCount = reservationService.selectCountByUserId(userId);
-        userInfo.setReservationCount(reservationCount);
+        tenantFunction.setReservationCount(reservationCount);
         //获得订单个数
         int orderCount = orderService.selectCountByUserId(userId);
-        userInfo.setOrderCount(orderCount);
+        tenantFunction.setOrderCount(orderCount);
         //获得足迹个数
         int trackCount = trackService.selectCountByUserId(userId);
-        userInfo.setTrackCount(trackCount);
-        return userInfo;
+        tenantFunction.setTrackCount(trackCount);
+        return tenantFunction;
+    }
+
+    @Override
+    public LandlordFunction findLandlordInfoByUserId(Long userId) {
+        LandlordFunction landlordFunction = new LandlordFunction();
+        int reservationCount = reservationService.selectCountByLandlordId(userId);
+        landlordFunction.setReservationCount(reservationCount);
+        int houseCount = houseService.selectCountByLandlordId(userId);
+        landlordFunction.setHouseCount(houseCount);
+        int roomCount = roomService.selectCountByLandlordId(userId);
+        landlordFunction.setRoomCount(roomCount);
+        int orderCount = orderService.selectCountByLandlordId(userId);
+        landlordFunction.setOrderCount(orderCount);
+        int tenantCount = orderService.selectTenantCountByLandlord(userId);
+        landlordFunction.setTenantCount(tenantCount);
+        return landlordFunction;
     }
 }

@@ -297,4 +297,28 @@ public class DateUtils {
 		}
 	}
 
+	/**
+	 * 转发预约日期
+	 * @param dateStr
+	 * @return
+	 */
+	public static String parseReservationDate(String dateStr) {
+		Date date = DateUtils.parseDate(dateStr);
+		Date now = new Date();
+		int day = DateUtils.differentDays(now, date);
+		String reservationDate = "";
+		switch (day) {
+			case 0:
+				reservationDate = "今天 " + DateUtils.formatDate(date);;
+				break;
+			case 1:
+				reservationDate = "明天 " + DateUtils.formatDate(date);;
+				break;
+			default:
+				reservationDate = DateUtils.formatDate(date);
+				break;
+		}
+		return reservationDate;
+	}
+
 }

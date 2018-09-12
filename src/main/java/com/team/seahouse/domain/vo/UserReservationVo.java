@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.enums.StatusEnum;
+import com.team.seahouse.commons.enums.TimeRangeEnum;
 import com.team.seahouse.commons.utils.DateUtils;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -49,6 +51,11 @@ public class UserReservationVo extends BaseDomain {
      * 房屋地址
      */
     private String address;
+
+    /**
+     * 地址坐标
+     */
+    private String addressCoordinate;
 
     /**
      * 房屋租金
@@ -114,6 +121,8 @@ public class UserReservationVo extends BaseDomain {
      */
     private Integer timeRange;
 
+    private String timeRangeValue;
+
     /**
      * 预约状态
      */
@@ -125,7 +134,7 @@ public class UserReservationVo extends BaseDomain {
     private String message;
 
     public void setReservationDate(String reservationDate) {
-        this.reservationDate = parseReservationDate(reservationDate);
+        this.reservationDate = DateUtils.parseReservationDate(reservationDate);
         this.reservationWeek = DateUtils.dateToWeek(reservationDate);
     }
 
@@ -133,27 +142,12 @@ public class UserReservationVo extends BaseDomain {
         return houseName + " " + roomName;
     }
 
-    /**
-     * 转发预约日期
-     * @param dateStr
-     * @return
-     */
-    private String parseReservationDate(String dateStr) {
-        Date date = DateUtils.parseDate(dateStr);
-        Date now = new Date();
-        int day = DateUtils.differentDays(now, date);
-        String reservationDate = "";
-        switch (day) {
-            case 0:
-                reservationDate = "今天 " + DateUtils.formatDate(date);;
-                break;
-            case 1:
-                reservationDate = "明天 " + DateUtils.formatDate(date);;
-                break;
-            default:
-                reservationDate = DateUtils.formatDate(date);
-                break;
-        }
-        return reservationDate;
+    public String getTimeRangeValue() {
+        return TimeRangeEnum.stateOf(timeRange).getStateInfo();
     }
+
+    public String[] getAddressCoordinate() {
+        return addressCoordinate.split(",");
+    }
+
 }

@@ -22,4 +22,47 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="business_time" property="businessTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <resultMap id="ContractResultMap" type="com.team.seahouse.domain.vo.ContractInfoVo">
+    <result column="room_id" property="roomId" jdbcType="VARCHAR" />
+    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+    <result column="rent" property="rent" jdbcType="DECIMAL" />
+    <result column="room_area" property="roomArea" jdbcType="NUMERIC" />
+    <result column="pay_way" property="payWay" jdbcType="VARCHAR" />
+    <result column="rent_way" property="rentWay" jdbcType="VARCHAR" />
+    <result column="date_limit" property="dateLimit" jdbcType="VARCHAR" />
+    <result column="deposit" property="deposit" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="exposition" property="exposition" jdbcType="VARCHAR" />
+    <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
+    <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
+    <result column="floor" property="floor" jdbcType="INTEGER" />
+    <result column="house_pattern" property="housePattern" jdbcType="VARCHAR" />
+    <result column="custom_name" property="customName" jdbcType="DECIMAL" />
+    <result column="custom_pay_type" property="customPayType" jdbcType="VARCHAR" />
+    <result column="custom_value" property="customValue" jdbcType="DECIMAL" />
+    <result column="heating_value" property="heatingValue" jdbcType="DECIMAL" />
+    <result column="heating_pay_type" property="heatingPayType" jdbcType="VARCHAR" />
+    <result column="electric_pay_type" property="electricPayType" jdbcType="VARCHAR" />
+    <result column="property_pay_type" property="propertyPayType" jdbcType="VARCHAR" />
+    <result column="property_value" property="propertyValue" jdbcType="DECIMAL" />
+    <result column="water_pay_type" property="waterPayType" jdbcType="VARCHAR" />
+    <result column="water_value" property="waterValue" jdbcType="DECIMAL" />
+    <result column="electric_value" property="electricValue" jdbcType="DECIMAL" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getContractInfo" resultMap="ContractResultMap">
+    SELECT m.id as room_id, m.house_id, m.room_image, h.house_name, m.room_name, m.rent, m.room_area, m.pay_way, m.rent_way, m.date_limit, m.deposit, h.region,
+      h.address, h.exposition, h.fixtures, h.landlord_id, h.floor, h.house_pattern, h.custom_name, h.custom_pay_type, h.custom_value, h.heating_value, h.heating_pay_type,
+      h.electric_value, h.electric_pay_type, h.property_pay_type, h.property_value, h.water_value, h.water_pay_type, i.user_id, i.real_name, i.id_number
+      FROM tb_room m, tb_identity_auth i, tb_house h
+
+    WHERE m.house_id=h.id AND m.id=#{houseId} AND i.user_id=#{userId}
+  </select>
 </mapper>

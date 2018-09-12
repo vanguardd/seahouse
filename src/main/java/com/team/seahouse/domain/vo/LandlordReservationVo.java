@@ -3,6 +3,7 @@ package com.team.seahouse.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
+import com.team.seahouse.commons.enums.TimeRangeEnum;
 import com.team.seahouse.commons.utils.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,9 @@ public class LandlordReservationVo extends BaseDomain {
     @JsonIgnore
     private String roomName;
 
+    /**
+     * 标题
+     */
     private String title;
 
     /**
@@ -104,6 +108,8 @@ public class LandlordReservationVo extends BaseDomain {
      */
     private Integer timeRange;
 
+    private String timeRangeValue;
+
     /**
      * 预约状态
      */
@@ -114,8 +120,17 @@ public class LandlordReservationVo extends BaseDomain {
      */
     private String message;
 
+    public void setReservationDate(String reservationDate) {
+        this.reservationDate = DateUtils.parseReservationDate(reservationDate);
+        this.reservationWeek = DateUtils.dateToWeek(reservationDate);
+    }
+
     public String getTitle() {
         return houseName + " " + roomName;
+    }
+
+    public String getTimeRangeValue() {
+        return TimeRangeEnum.stateOf(timeRange).getStateInfo();
     }
 
 }

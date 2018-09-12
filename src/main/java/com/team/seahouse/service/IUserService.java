@@ -3,6 +3,8 @@ package com.team.seahouse.service;
 import com.team.seahouse.domain.IdentityAuth;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
+import com.team.seahouse.domain.vo.LandlordFunction;
+import com.team.seahouse.domain.vo.TenantFunction;
 import com.team.seahouse.domain.vo.UserInfoVo;
 
 /**
@@ -48,9 +50,16 @@ public interface IUserService {
     void updateUserName(String userName, Long userId);
 
     /**
-     * 根据用户编号查询用户信息
+     * 根据用户编号查询function信息
      * @param userId
      * @return
      */
-    UserInfoVo findUserInfoByUserId(Long userId);
+    TenantFunction fundTenantByUserId(Long userId);
+
+    /**
+     * 根据用户编号查询房东信息
+     * @param userId
+     * @return
+     */
+    LandlordFunction findLandlordInfoByUserId(Long userId);
 }

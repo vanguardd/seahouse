@@ -49,4 +49,11 @@ public interface IReservationService {
      * @return
      */
     int selectCountByUserId(Long userId);
+
+    /**
+     * 根据房东编号查询预约个数
+     * @param userId
+     * @return
+     */
+    int selectCountByLandlordId(Long userId);
 }

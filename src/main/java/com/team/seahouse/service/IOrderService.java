@@ -3,6 +3,7 @@ package com.team.seahouse.service;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Order;
+import com.team.seahouse.domain.vo.ContractInfoVo;
 
 /**
  * @Title: 订单业务接口
@@ -34,4 +35,26 @@ public interface IOrderService {
      * @return
      */
     PageResult<Order> myOrder(Long userId, PageQuery page);
+
+    /**
+     * 根据房东编号查询订单个数
+     * @param userId
+     * @return
+     */
+    int selectCountByLandlordId(Long userId);
+
+    /**
+     * 根据房东编号查询房客个数
+     * @param userId
+     * @return
+     */
+    int selectTenantCountByLandlord(Long userId);
+
+    /**
+     * 获得创建订单所需的信息
+     * @param houseId
+     * @param userId
+     * @return
+     */
+    ContractInfoVo getContractInfo(Long houseId, Long userId);
 }

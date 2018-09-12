@@ -78,14 +78,13 @@ public class ReservationServiceImpl implements IReservationService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void update(Reservation reservation) {
         reservation.setUpdateTime(new Date());
         try {
-            reservationMapper.insert(reservation);
+            reservationMapper.updateByPrimaryKeySelective(reservation);
         } catch (Exception e) {
-            throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(e);
         }
     }
 
@@ -94,6 +93,12 @@ public class ReservationServiceImpl implements IReservationService {
         Reservation reservation = new Reservation();
         reservation.setUserId(userId);
         int count = reservationMapper.selectCount(reservation);
+        return count;
+    }
+
+    @Override
+    public int selectCountByLandlordId(Long userId) {
+        int count = reservationMapper.selectCountByLandlord(userId).intValue();
         return count;
     }
 }

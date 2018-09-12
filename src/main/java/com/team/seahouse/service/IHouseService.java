@@ -3,9 +3,7 @@ package com.team.seahouse.service;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.House;
-import com.team.seahouse.domain.Room;
 import com.team.seahouse.domain.vo.HouseDetailVo;
-import com.team.seahouse.domain.vo.HouseInfoVo;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
 import com.team.seahouse.domain.vo.UserInfoVo;
@@ -64,4 +62,11 @@ public interface IHouseService {
      * @return
      */
     PageResult<HouseListVo> recommend(UserInfoVo userInfo, PageQuery pageInfo);
+
+    /**
+     * 根据房东编号查询房屋数量
+     * @param userId
+     * @return
+     */
+    int selectCountByLandlordId(Long userId);
 }

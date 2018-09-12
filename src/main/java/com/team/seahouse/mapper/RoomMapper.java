@@ -21,4 +21,11 @@ public interface RoomMapper extends BaseMapper<Room> {
      */
     @Select("UPDATE tb_room SET house_id=#{houseId} WHERE id=#{roomId}")
     void setHouseId(@Param("houseId") Long houseId, @Param("roomId") Long roomId);
+
+    /**
+     * 根据房东编号查询房间个数
+     * @param userId
+     * @return
+     */
+    Long selectCountByLandlordId(Long userId);
 }

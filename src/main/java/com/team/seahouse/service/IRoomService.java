@@ -26,4 +26,11 @@ public interface IRoomService {
      * @param roomIds 需要更新的房间信息的Id
      */
     void setHouseId(Long houseId, List<Long> roomIds);
+
+    /**
+     * 根据房东编号查询房间个数
+     * @param userId
+     * @return
+     */
+    int selectCountByLandlordId(Long userId);
 }

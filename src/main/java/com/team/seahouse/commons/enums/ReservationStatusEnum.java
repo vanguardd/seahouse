@@ -11,7 +11,8 @@ public enum ReservationStatusEnum {
 
     UNCONFIRMED(0, "待确认"),
     CONFIRMED_COMPLETE(1, "已确认"),
-    COMPLETE(3, "已完成");
+    CANCEL(2, "已完成"),
+    COMPLETE(3, "已取消");
 
 
     private Integer status;

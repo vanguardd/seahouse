@@ -74,7 +74,10 @@ public class HouseListVo extends BaseDomain {
      */
     private String address;
 
-    private String firstAddress;
+    /**
+     * 区域
+     */
+    private String region;
 
     /**
      * 地址坐标

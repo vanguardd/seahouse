@@ -192,9 +192,9 @@ public class House extends BaseDomain {
 
 
     /**
-     * 一级地址
+     * 区域
      */
-    private String firstAddress;
+    private String region;
 
     /***************小区信息**********************/
 

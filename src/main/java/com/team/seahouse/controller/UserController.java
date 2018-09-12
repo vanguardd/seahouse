@@ -2,6 +2,7 @@ package com.team.seahouse.controller;
 
 import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
+import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
@@ -9,6 +10,8 @@ import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.IdentityAuth;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
+import com.team.seahouse.domain.vo.LandlordFunction;
+import com.team.seahouse.domain.vo.TenantFunction;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.service.IUserService;
@@ -42,16 +45,50 @@ public class UserController extends BaseController {
     @ApiOperation(value = "用户信息接口", notes = "获得用户信息接口")
     @GetMapping("/user_info")
     public Response userInfo() {
-        UserInfoVo userInfo = null;
         Long userId = getUserId();
+        if(userId == null)  {
+            return new Response(CommonReturnCode.UNAUTHORIZED.getStatus(), CommonReturnCode.UNAUTHORIZED.getMessage());
+        }
         try {
-            userInfo = userService.findUserInfoByUserId(userId);
+            UserInfoVo userInfo = userInfoMapper.findUserInfoByUserId(userId);
             return new Response(CommonReturnCode.OK, userInfo);
         } catch (BusinessException e) {
             LoggerUtils.error(UserController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
+
+    @GetMapping("/tenant/function/info")
+    @ApiOperation(value = "房客个人中心function信息接口", notes = "获得房客个人中心function信息接口")
+    public Response tenantFunction() {
+        Long userId = getUserId();
+        if(userId == null) {
+            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+        }
+        try {
+            TenantFunction tenantFunction = userService.fundTenantByUserId(userId);
+            return new Response(CommonReturnCode.OK, tenantFunction);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/landlord/function/info")
+    @ApiOperation(value = "房东function信息接口", notes = "获得房东个人中心信息接口")
+    public Response landlordInfo() {
+        Long userId = getUserId();
+        if(userId == null) {
+            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+        }
+        LandlordFunction landlordFunction = null;
+        try {
+            landlordFunction = userService.findLandlordInfoByUserId(userId);
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getCode(), e.getMessage());
+        }
+        return new Response(CommonReturnCode.OK, landlordFunction);
+    }
+
 
     /**
      * 修改用户信息
@@ -83,6 +120,9 @@ public class UserController extends BaseController {
     public Response updateAvatar(String avatarPath) {
         try {
             Long userId = getUserId();
+            if(userId == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             userInfoMapper.setAvatar(avatarPath, userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
@@ -146,6 +186,9 @@ public class UserController extends BaseController {
     public Response identityAuth(@RequestBody IdentityAuth identityAuth) {
         try {
             Long userId = getUserId();
+            if(userId == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             identityAuth.setUserId(userId);
             userService.identityAuth(identityAuth);
             return new Response(CommonReturnCode.OK);

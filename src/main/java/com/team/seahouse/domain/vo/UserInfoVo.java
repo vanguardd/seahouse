@@ -78,29 +78,9 @@ public class UserInfoVo extends BaseDomain {
     private Integer zmScore;
 
     /**
-     * 订单个数
-     */
-    private Integer orderCount;
-
-    /**
      * 是否实名认证
      */
     private Boolean isAuth;
-
-    /**
-     * 收藏个数
-     */
-    private Integer collectionCount;
-
-    /**
-     * 预约个数
-     */
-    private Integer reservationCount;
-
-    /**
-     * 足迹个数
-     */
-    private Integer trackCount;
 
      public void setIdentityId(Long identityId) {
          if(identityId == null) {

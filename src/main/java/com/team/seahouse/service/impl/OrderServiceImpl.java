@@ -1,16 +1,20 @@
 package com.team.seahouse.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.team.seahouse.commons.enums.OrderStatusEnum;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.OrderUtils;
+import com.team.seahouse.domain.Contract;
 import com.team.seahouse.domain.Order;
+import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.mapper.OrderMapper;
 import com.team.seahouse.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -54,18 +58,44 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public PageResult<Order> myOrder(Long userId, PageQuery page) {
         try {
-            Order order = new Order();
-            order.setUserId(userId);
             //设置分页信息
             PageHelper.startPage(page.getPage(), page.getSize());
             //设置排序信息
             PageHelper.orderBy(page.getSortColumn() + " " + page.getDirection());
-            List<Order> orderList =  orderMapper.selectByExample(order);;
-            PageResult<Order> result = new PageResult<Order>(orderList);
+            List<Order> orderList =  orderMapper.findByUserId(userId);
+            PageResult<Order> result = new PageResult<>(orderList);
             return result;
         } catch (BusinessException e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public int selectCountByLandlordId(Long userId) {
+        Order order = new Order();
+        order.setLandlordId(userId);
+        int count = orderMapper.selectCount(order);
+        return count;
+    }
+
+    @Override
+    public int selectTenantCountByLandlord(Long userId) {
+        Order order = new Order();
+        order.setLandlordId(userId);
+        order.setState(OrderStatusEnum.PAY_TO_COMPLETE.getStatus());
+        int count = orderMapper.selectCount(order);
+        return count;
+    }
+
+    @Override
+    public ContractInfoVo getContractInfo(Long houseId, Long userId) {
+        ContractInfoVo contractInfoVo = null;
+        try {
+            contractInfoVo = orderMapper.getContractInfo(houseId, userId);
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+        return contractInfoVo;
     }
 
 }

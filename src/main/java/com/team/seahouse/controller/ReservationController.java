@@ -16,6 +16,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.rmi.runtime.Log;
+
+import java.util.logging.Logger;
 
 /**
  * @Title: 预约看房模块接口
@@ -84,19 +87,40 @@ public class ReservationController extends BaseController {
     }
 
     /**
-     * 查看预约看房信息详情
+     * 查看预约看房信息详情（租客）
      * @param reservationId
      * @return
      */
-    @GetMapping("/detail/{reservationId}")
-    @ApiOperation(value = "查看预约详情接口", notes = "根据预约编号查看预约信息详情")
+    @GetMapping("/detail/tenant/{reservationId}")
+    @ApiOperation(value = "查看预约详情接口", notes = "根据预约编号查看预约信息详情（租客）")
     public Response detail(@PathVariable("reservationId") Long reservationId) {
         try {
             if(reservationId == null) {
                 LoggerUtils.error(ReservationController.class, CommonReturnCode.BAD_REQUEST.getMessage());
                 return new Response(CommonReturnCode.BAD_REQUEST);
             }
-            Reservation reservation = reservationMapper.findByReservationId(reservationId);
+            UserReservationVo reservation = reservationMapper.findTenantByReservationId(reservationId);
+            return new Response(CommonReturnCode.OK, reservation);
+        } catch (BusinessException e) {
+            LoggerUtils.error(ReservationController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 查看预约看房信息详情（房东）
+     * @param reservationId
+     * @return
+     */
+    @GetMapping("/detail/landlord/{reservationId}")
+    @ApiOperation(value = "查看预约详情接口", notes = "根据编号查看预约信息详情（房东）")
+    public Response landlordDetail(@PathVariable("reservationId") Long reservationId) {
+        if(reservationId == null) {
+            LoggerUtils.error(ReservationController.class, CommonReturnCode.BAD_REQUEST.getMessage());
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
+        try {
+            LandlordReservationVo reservation = reservationMapper.findLandlordByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
         } catch (BusinessException e) {
             LoggerUtils.error(ReservationController.class, e.getMessage());
@@ -114,10 +138,10 @@ public class ReservationController extends BaseController {
     public Response update(@RequestBody Reservation reservation) {
         try {
             reservationService.update(reservation);
-            return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             LoggerUtils.error(ReservationController.class, e.getMessage());
-            return new Response(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
+        return new Response(CommonReturnCode.OK);
+
     }
 }

@@ -153,4 +153,13 @@ public class HouseServiceImpl implements IHouseService {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public int selectCountByLandlordId(Long userId) {
+        House house = new House();
+        house.setLandlordId(userId);
+        house.setAuditState(AuditStatusEnum.AUDIT_PASS.getStatus());
+        int count = houseMapper.selectCount(house);
+        return count;
+    }
 }

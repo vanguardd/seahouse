@@ -20,12 +20,11 @@ import java.util.List;
 public interface ReservationMapper extends BaseMapper<Reservation> {
 
     /**
-     * 根据预约信息编号查询预约详情
+     * 根据预约信息编号查询预约详情(租客)
      * @param reservationId
      * @return
      */
-    @Select("SELECT * FROM tb_reservation WHERE id=#{reservationId}")
-    Reservation findByReservationId(Long reservationId);
+    UserReservationVo findTenantByReservationId(Long reservationId);
 
     /**
      * 根据用户编号查询用户预约信息
@@ -40,4 +39,18 @@ public interface ReservationMapper extends BaseMapper<Reservation> {
      * @return
      */
     List<LandlordReservationVo> findLandlordReservation(@Param("userId") Long userId);
+
+    /**
+     * 根据预约信息编号查询预约详情(房东)
+     * @param reservationId
+     * @return
+     */
+    LandlordReservationVo findLandlordByReservationId(Long reservationId);
+
+    /**
+     * 根据房东编号查询房东预约看房个数
+     * @param userId
+     * @return
+     */
+    Long selectCountByLandlord(Long userId);
 }

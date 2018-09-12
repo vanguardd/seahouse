@@ -43,4 +43,11 @@ public class RoomServiceImpl implements IRoomService {
             roomMapper.setHouseId(houseId, roomId);
         }
     }
+
+    @Override
+    public int selectCountByLandlordId(Long userId) {
+        Room room = new Room();
+        int roomCount = roomMapper.selectCountByLandlordId(userId).intValue();
+        return roomCount;
+    }
 }
