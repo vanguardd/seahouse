@@ -36,7 +36,6 @@
     <result column="deposit" property="deposit" jdbcType="VARCHAR" />
     <result column="region" property="region" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="exposition" property="exposition" jdbcType="VARCHAR" />
     <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
     <result column="landlord_id" property="landlordId" jdbcType="BIGINT" />
     <result column="floor" property="floor" jdbcType="INTEGER" />
@@ -57,12 +56,54 @@
     <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
   </resultMap>
 
+  <resultMap id="orderListResultMap" type="com.team.seahouse.domain.vo.OrderListVo">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="renter_sign_state" property="renterSignState" jdbcType="INTEGER" />
+    <result column="landLord_id" property="landlordId" jdbcType="BIGINT" />
+    <result column="landLord_sign_state" property="landlordSignState" jdbcType="INTEGER" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="contract_id" property="contractId" jdbcType="BIGINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="pay_way" property="payWay" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="discount_amount" property="discountAmount" jdbcType="DECIMAL" />
+    <result column="business_amount" property="businessAmount" jdbcType="DECIMAL" />
+    <result column="renter_sign_time" property="renterSignTime" jdbcType="TIMESTAMP" />
+    <result column="landLord_sign_time" property="landlordSignTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="business_time" property="businessTime" jdbcType="TIMESTAMP" />
+    <result column="landlord_avatar" property="landlordAvatar" jdbcType="VARCHAR" />
+    <result column="landlord_name" property="landlordName" jdbcType="VARCHAR" />
+    <result column="tenant_avatar" property="tenantAvatar" jdbcType="VARCHAR" />
+    <result column="tenant_name" property="tenantName" jdbcType="VARCHAR" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+    <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
+    <result column="room_area" property="roomArea" jdbcType="NUMERIC" />
+    <result column="rent" property="rent" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <!-- 获得签约所需的信息 -->
   <select id="getContractInfo" resultMap="ContractResultMap">
     SELECT m.id as room_id, m.house_id, m.room_image, h.house_name, m.room_name, m.rent, m.room_area, m.pay_way, m.rent_way, m.date_limit, m.deposit, h.region,
-      h.address, h.exposition, h.fixtures, h.landlord_id, h.floor, h.house_pattern, h.custom_name, h.custom_pay_type, h.custom_value, h.heating_value, h.heating_pay_type,
+      h.address, h.fixtures, h.landlord_id, h.floor, h.house_pattern, h.custom_name, h.custom_pay_type, h.custom_value, h.heating_value, h.heating_pay_type,
       h.electric_value, h.electric_pay_type, h.property_pay_type, h.property_value, h.water_value, h.water_pay_type, i.user_id, i.real_name, i.id_number
       FROM tb_room m, tb_identity_auth i, tb_house h
 
     WHERE m.house_id=h.id AND m.id=#{houseId} AND i.user_id=#{userId}
+  </select>
+
+  <!-- 查询我的订单（房客） -->
+  <select id="findByUserId" resultMap="orderListResultMap" >
+    SELECT o.*, u.avatar AS landlord_avatar, u.real_name AS landlord_name, h.house_name, m.room_name, m.room_image, h.fixtures, m.room_area, m.rent,
+      l.avatar AS tenant_avatar, l.real_name AS tenant_name
+      FROM tb_order o
+    LEFT JOIN tb_user_info u ON o.landLord_id=u.user_id
+    LEFT JOIN tb_user_info l ON o.user_id=l.user_id
+    LEFT JOIN tb_room m ON o.house_id=m.id
+    LEFT JOIN tb_house h ON m.house_id=h.id
+    WHERE o.user_id=#{userId}
   </select>
 </mapper>

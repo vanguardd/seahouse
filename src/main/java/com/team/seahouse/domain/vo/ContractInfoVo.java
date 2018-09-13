@@ -147,6 +147,11 @@ public class ContractInfoVo {
      */
     private String dateLimit;
 
+    /**
+     * 押金
+     */
+    private String deposit;
+
     /****************地址信息**********************/
 
     /**

@@ -9,8 +9,9 @@
     <result column="signing_time" property="signingTime" jdbcType="TIMESTAMP" />
     <result column="contract_url" property="contractUrl" jdbcType="VARCHAR" />
     <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
-    <result column="partyaid" property="partyaid" jdbcType="BIGINT" />
-    <result column="partybid" property="partybid" jdbcType="BIGINT" />
+    <result column="party_a_id" property="partyAId" jdbcType="BIGINT" />
+    <result column="party_b_id" property="partyBId" jdbcType="BIGINT" />
     <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
 </mapper>

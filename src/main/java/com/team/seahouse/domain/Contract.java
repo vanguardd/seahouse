@@ -46,5 +46,10 @@ public class Contract extends BaseDomain {
     /**
      * 合同状态
      */
-    private String state;
+    private Integer state;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

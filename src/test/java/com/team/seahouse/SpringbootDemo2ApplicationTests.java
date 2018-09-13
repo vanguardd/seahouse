@@ -1,5 +1,6 @@
 package com.team.seahouse;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.Collections;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.util.*;
 
 import static com.team.seahouse.commons.utils.StringUtils.*;
 
@@ -68,6 +69,31 @@ public class SpringbootDemo2ApplicationTests {
 		System.out.println(isExist);
 		System.out.println(redisService.get("user"));
 
+	}
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("请输入字符串：");
+		String str = scanner.nextLine();
+		char[] chars = str.toCharArray();
+		Arrays.sort(chars);
+		Map<Character, Integer> map = new HashMap<>();
+		for(char i: chars) {
+			if(!map.containsKey(i)) {
+				map.put(i, 1);
+			} else {
+				map.put(i, map.get(i) + 1);
+			}
+		}
+		StringBuffer sb = new StringBuffer();
+		Set<Character> keySet = map.keySet();
+		Iterator<Character> iterator = keySet.iterator();
+		while (iterator.hasNext()) {
+			Character key = iterator.next();
+			Integer value = map.get(key);
+			sb.append(key + "" + value);
+		}
+		System.out.println(sb.toString());
 	}
 
 }

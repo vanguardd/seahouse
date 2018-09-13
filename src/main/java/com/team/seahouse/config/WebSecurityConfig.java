@@ -55,7 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/collection/**",
             "/track/**",
             "/pass/**",
-            "/reservation/**"
+            "/reservation/**",
+            "/contract/**"
     };
 
     @Autowired

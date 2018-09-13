@@ -4,6 +4,7 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
+import com.team.seahouse.domain.vo.OrderListVo;
 
 /**
  * @Title: 订单业务接口
@@ -34,7 +35,7 @@ public interface IOrderService {
      * @param page 分页信息
      * @return
      */
-    PageResult<Order> myOrder(Long userId, PageQuery page);
+    PageResult<OrderListVo> myOrder(Long userId, PageQuery page);
 
     /**
      * 根据房东编号查询订单个数

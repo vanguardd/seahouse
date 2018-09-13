@@ -3,6 +3,7 @@ package com.team.seahouse.mapper;
 import com.team.seahouse.commons.base.BaseMapper;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
+import com.team.seahouse.domain.vo.OrderListVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,8 +23,7 @@ public interface OrderMapper extends BaseMapper<Order> {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM tb_order WHERE user_id=#{userId}")
-    List<Order> findByUserId(@Param("userId") Long userId);
+    List<OrderListVo> findByUserId(@Param("userId") Long userId);
 
     /**
      * 获得签约信息

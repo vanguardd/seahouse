@@ -9,6 +9,7 @@ import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
+import com.team.seahouse.domain.vo.OrderListVo;
 import com.team.seahouse.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -75,7 +76,7 @@ public class OrderController extends BaseController {
     public Response myOrder(PageQuery pageQuery) {
         Long userId = getUserId();
         try {
-            PageResult<Order> pageResult = orderService.myOrder(userId, pageQuery);
+            PageResult<OrderListVo> pageResult = orderService.myOrder(userId, pageQuery);
             return new Response(CommonReturnCode.OK, pageResult);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());
