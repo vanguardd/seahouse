@@ -12,11 +12,13 @@ import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.Room;
 import com.team.seahouse.domain.vo.HouseDetailVo;
 import com.team.seahouse.domain.vo.HouseListVo;
+import com.team.seahouse.domain.vo.LandlordHouseListVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.IRoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,9 +82,13 @@ public class HouseController extends BaseController {
     @GetMapping("/{roomId}")
     @ApiOperation(value = "查看房屋详情", notes = "查看房屋详情接口")
     public Response detail(@PathVariable("roomId") Long roomId) {
+        //获得已经登录的用户编号
+        Long userId = getUserId();
+        if(userId == null) {
+            LoggerUtils.error(HouseController.class, CommonReturnCode.UNAUTHORIZED.getMessage());
+            return new Response(CommonReturnCode.UNAUTHORIZED);
+        }
         try {
-            //获得已经登录的用户编号
-            Long userId = getUserId();
             HouseDetailVo house = houseService.findByRoomId(roomId, userId);
             return new Response(CommonReturnCode.OK, house);
         } catch (BusinessException e) {
@@ -137,7 +143,6 @@ public class HouseController extends BaseController {
             LoggerUtils.error(HouseController.class, CommonReturnCode.BAD_REQUEST.getMessage());
             return new Response(CommonReturnCode.BAD_REQUEST);
         }
-
         try {
             PageResult<HouseListVo> houseList = houseService.findByType(type, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
@@ -164,6 +169,27 @@ public class HouseController extends BaseController {
         try {
             PageResult<HouseListVo> houseList = houseService.recommend(userInfo, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
+        } catch (BusinessException e) {
+            LoggerUtils.error(HouseController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 根据房东用户编号查询房东房屋列表
+     * @param pageQuery
+     * @return
+     */
+    @GetMapping("/landlord/list")
+    @ApiOperation(value = "查询房东房屋列表", notes = "根据房东用户编号查询房东房屋列表")
+    public Response landlordHouseList(PageQuery pageQuery) {
+        Long userId = getUserId();
+        if(userId == null) {
+            return new Response(CommonReturnCode.UNAUTHORIZED);
+        }
+        try {
+            PageResult<LandlordHouseListVo> pageResult = houseService.findLandlordHouseList(userId, pageQuery);
+            return new Response(CommonReturnCode.OK, pageResult);
         } catch (BusinessException e) {
             LoggerUtils.error(HouseController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());

@@ -2,6 +2,8 @@ package com.team.seahouse.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.seahouse.commons.base.BaseDomain;
+import com.team.seahouse.commons.enums.OrderStatusEnum;
+import com.team.seahouse.commons.enums.OrderTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -66,57 +68,9 @@ public class OrderListVo extends BaseDomain {
     private Integer state;
 
     /**
-     * 支付方式
+     * 状态值
      */
-    @Column(name = "pay_way")
-    private Integer payWay;
-
-    /**
-     * 订单金额
-     */
-    private BigDecimal amount;
-
-    /**
-     * 优惠金额
-     */
-    @Column(name = "discount_amount")
-    private BigDecimal discountAmount;
-
-    /**
-     * 交易金额
-     */
-    @Column(name = "business_amount")
-    private BigDecimal businessAmount;
-
-    /**
-     * 租客签约时间
-     */
-    @Column(name = "renter_sign_time")
-    private Date renterSignTime;
-
-    /**
-     * 房东签约时间
-     */
-    @Column(name = "landLord_sign_time")
-    private Date landlordSignTime;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @Column(name = "update_time")
-    private Date updateTime;
-
-    /**
-     * 交易时间
-     */
-    @Column(name = "business_time")
-    private Date businessTime;
+    private String stateVal;
 
     private String landlordAvatar;
 
@@ -144,6 +98,11 @@ public class OrderListVo extends BaseDomain {
 
     public String getTitle() {
         return houseName + " " + roomName;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+        this.stateVal = OrderStatusEnum.stateOf(state).getStateInfo();
     }
 
 }

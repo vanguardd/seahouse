@@ -4,6 +4,7 @@ import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
+import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
 
 /**
@@ -58,4 +59,19 @@ public interface IOrderService {
      * @return
      */
     ContractInfoVo getContractInfo(Long houseId, Long userId);
+
+    /**
+     * 查询房东的订单列表
+     * @param userId
+     * @param pageQuery
+     * @return
+     */
+    PageResult<OrderListVo> getLandlordOrderList(Long userId, PageQuery pageQuery);
+
+    /**
+     * 查询订单详情
+     * @param orderId
+     * @return
+     */
+    OrderDetailVo detail(Long orderId);
 }

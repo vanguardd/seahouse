@@ -80,7 +80,7 @@
   
   <resultMap id="houseDetailResultMap" type="com.team.seahouse.domain.vo.HouseDetailVo">
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="region" property="firstAddress" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="address_coordinate" property="addressCoordinate" jdbcType="VARCHAR" />
     <result column="exposition" property="exposition" jdbcType="VARCHAR" />
@@ -143,6 +143,24 @@
     <result column="create_time" property="landLordCreateDate" />
     <result column="collection_id" property="collection" jdbcType="BIGINT" />
     <result column="reservation_id" property="reservationId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap id="landlordHouseListResultMap" type="com.team.seahouse.domain.vo.LandlordHouseListVo">
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="audit_state" property="auditState" jdbcType="VARCHAR" />
+    <collection property="rooms" ofType="RoomVo" column="id">
+      <result column="room_id" property="id" jdbcType="BIGINT" />
+      <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+      <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+      <result column="room_area" property="roomArea" jdbcType="DOUBLE" />
+      <result column="rent" property="rent" jdbcType="DECIMAL" />
+      <result column="rent_way" property="rentWay" jdbcType="VARCHAR" />
+      <result column="state" property="state" jdbcType="NUMERIC" />
+    </collection>
   </resultMap>
 
   <sql id="houseListColumn">
@@ -251,6 +269,15 @@
       FROM tb_room r
     LEFT JOIN tb_house h ON r.house_id=h.id
     WHERE type=#{type}
+  </select>
+
+  <!-- 根据房东用户编号查询房东房屋列表 -->
+  <select id="findLandlordHouseListByUserId" resultMap="landlordHouseListResultMap">
+    SELECT h.id, h.house_name, h.city, r.id AS room_id, r.room_name, r.room_image, h.fixtures,
+      r.room_area, r.rent, r.rent_way, h.region, h.create_time, h.audit_state, r.state
+      FROM tb_house h
+    LEFT JOIN tb_room r ON r.house_id=h.id
+    WHERE h.landlord_id=#{userId}
   </select>
 
 </mapper>

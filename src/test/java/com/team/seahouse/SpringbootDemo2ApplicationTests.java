@@ -1,11 +1,11 @@
 package com.team.seahouse;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
 import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.Collections;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.mapper.CollectionMapper;
+import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.mapper.UserMapper;
 import com.team.seahouse.service.IRedisService;
 import org.junit.Test;
@@ -27,6 +27,9 @@ public class SpringbootDemo2ApplicationTests {
 
 	@Autowired
 	private CollectionMapper collectionMapper;
+
+	@Autowired
+	private UserInfoMapper userInfoMapper;
 
 	@Autowired
 	private IRedisService<String> redisService;
@@ -71,29 +74,10 @@ public class SpringbootDemo2ApplicationTests {
 
 	}
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("请输入字符串：");
-		String str = scanner.nextLine();
-		char[] chars = str.toCharArray();
-		Arrays.sort(chars);
-		Map<Character, Integer> map = new HashMap<>();
-		for(char i: chars) {
-			if(!map.containsKey(i)) {
-				map.put(i, 1);
-			} else {
-				map.put(i, map.get(i) + 1);
-			}
-		}
-		StringBuffer sb = new StringBuffer();
-		Set<Character> keySet = map.keySet();
-		Iterator<Character> iterator = keySet.iterator();
-		while (iterator.hasNext()) {
-			Character key = iterator.next();
-			Integer value = map.get(key);
-			sb.append(key + "" + value);
-		}
-		System.out.println(sb.toString());
+	@Test
+	public void testUserInfo() {
+		int i = userInfoMapper.setRealName("周毅", 20L);
+		System.out.println(i);
 	}
 
 }

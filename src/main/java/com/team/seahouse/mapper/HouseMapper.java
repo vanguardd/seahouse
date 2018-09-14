@@ -5,6 +5,7 @@ import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.vo.HouseDetailVo;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
+import com.team.seahouse.domain.vo.LandlordHouseListVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -68,5 +69,12 @@ public interface HouseMapper extends BaseMapper<House> {
      * @return
      */
     List<HouseListVo> findByUserInfo(UserInfoVo userInfo);
+
+    /**
+     * 查询房东的房屋列表
+     * @param userId
+     * @return
+     */
+    List<LandlordHouseListVo> findLandlordHouseListByUserId(Long userId);
 
 }

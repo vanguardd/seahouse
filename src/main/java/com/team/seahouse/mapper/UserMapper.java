@@ -5,7 +5,6 @@ import com.team.seahouse.domain.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.security.core.parameters.P;
 
 /**
  * @title 用户模块

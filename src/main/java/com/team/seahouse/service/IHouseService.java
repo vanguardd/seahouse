@@ -6,6 +6,7 @@ import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.vo.HouseDetailVo;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
+import com.team.seahouse.domain.vo.LandlordHouseListVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 
 /**
@@ -69,4 +70,11 @@ public interface IHouseService {
      * @return
      */
     int selectCountByLandlordId(Long userId);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    PageResult<LandlordHouseListVo> findLandlordHouseList(Long userId, PageQuery pageQuery);
 }

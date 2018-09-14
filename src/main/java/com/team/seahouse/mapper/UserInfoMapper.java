@@ -3,9 +3,10 @@ package com.team.seahouse.mapper;
 import com.team.seahouse.commons.base.BaseMapper;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.vo.UserInfoVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.data.repository.query.Param;
+
 
 /**
  * @title 用户信息模块

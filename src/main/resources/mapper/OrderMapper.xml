@@ -65,6 +65,28 @@
     <result column="house_id" property="houseId" jdbcType="BIGINT" />
     <result column="contract_id" property="contractId" jdbcType="BIGINT" />
     <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="landlord_avatar" property="landlordAvatar" jdbcType="VARCHAR" />
+    <result column="landlord_name" property="landlordName" jdbcType="VARCHAR" />
+    <result column="tenant_avatar" property="tenantAvatar" jdbcType="VARCHAR" />
+    <result column="tenant_name" property="tenantName" jdbcType="VARCHAR" />
+    <result column="house_name" property="houseName" jdbcType="VARCHAR" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+    <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
+    <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
+    <result column="room_area" property="roomArea" jdbcType="NUMERIC" />
+    <result column="rent" property="rent" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <resultMap id="orderDetailResultMap" type="com.team.seahouse.domain.vo.OrderDetailVo">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="renter_sign_state" property="renterSignState" jdbcType="INTEGER" />
+    <result column="landLord_id" property="landlordId" jdbcType="BIGINT" />
+    <result column="landLord_sign_state" property="landlordSignState" jdbcType="INTEGER" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="contract_id" property="contractId" jdbcType="BIGINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="rent_date_limit" property="rentDateLimit" jdbcType="VARCHAR" />
     <result column="pay_way" property="payWay" jdbcType="INTEGER" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="discount_amount" property="discountAmount" jdbcType="DECIMAL" />
@@ -105,5 +127,27 @@
     LEFT JOIN tb_room m ON o.house_id=m.id
     LEFT JOIN tb_house h ON m.house_id=h.id
     WHERE o.user_id=#{userId}
+  </select>
+
+  <select id="findLandlordByUserId" resultMap="orderListResultMap">
+    SELECT o.*, u.avatar AS landlord_avatar, u.real_name AS landlord_name, h.house_name, m.room_name, m.room_image, h.fixtures, m.room_area, m.rent,
+                l.avatar AS tenant_avatar, l.real_name AS tenant_name
+    FROM tb_order o
+      LEFT JOIN tb_user_info u ON o.landLord_id=u.user_id
+      LEFT JOIN tb_user_info l ON o.user_id=l.user_id
+      LEFT JOIN tb_room m ON o.house_id=m.id
+      LEFT JOIN tb_house h ON m.house_id=h.id
+    WHERE o.landLord_id=#{userId}
+  </select>
+
+  <select id="findByOrderId" resultMap="orderDetailResultMap">
+    SELECT o.*, u.avatar AS landlord_avatar, u.real_name AS landlord_name, h.house_name, m.room_name, m.room_image, h.fixtures, m.room_area, m.rent,
+                l.avatar AS tenant_avatar, l.real_name AS tenant_name
+    FROM tb_order o
+      LEFT JOIN tb_user_info u ON o.landLord_id=u.user_id
+      LEFT JOIN tb_user_info l ON o.user_id=l.user_id
+      LEFT JOIN tb_room m ON o.house_id=m.id
+      LEFT JOIN tb_house h ON m.house_id=h.id
+    WHERE o.id=#{orderId}
   </select>
 </mapper>

@@ -11,6 +11,7 @@ import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.vo.HouseDetailVo;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.commons.request.SearchQuery;
+import com.team.seahouse.domain.vo.LandlordHouseListVo;
 import com.team.seahouse.domain.vo.UserInfoVo;
 import com.team.seahouse.mapper.HouseMapper;
 import com.team.seahouse.mapper.UserInfoMapper;
@@ -109,7 +110,6 @@ public class HouseServiceImpl implements IHouseService {
 
     @Override
     public PageResult<HouseListVo> search(SearchQuery searchQuery) {
-
         try {
             PageHelper.startPage(searchQuery.getPage(), searchQuery.getSize());
             PageHelper.orderBy(searchQuery.getSortColumn() + " " + searchQuery.getDirection());
@@ -149,7 +149,7 @@ public class HouseServiceImpl implements IHouseService {
             List<HouseListVo> houseList = houseMapper.findByUserInfo(userInfo);
             PageResult<HouseListVo> result = new PageResult<>(houseList);
             return result;
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
@@ -161,5 +161,20 @@ public class HouseServiceImpl implements IHouseService {
         house.setAuditState(AuditStatusEnum.AUDIT_PASS.getStatus());
         int count = houseMapper.selectCount(house);
         return count;
+    }
+
+    @Override
+    public PageResult<LandlordHouseListVo> findLandlordHouseList(Long userId, PageQuery pageQuery) {
+        try {
+            //设置分页信息
+            PageHelper.startPage(pageQuery.getPage(), pageQuery.getSize());
+            //设置排序条件
+            PageHelper.orderBy(pageQuery.getSortColumn() + " " + pageQuery.getDirection());
+            List<LandlordHouseListVo> houseListVos = houseMapper.findLandlordHouseListByUserId(userId);
+            PageResult<LandlordHouseListVo> result = new PageResult<>(houseListVos);
+            return result;
+        } catch (BusinessException e) {
+            throw new BusinessException(e);
+        }
     }
 }

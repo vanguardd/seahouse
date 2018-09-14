@@ -9,6 +9,7 @@ import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
+import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
 import com.team.seahouse.service.IOrderService;
 import io.swagger.annotations.Api;
@@ -71,13 +72,38 @@ public class OrderController extends BaseController {
      * 我的订单
      * @return
      */
-    @GetMapping("/myOrder")
+    @GetMapping("/tenant/list")
     @ApiOperation(value = "我的订单", notes = "查询我的订单列表")
-    public Response myOrder(PageQuery pageQuery) {
+    public Response tenantOrder(PageQuery pageQuery) {
         Long userId = getUserId();
         try {
             PageResult<OrderListVo> pageResult = orderService.myOrder(userId, pageQuery);
             return new Response(CommonReturnCode.OK, pageResult);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/landlord/list")
+    public Response landlordOrder(PageQuery pageQuery) {
+        Long userId = getUserId();
+        try {
+            PageResult<OrderListVo> pageResult = orderService.getLandlordOrderList(userId, pageQuery);
+            return new Response(CommonReturnCode.OK, pageResult);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/detail/{orderId}")
+    @ApiOperation(value = "订单详情", notes = "查询订单详情")
+    public Response detail(@PathVariable("orderId") Long orderId) {
+        if(orderId == null) {
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
+        try {
+            OrderDetailVo order = orderService.detail(orderId);
+            return new Response(CommonReturnCode.OK, order);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());
         }

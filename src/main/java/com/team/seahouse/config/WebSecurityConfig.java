@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/sms/**",
             //-- 搜索
             "/house/search",
-            "/house/*",
+            "/house/**",
             //-- 获得上传图片Token
             "/uploads/**",
             "/order/**",

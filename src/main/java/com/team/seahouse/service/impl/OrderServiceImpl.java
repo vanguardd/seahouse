@@ -8,15 +8,14 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
 import com.team.seahouse.commons.utils.OrderUtils;
-import com.team.seahouse.domain.Contract;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
+import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
 import com.team.seahouse.mapper.OrderMapper;
 import com.team.seahouse.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -101,6 +100,32 @@ public class OrderServiceImpl implements IOrderService {
             throw new BusinessException(e);
         }
         return contractInfoVo;
+    }
+
+    @Override
+    public PageResult<OrderListVo> getLandlordOrderList(Long userId, PageQuery pageQuery) {
+        try {
+            //设置分页信息
+            PageHelper.startPage(pageQuery.getPage(), pageQuery.getSize());
+            //设置排序信息
+            PageHelper.orderBy(pageQuery.getSortColumn() + " " + pageQuery.getDirection());
+            List<OrderListVo> orderList =  orderMapper.findLandlordByUserId(userId);
+            PageResult<OrderListVo> result = new PageResult<>(orderList);
+            return result;
+        } catch (BusinessException e) {
+            throw new BusinessException(CommonReturnCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public OrderDetailVo detail(Long orderId) {
+        OrderDetailVo orderDetailVo = null;
+        try {
+            orderDetailVo = orderMapper.findByOrderId(orderId);
+        } catch (BusinessException e) {
+            throw new BusinessException(e);
+        }
+        return orderDetailVo;
     }
 
 }
