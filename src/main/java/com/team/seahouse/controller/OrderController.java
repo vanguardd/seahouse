@@ -32,6 +32,11 @@ public class OrderController extends BaseController {
     @Autowired
     private IOrderService orderService;
 
+    /**
+     * 提交订单所需的数据
+     * @param houseId
+     * @return
+     */
     @GetMapping("/contractInfo/{houseId}")
     @ApiOperation(value = "获得提交订单的数据", notes = "获得提交订单的数据信息")
     public Response contractInfo(@PathVariable("houseId") Long houseId) {
@@ -50,7 +55,7 @@ public class OrderController extends BaseController {
     }
 
     /**
-     * 创建订单
+     * 提交订单
      * @param order
      * @return
      */
@@ -69,7 +74,7 @@ public class OrderController extends BaseController {
     }
 
     /**
-     * 我的订单
+     * 我的订单(房客)
      * @return
      */
     @GetMapping("/tenant/list")
@@ -84,6 +89,11 @@ public class OrderController extends BaseController {
         }
     }
 
+    /**
+     * 我的订单（房东）
+     * @param pageQuery
+     * @return
+     */
     @GetMapping("/landlord/list")
     public Response landlordOrder(PageQuery pageQuery) {
         Long userId = getUserId();
@@ -104,6 +114,41 @@ public class OrderController extends BaseController {
         try {
             OrderDetailVo order = orderService.detail(orderId);
             return new Response(CommonReturnCode.OK, order);
+        } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 修改订单信息
+     * @param order
+     * @return
+     */
+    @GetMapping("/update")
+    @ApiOperation(value = "更新订单状态", notes = "更新订单状态")
+    public Response update(Order order) {
+        try {
+            orderService.update(order);
+            return new Response(CommonReturnCode.OK);
+        } catch (BusinessException e) {
+            return new  Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 手动取消订单
+     * @param orderId
+     * @return
+     */
+    @PutMapping("/handleCancel/{orderId}")
+    @ApiOperation(value = "手动取消订单", notes = "手动取消订单")
+    public Response handleCancelOrder(@PathVariable("orderId") Long orderId) {
+        if(orderId == null) {
+            return new Response(CommonReturnCode.BAD_REQUEST);
+        }
+        try {
+            orderService.handleCancelOrder(orderId);
+            return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             return new Response(e.getCode(), e.getMessage());
         }

@@ -8,11 +8,11 @@ package com.team.seahouse.commons.enums;
  * @Date: 2018/09/07
  */
 public enum OrderTypeEnum {
-    ALL_VALID(0, "1,2,3,4", "全部有效订单"),
+    ALL_VALID(0, "1,2,3,4,9", "全部有效订单"),
     TO_BE_PAID(1, "1", "未签字"),
     WAIT_FOR_RECEIVING(2, "1,2", "待支付"),
-    CLOSE(3, "1,2,3", "待评价"),
-    ALL_ORDER(4,"1,2,3,4,11,,12","全部订单");
+    CLOSE(3, "1,2,3,9", "待评价"),
+    ALL_ORDER(4,"1,2,3,4,9,11,12","全部订单");
 
     private Integer type;
 

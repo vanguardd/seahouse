@@ -46,6 +46,7 @@ public class OrderServiceImpl implements IOrderService {
         //生成订单号
         String orderNumber = OrderUtils.getOrderNumber(order.getUserId());
         order.setOrderNumber(orderNumber);
+        //设置订单状态为订单提交
         order.setState(OrderStatusEnum.SUBMIT_ORDERS.getStatus());
         order.setRenterSignState(ContractStatusEnum.NO_SIGN.getStatus());
         order.setLandlordSignState(ContractStatusEnum.NO_SIGN.getStatus());
@@ -126,6 +127,23 @@ public class OrderServiceImpl implements IOrderService {
             throw new BusinessException(e);
         }
         return orderDetailVo;
+    }
+
+    @Override
+    public void update(Order order) {
+        try {
+            orderMapper.updateByPrimaryKeySelective(order);
+        } catch (BusinessException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Override
+    public void handleCancelOrder(Long orderId) {
+        Order order = new Order();
+        order.setId(orderId);
+        order.setState(OrderStatusEnum.MANUALLY_CANCEL_THE_ORDER.getStatus());
+        orderMapper.updateByPrimaryKeySelective(order);
     }
 
 }

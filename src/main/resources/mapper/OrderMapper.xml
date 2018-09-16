@@ -101,10 +101,12 @@
     <result column="tenant_name" property="tenantName" jdbcType="VARCHAR" />
     <result column="house_name" property="houseName" jdbcType="VARCHAR" />
     <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
     <result column="room_image" property="roomImage" jdbcType="VARCHAR" />
     <result column="fixtures" property="fixtures" jdbcType="VARCHAR" />
     <result column="room_area" property="roomArea" jdbcType="NUMERIC" />
     <result column="rent" property="rent" jdbcType="DECIMAL" />
+    <result column="rent_way" property="rentWay" jdbcType="VARCHAR" />
   </resultMap>
 
   <!-- 获得签约所需的信息 -->
@@ -141,8 +143,8 @@
   </select>
 
   <select id="findByOrderId" resultMap="orderDetailResultMap">
-    SELECT o.*, u.avatar AS landlord_avatar, u.real_name AS landlord_name, h.house_name, m.room_name, m.room_image, h.fixtures, m.room_area, m.rent,
-                l.avatar AS tenant_avatar, l.real_name AS tenant_name
+    SELECT o.*, u.avatar AS landlord_avatar, u.real_name AS landlord_name, h.house_name, m.room_name, m.room_image, h.region, h.fixtures, m.room_area,
+      m.rent, m.rent_way, l.avatar AS tenant_avatar, l.real_name AS tenant_name
     FROM tb_order o
       LEFT JOIN tb_user_info u ON o.landLord_id=u.user_id
       LEFT JOIN tb_user_info l ON o.user_id=l.user_id

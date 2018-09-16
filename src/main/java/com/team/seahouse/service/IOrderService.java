@@ -74,4 +74,16 @@ public interface IOrderService {
      * @return
      */
     OrderDetailVo detail(Long orderId);
+
+    /**
+     * 更新订单状态
+     * @param order
+     */
+    void update(Order order);
+
+    /**
+     * 手动取消订单
+     * @param orderId
+     */
+    void handleCancelOrder(Long orderId);
 }

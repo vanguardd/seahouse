@@ -134,7 +134,7 @@ public class ReservationController extends BaseController {
      * @return
      */
     @PutMapping("/update")
-    @ApiOperation(value = "修改预约信息", notes = "修改预约信息")
+    @ApiOperation(value = "修改预约信息", notes = "修改预约信息状态等")
     public Response update(@RequestBody Reservation reservation) {
         try {
             reservationService.update(reservation);

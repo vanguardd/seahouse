@@ -145,11 +145,15 @@ public class OrderDetailVo extends BaseDomain {
 
     private String roomImage;
 
+    private String region;
+
     private String fixtures;
 
     private Double roomArea;
 
     private BigDecimal rent;
+
+    private String rentWay;
 
     public String getTitle() {
         return houseName + " " + roomName;
