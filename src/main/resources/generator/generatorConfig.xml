@@ -15,9 +15,9 @@
         </plugin>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/seahouse?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
-                        userId="root"
-                        password="root">
+                        connectionURL="jdbc:mysql://192.168.1.120:3306/seahouse?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
+                        userId="seahouse"
+                        password="1234">
         </jdbcConnection>
 
 
@@ -33,7 +33,7 @@
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
 
-        <table tableName="tb_room" domainObjectName="Room">
+        <table tableName="tb_device" domainObjectName="Device">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
