@@ -6,6 +6,9 @@ import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
+import com.team.seahouse.domain.vo.TenantVo;
+
+import java.util.List;
 
 /**
  * @Title: 订单业务接口
@@ -86,4 +89,11 @@ public interface IOrderService {
      * @param orderId
      */
     void handleCancelOrder(Long orderId);
+
+    /**
+     * 房客列表
+     * @param userId
+     * @return
+     */
+    List<TenantVo> tenantList(Long userId);
 }

@@ -5,6 +5,7 @@ import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
+import com.team.seahouse.domain.vo.TenantVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -47,4 +48,18 @@ public interface OrderMapper extends BaseMapper<Order> {
      * @return
      */
     OrderDetailVo findByOrderId(Long orderId);
+
+    /**
+     * 根据房东用户编号查询租客列表
+     * @param userId
+     * @return
+     */
+    List<TenantVo> findTenants(Long userId);
+
+    /**
+     * 根据房东用户编号查询租客个数
+     * @param userId
+     * @return
+     */
+    Long selectTenantCount(Long userId);
 }

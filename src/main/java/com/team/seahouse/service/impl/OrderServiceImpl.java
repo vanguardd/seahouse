@@ -12,6 +12,7 @@ import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
+import com.team.seahouse.domain.vo.TenantVo;
 import com.team.seahouse.mapper.OrderMapper;
 import com.team.seahouse.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,10 +86,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public int selectTenantCountByLandlord(Long userId) {
-        Order order = new Order();
-        order.setLandlordId(userId);
-        order.setState(OrderStatusEnum.PAY_TO_COMPLETE.getStatus());
-        int count = orderMapper.selectCount(order);
+        int count = orderMapper.selectTenantCount(userId).intValue();
         return count;
     }
 
@@ -144,6 +142,16 @@ public class OrderServiceImpl implements IOrderService {
         order.setId(orderId);
         order.setState(OrderStatusEnum.MANUALLY_CANCEL_THE_ORDER.getStatus());
         orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    @Override
+    public List<TenantVo> tenantList(Long userId) {
+        try {
+            List<TenantVo> tenants = orderMapper.findTenants(userId);
+            return tenants;
+        } catch (BusinessException e) {
+            throw new BusinessException(e);
+        }
     }
 
 }

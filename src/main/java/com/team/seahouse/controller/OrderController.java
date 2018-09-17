@@ -11,11 +11,14 @@ import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.domain.vo.OrderDetailVo;
 import com.team.seahouse.domain.vo.OrderListVo;
+import com.team.seahouse.domain.vo.TenantVo;
 import com.team.seahouse.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Title: 订单业务接口
@@ -147,6 +150,19 @@ public class OrderController extends BaseController {
             orderService.handleCancelOrder(orderId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/tenant")
+    @ApiOperation(value = "获得房客列表", notes = "根据房东用户编号查询房客列表")
+    public Response tenantList() {
+        try {
+            Long userId = getUserId();
+            List<TenantVo> tenantList = orderService.tenantList(userId);
+            return new Response(CommonReturnCode.OK, tenantList);
+        } catch (BusinessException e) {
+            LoggerUtils.error(OrderController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
