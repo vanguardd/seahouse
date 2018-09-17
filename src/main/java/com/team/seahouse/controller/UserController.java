@@ -116,7 +116,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新头像", notes = "将上传头像后的URL保存到数据库中")
-    @PostMapping("/userInfo/avatar/update")
+    @PutMapping("/userInfo/avatar/update")
     public Response updateAvatar(String avatarPath) {
         try {
             Long userId = getUserId();
