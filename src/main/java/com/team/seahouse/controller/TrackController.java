@@ -33,9 +33,6 @@ public class TrackController extends BaseController {
     @Autowired
     private ITrackService trackService;
 
-    @Autowired
-    private HouseMapper houseMapper;
-
     /**
      * 查询我的足迹
      * @param page
@@ -62,16 +59,17 @@ public class TrackController extends BaseController {
     @PostMapping("/addList")
     @ApiOperation(value = "添加足迹", notes = "访问房屋信息详情时，添加浏览足迹")
     public Response addTrack(@RequestParam("houseIds") String houseIds) {
-        if(!StringUtils.isNotBlank(houseIds)) {
-            LoggerUtils.error(TrackController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
-        List<Long> houseIdList = StringUtils.stringToArray(houseIds);
+
         try {
+            if(!StringUtils.isNotBlank(houseIds)) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             Long userId = getUserId();
+            List<Long> houseIdList = StringUtils.stringToArray(houseIds);
             trackService.addList(userId, houseIdList);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
+            LoggerUtils.error(TrackController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         } 
     }
@@ -88,6 +86,7 @@ public class TrackController extends BaseController {
             trackService.clearTracks(userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
+            LoggerUtils.error(TrackController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -100,17 +99,17 @@ public class TrackController extends BaseController {
     @DeleteMapping("/deleteTracks")
     @ApiOperation(value = "删除足迹", notes = "删除单个或多个足迹")
     public Response deleteTracks(String houseIds) {
-        if(!StringUtils.isNotBlank(houseIds)) {
-            LoggerUtils.error(TrackController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
-        List<Long> houseIdList = StringUtils.stringToArray(houseIds);
-        Long userId = getUserId();
         try {
+            if(!StringUtils.isNotBlank(houseIds)) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
+            Long userId = getUserId();
+            List<Long> houseIdList = StringUtils.stringToArray(houseIds);
             trackService.deleteTracks(userId, houseIdList);
+            return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
+            LoggerUtils.error(TrackController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK);
     }
 }

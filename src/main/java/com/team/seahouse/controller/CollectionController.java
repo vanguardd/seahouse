@@ -37,7 +37,6 @@ public class CollectionController extends BaseController {
     @PostMapping("/add")
     @ApiOperation(value = "收藏出租房屋接口", notes = "收藏出租房屋信息接口")
     public Response add(@RequestBody Collections collections) {
-
         try {
             Long userId = getUserId();
             collections.setUserId(userId);
@@ -52,11 +51,10 @@ public class CollectionController extends BaseController {
     @DeleteMapping("remove/{houseId}")
     @ApiOperation(value = "取消收藏接口", notes = "取消收藏出租信息接口")
     public Response remove(@PathVariable("houseId") Long houseId) {
-        if(houseId == null) {
-            LoggerUtils.error(CollectionController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
         try {
+            if(houseId == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             collectionMapper.deleteCollectionByHouseId(houseId);
             return new Response(CommonReturnCode.SUCCESS);
         } catch (Exception e) {
@@ -68,8 +66,8 @@ public class CollectionController extends BaseController {
     @GetMapping("/myCollection")
     @ApiOperation(value = "查看我的收藏接口", notes = "根据用户编号查看收藏的出租房屋信息列表")
     public Response getMyCollections(PageQuery pageQuery) {
-        Long userId = getUserId();
         try {
+            Long userId = getUserId();
             PageResult<HouseListVo> houseList = collectionService.getMyCollections(userId, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {

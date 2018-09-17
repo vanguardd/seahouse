@@ -47,7 +47,8 @@ public class ReservationController extends BaseController {
     @ApiOperation(value = "创建预约看房信息", notes = "创建预约看房信息")
     public Response create(@RequestBody Reservation reservation) {
         try {
-            reservation.setUserId(getUserId());
+            Long userId = getUserId();
+            reservation.setUserId(userId);
             reservationService.add(reservation);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
@@ -96,8 +97,7 @@ public class ReservationController extends BaseController {
     public Response detail(@PathVariable("reservationId") Long reservationId) {
         try {
             if(reservationId == null) {
-                LoggerUtils.error(ReservationController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-                return new Response(CommonReturnCode.BAD_REQUEST);
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
             }
             UserReservationVo reservation = reservationMapper.findTenantByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
@@ -115,11 +115,10 @@ public class ReservationController extends BaseController {
     @GetMapping("/detail/landlord/{reservationId}")
     @ApiOperation(value = "查看预约详情接口", notes = "根据编号查看预约信息详情（房东）")
     public Response landlordDetail(@PathVariable("reservationId") Long reservationId) {
-        if(reservationId == null) {
-            LoggerUtils.error(ReservationController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
         try {
+            if(reservationId == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             LandlordReservationVo reservation = reservationMapper.findLandlordByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
         } catch (BusinessException e) {

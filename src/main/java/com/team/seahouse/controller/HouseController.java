@@ -76,19 +76,15 @@ public class HouseController extends BaseController {
 
     /**
      * 查看房屋详情
-     * @param roomId
+     * @param roomId 房屋编号
      * @return
      */
     @GetMapping("/{roomId}")
     @ApiOperation(value = "查看房屋详情", notes = "查看房屋详情接口")
     public Response detail(@PathVariable("roomId") Long roomId) {
-        //获得已经登录的用户编号
-        Long userId = getUserId();
-        if(userId == null) {
-            LoggerUtils.error(HouseController.class, CommonReturnCode.UNAUTHORIZED.getMessage());
-            return new Response(CommonReturnCode.UNAUTHORIZED);
-        }
         try {
+            //获得已经登录的用户编号
+            Long userId = getUserId();
             HouseDetailVo house = houseService.findByRoomId(roomId, userId);
             return new Response(CommonReturnCode.OK, house);
         } catch (BusinessException e) {
@@ -139,11 +135,10 @@ public class HouseController extends BaseController {
     @GetMapping("/type/{type}")
     @ApiOperation(value = "根据类型查询房屋信息接口", notes = "根据类型查询房屋信息接口")
     public Response findByType(@PathVariable("type") Integer type, PageQuery pageQuery) {
-        if(type == null) {
-            LoggerUtils.error(HouseController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
         try {
+            if(type == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             PageResult<HouseListVo> houseList = houseService.findByType(type, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
@@ -160,13 +155,10 @@ public class HouseController extends BaseController {
     @GetMapping("/recommend")
     @ApiOperation(value = "推荐房屋信息接口", notes = "根据用户信息推荐房屋信息接口")
     public Response recommend(PageQuery pageQuery) {
-        //获得携带Token的用户信息
-        UserInfoVo userInfo = getUserInfo();
-        if(userInfo == null) {
-            LoggerUtils.error(HouseController.class, CommonReturnCode.UNAUTHORIZED.getMessage());
-            return new Response(CommonReturnCode.UNAUTHORIZED);
-        }
+
         try {
+            //获得携带Token的用户信息
+            UserInfoVo userInfo = getUserInfo();
             PageResult<HouseListVo> houseList = houseService.recommend(userInfo, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
@@ -183,11 +175,8 @@ public class HouseController extends BaseController {
     @GetMapping("/landlord/list")
     @ApiOperation(value = "查询房东房屋列表", notes = "根据房东用户编号查询房东房屋列表")
     public Response landlordHouseList(PageQuery pageQuery) {
-        Long userId = getUserId();
-        if(userId == null) {
-            return new Response(CommonReturnCode.UNAUTHORIZED);
-        }
         try {
+            Long userId = getUserId();
             PageResult<LandlordHouseListVo> pageResult = houseService.findLandlordHouseList(userId, pageQuery);
             return new Response(CommonReturnCode.OK, pageResult);
         } catch (BusinessException e) {

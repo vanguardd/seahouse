@@ -45,11 +45,9 @@ public class UserController extends BaseController {
     @ApiOperation(value = "用户信息接口", notes = "获得用户信息接口")
     @GetMapping("/user_info")
     public Response userInfo() {
-        Long userId = getUserId();
-        if(userId == null)  {
-            return new Response(CommonReturnCode.UNAUTHORIZED.getStatus(), CommonReturnCode.UNAUTHORIZED.getMessage());
-        }
+
         try {
+            Long userId = getUserId();
             UserInfoVo userInfo = userInfoMapper.findUserInfoByUserId(userId);
             return new Response(CommonReturnCode.OK, userInfo);
         } catch (BusinessException e) {
@@ -61,14 +59,12 @@ public class UserController extends BaseController {
     @GetMapping("/tenant/function/info")
     @ApiOperation(value = "房客个人中心function信息接口", notes = "获得房客个人中心function信息接口")
     public Response tenantFunction() {
-        Long userId = getUserId();
-        if(userId == null) {
-            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-        }
         try {
+            Long userId = getUserId();
             TenantFunction tenantFunction = userService.fundTenantByUserId(userId);
             return new Response(CommonReturnCode.OK, tenantFunction);
         } catch (BusinessException e) {
+            LoggerUtils.error(UserController.class, e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -76,17 +72,14 @@ public class UserController extends BaseController {
     @GetMapping("/landlord/function/info")
     @ApiOperation(value = "房东function信息接口", notes = "获得房东个人中心信息接口")
     public Response landlordInfo() {
-        Long userId = getUserId();
-        if(userId == null) {
-            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-        }
-        LandlordFunction landlordFunction = null;
         try {
-            landlordFunction = userService.findLandlordInfoByUserId(userId);
+            Long userId = getUserId();
+            LandlordFunction landlordFunction  = userService.findLandlordInfoByUserId(userId);
+            return new Response(CommonReturnCode.OK, landlordFunction);
         } catch (BusinessException e) {
+            LoggerUtils.error(UserController.class, e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK, landlordFunction);
     }
 
 
@@ -120,9 +113,6 @@ public class UserController extends BaseController {
     public Response updateAvatar(String avatarPath) {
         try {
             Long userId = getUserId();
-            if(userId == null) {
-                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-            }
             userInfoMapper.setAvatar(avatarPath, userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
@@ -140,18 +130,17 @@ public class UserController extends BaseController {
     @ApiOperation(value = "更新昵称", notes = "新增、修改昵称接口")
     @PostMapping("/userInfo/userName/update")
     public Response updateUserName(String userName) {
-        //昵称最大长度
-        Integer userNameLengthLimit = 12;
-        UserInfoVo user = getUserInfo();
-        if(null != user.getUserName() && userName.equals(user.getUserName())) {
-            LoggerUtils.error(UserController.class, UserReturnCode.USERNAME_SAME.getMessage());
-            return new Response(UserReturnCode.USERNAME_SAME);
-        }
-        if(userName.length() > userNameLengthLimit) {
-            LoggerUtils.error(UserController.class, UserReturnCode.USERNAME_LENGTH_LIMIT.getMessage());
-            return new Response(UserReturnCode.USERNAME_LENGTH_LIMIT);
-        }
+
         try {
+            //昵称最大长度
+            Integer userNameLengthLimit = 12;
+            UserInfoVo user = getUserInfo();
+            if(null != user.getUserName() && userName.equals(user.getUserName())) {
+                throw new BusinessException(UserReturnCode.USERNAME_SAME);
+            }
+            if(userName.length() > userNameLengthLimit) {
+                throw new BusinessException(UserReturnCode.USERNAME_LENGTH_LIMIT);
+            }
             userService.updateUserName(userName, user.getUserId());
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
@@ -186,9 +175,6 @@ public class UserController extends BaseController {
     public Response identityAuth(@RequestBody IdentityAuth identityAuth) {
         try {
             Long userId = getUserId();
-            if(userId == null) {
-                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-            }
             identityAuth.setUserId(userId);
             userService.identityAuth(identityAuth);
             return new Response(CommonReturnCode.OK);

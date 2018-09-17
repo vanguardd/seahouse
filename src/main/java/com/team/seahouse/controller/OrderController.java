@@ -40,18 +40,15 @@ public class OrderController extends BaseController {
     @GetMapping("/contractInfo/{houseId}")
     @ApiOperation(value = "获得提交订单的数据", notes = "获得提交订单的数据信息")
     public Response contractInfo(@PathVariable("houseId") Long houseId) {
-        Long userId = getUserId();
-        if(userId == null) {
-            LoggerUtils.error(OrderController.class, CommonReturnCode.BAD_REQUEST.getMessage());
-            throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-        }
-        ContractInfoVo contractInfoVo = null;
         try {
-            contractInfoVo = orderService.getContractInfo(houseId, userId);
+            Long userId = getUserId();
+            ContractInfoVo contractInfoVo  = orderService.getContractInfo(houseId, userId);
+            return new Response(CommonReturnCode.OK, contractInfoVo);
         } catch (BusinessException e) {
+            LoggerUtils.error(OrderController.class, e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK, contractInfoVo);
+
     }
 
     /**
@@ -66,11 +63,11 @@ public class OrderController extends BaseController {
             Long userId = getUserId();
             order.setUserId(userId);
             orderService.create(order);
+            return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
             LoggerUtils.error(OrderController.class, e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK);
     }
 
     /**
@@ -80,8 +77,8 @@ public class OrderController extends BaseController {
     @GetMapping("/tenant/list")
     @ApiOperation(value = "我的订单", notes = "查询我的订单列表")
     public Response tenantOrder(PageQuery pageQuery) {
-        Long userId = getUserId();
         try {
+            Long userId = getUserId();
             PageResult<OrderListVo> pageResult = orderService.myOrder(userId, pageQuery);
             return new Response(CommonReturnCode.OK, pageResult);
         } catch (BusinessException e) {
@@ -96,8 +93,8 @@ public class OrderController extends BaseController {
      */
     @GetMapping("/landlord/list")
     public Response landlordOrder(PageQuery pageQuery) {
-        Long userId = getUserId();
         try {
+            Long userId = getUserId();
             PageResult<OrderListVo> pageResult = orderService.getLandlordOrderList(userId, pageQuery);
             return new Response(CommonReturnCode.OK, pageResult);
         } catch (BusinessException e) {
@@ -108,10 +105,10 @@ public class OrderController extends BaseController {
     @GetMapping("/detail/{orderId}")
     @ApiOperation(value = "订单详情", notes = "查询订单详情")
     public Response detail(@PathVariable("orderId") Long orderId) {
-        if(orderId == null) {
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
         try {
+            if(orderId == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             OrderDetailVo order = orderService.detail(orderId);
             return new Response(CommonReturnCode.OK, order);
         } catch (BusinessException e) {
@@ -143,10 +140,10 @@ public class OrderController extends BaseController {
     @PutMapping("/handleCancel/{orderId}")
     @ApiOperation(value = "手动取消订单", notes = "手动取消订单")
     public Response handleCancelOrder(@PathVariable("orderId") Long orderId) {
-        if(orderId == null) {
-            return new Response(CommonReturnCode.BAD_REQUEST);
-        }
         try {
+            if(orderId == null) {
+                throw new BusinessException(CommonReturnCode.BAD_REQUEST);
+            }
             orderService.handleCancelOrder(orderId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {

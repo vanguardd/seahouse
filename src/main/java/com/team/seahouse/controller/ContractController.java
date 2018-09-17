@@ -40,14 +40,13 @@ public class ContractController extends BaseController {
     @PostMapping("/create")
     @ApiOperation(value = "创建合同", notes = "创建合同")
     public Response create(@RequestBody Contract contract) {
-        Contract saveContract = null;
         try {
-            saveContract = contractService.create(contract);
+            Contract saveContract = contractService.create(contract);
+            return new Response(CommonReturnCode.OK, saveContract);
         } catch (BusinessException e) {
             LoggerUtils.error(ContractController.class, e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
-        return new Response(CommonReturnCode.OK, saveContract);
     }
 
 }

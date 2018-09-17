@@ -79,9 +79,6 @@ public class BaseController {
 	protected UserInfoVo getUserInfo() throws BusinessException {
 		Long userId = getUserId();
 		UserInfoVo userInfo  = userInfoMapper.findUserInfoByUserId(userId);
-		if(userInfo == null) {
-			throw new BusinessException(CommonReturnCode.BAD_REQUEST);
-		}
 		return userInfo;
 	}
 
@@ -93,6 +90,9 @@ public class BaseController {
 	protected Long getUserId() throws BusinessException {
 		String token = getToken();
 		Long userId = jwtTokenUtil.getUserIdFromToken(token);
+		if(userId == null) {
+			throw new BusinessException(CommonReturnCode.UNAUTHORIZED);
+		}
 		return userId;
 	}
 
