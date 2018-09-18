@@ -5,6 +5,7 @@ import com.team.seahouse.domain.Device;
 import com.team.seahouse.mapper.DeviceMapper;
 import com.team.seahouse.service.IDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @Version: 1.0
  * @Date: 2018/09/18
  */
+@Service
 public class DeviceServiceImpl implements IDeviceService{
 
     @Autowired

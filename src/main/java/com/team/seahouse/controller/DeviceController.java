@@ -2,10 +2,7 @@ package com.team.seahouse.controller;
 
 import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
-import com.team.seahouse.commons.response.CommonReturnCode;
-import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.domain.Device;
-import com.team.seahouse.mapper.DeviceMapper;
 import com.team.seahouse.service.IDeviceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
