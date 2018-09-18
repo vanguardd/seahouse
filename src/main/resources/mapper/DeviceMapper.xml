@@ -20,4 +20,5 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="state" property="state" jdbcType="VARCHAR" />
   </resultMap>
+
 </mapper>
