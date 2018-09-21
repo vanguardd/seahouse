@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * @title 设备模块
