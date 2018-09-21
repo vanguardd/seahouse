@@ -7,7 +7,7 @@
 
   <name>seahouse-server</name>
   <groupId>com.team.seahouse</groupId>
-  <artifactId>seahouse</artifactId>
+  <artifactId>seahouse-server</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <parent>

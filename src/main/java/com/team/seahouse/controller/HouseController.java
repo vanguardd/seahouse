@@ -184,4 +184,16 @@ public class HouseController extends BaseController {
             return new Response(e.getCode(), e.getMessage());
         }
     }
+
+    @PutMapping("/unShelve/{roomId}")
+    @ApiOperation(value = "下架房间", notes = "对房间进行下架操作")
+    public Response unShelve(@PathVariable("roomId") Long roomId) {
+        try {
+            roomService.unShelve(roomId);
+            return new Response(CommonReturnCode.OK);
+        } catch (BusinessException e) {
+            LoggerUtils.error(HouseController.class, e.getMessage());
+            return new Response(e.getCode(), e.getMessage());
+        }
+    }
 }

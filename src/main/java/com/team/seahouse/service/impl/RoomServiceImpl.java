@@ -46,8 +46,19 @@ public class RoomServiceImpl implements IRoomService {
 
     @Override
     public int selectCountByLandlordId(Long userId) {
-        Room room = new Room();
         int roomCount = roomMapper.selectCountByLandlordId(userId).intValue();
         return roomCount;
+    }
+
+    @Override
+    public void unShelve(Long roomId) {
+        Room room = new Room();
+        room.setId(roomId);
+        room.setState(RoomStatusEnum.OFF_SHELVE.getStatus());
+        try {
+            roomMapper.updateByPrimaryKeySelective(room);
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getCode(), e.getMessage());
+        }
     }
 }

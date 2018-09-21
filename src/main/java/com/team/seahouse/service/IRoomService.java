@@ -33,4 +33,10 @@ public interface IRoomService {
      * @return
      */
     int selectCountByLandlordId(Long userId);
+
+    /**
+     * 根据房间编号做下架操作
+     * @param roomId
+     */
+    void unShelve(Long roomId);
 }
