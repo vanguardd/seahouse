@@ -9,11 +9,11 @@ package com.team.seahouse.commons.enums;
  */
 public enum OrderStatusEnum {
 
-    SUBMIT_ORDERS(1, "订单提交"),
-    SIGN_TO_COMPLETE(2, "签字完成"),
-    PAY_TO_COMPLETE(3, "支付完成"),
-    CHECK_IN(9, "已入住"),
-    EVALUATE_TO_COMPLETE(4, "评价完成"),
+    SUBMIT_ORDERS(1, "待签约"),
+    SIGN_TO_COMPLETE(2, "待付款"),
+    PAY_TO_COMPLETE(3, "待入住"),
+    CHECK_IN(4, "待评价"),
+    EVALUATE_TO_COMPLETE(10, "订单完成"),
 
     EXIT_RENT(5, "申请退租中"),
     EXIT_RENT_SUCC(6, "申请退租成功"),

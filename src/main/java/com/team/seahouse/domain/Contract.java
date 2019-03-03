@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * @title 合同实体类
+ * @title 签约实体类
  * @describe
  * @author vanguard
  * @version 1.0
@@ -43,10 +43,31 @@ public class Contract extends BaseDomain {
      */
     private Long partyBId;
 
+     /** 甲方签字状态（租客） */
+    private Integer renterSignState;
+
+     /** 乙方签字状态（房东） */
+    private Integer landlordSignState;
+
+    /** 租客签约时间 */
+    private Date renterSignTime;
+
+    /** 房东签约时间 */
+    private Date landlordSignTime;
     /**
      * 合同状态
      */
     private Integer state;
+
+    /**
+     * 签约开始日期
+     */
+    private Date startDate;
+
+    /**
+     * 签约结束日期
+     */
+    private Date endDate;
 
     /**
      * 创建时间

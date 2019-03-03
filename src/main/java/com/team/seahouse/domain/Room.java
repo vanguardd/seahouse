@@ -28,6 +28,11 @@ public class Room extends BaseDomain {
     private Long houseId;
 
     /**
+     * 房屋名称
+     */
+    private String houseName;
+
+    /**
      * 房间名称
      */
     @Column(name = "room_name")

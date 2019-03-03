@@ -40,11 +40,6 @@ public class House extends BaseDomain {
      */
     private String propertyCarder;
 
-    /**
-     * 房屋使用起始日期
-     */
-    private Date startDate;
-
     /******* 认证材料 2、租赁合同 type=2*******/
 
     /**
