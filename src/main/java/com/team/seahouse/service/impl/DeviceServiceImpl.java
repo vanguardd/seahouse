@@ -23,6 +23,7 @@ public class DeviceServiceImpl implements IDeviceService{
     @Autowired
     private DeviceMapper deviceMapper;
 
+    @Override
     public void updateDevice (Device device) {
         try{
             deviceMapper.updateDevice(device);
@@ -31,6 +32,7 @@ public class DeviceServiceImpl implements IDeviceService{
         }
     }
 
+    @Override
     public void insertDevice (Device device) {
         try{
             deviceMapper.insert(device);
