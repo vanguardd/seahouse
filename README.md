@@ -15,7 +15,7 @@ SeaHouse是一个基于蚂蚁信用的租房项目。
 
 Token模式：JsonWebToken 0.7.0
 
-开发工具：Intellj IDEA 
+开发工具：Intellij IDEA 
 
 缓存框架：Spring Data Redis 2.0.8.RELEASE
 
