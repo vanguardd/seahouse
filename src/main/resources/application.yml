@@ -70,6 +70,11 @@ spring:
             enable: true
             required: true
   devtools:
+    restart:
+      #热部署生效
+      enabled: true
+        #设置重启的目录
+      additional-paths: src/main/java
     remote:
       secret: seahousesecret
 

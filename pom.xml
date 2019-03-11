@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.3.RELEASE</version>
+    <version>2.1.2.RELEASE</version>
     <relativePath/>
   </parent>
 
@@ -36,16 +36,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-        <exclusions>
-            <exclusion>
-                <artifactId>spring-boot-test</artifactId>
-                <groupId>org.springframework.boot</groupId>
-            </exclusion>
-          <exclusion>
-            <artifactId>spring-boot-test</artifactId>
-            <groupId>org.springframework.boot</groupId>
-          </exclusion>
-        </exclusions>
     </dependency>
 
     <dependency>
@@ -121,7 +111,6 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.30</version>
     </dependency>
 
     <dependency>
@@ -180,14 +169,6 @@
           <artifactId>commons-io</artifactId>
           <groupId>commons-io</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>commons-io</artifactId>
-          <groupId>commons-io</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-io</artifactId>
-          <groupId>commons-io</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -238,13 +219,7 @@
     <dependency>
       <groupId>com.github.ulisesbocchio</groupId>
       <artifactId>jasypt-spring-boot-starter</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-test</artifactId>
-      <version>RELEASE</version>
+      <version>2.1.1</version>
     </dependency>
 
     <!-- Commons项目中用来处理Java基本对象方法的工具类包 -->
@@ -267,6 +242,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>com.team.seahouse.SeaHouseApplication</mainClass>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.springframework</groupId>
@@ -296,20 +274,6 @@
             <version>1.0.0</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.zeroturnaround</groupId>
-        <artifactId>jrebel-maven-plugin</artifactId>
-        <version>1.1.8</version>
-        <executions>
-          <execution>
-            <id>generate-rebel-xml</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
 
