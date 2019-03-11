@@ -1,7 +1,7 @@
 server:
   port: 8081
   servlet:
-    path: /
+    context-path: /
 
 spring:
   profiles:
@@ -77,6 +77,7 @@ spring:
       additional-paths: src/main/java
     remote:
       secret: seahousesecret
+    add-properties: true
 
 mybatis:
       type-aliases-package: com.team.seahouse.domain
