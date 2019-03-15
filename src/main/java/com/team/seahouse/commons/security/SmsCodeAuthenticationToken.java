@@ -6,11 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 /**
- * @author vanguard
- * @version 1.0
- * @title
- * @describe
- * @date 2018/07/17
+ * @Title: 手机号和验证码验证Token
+ * @Description:
+ * @Author: vanguard
+ * @Version: 1.0
+ * @Date: 2019/3/15
  */
 public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
     private static final long serialVersionUID = 2383092775910246006L;
@@ -68,7 +68,6 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
             throw new IllegalArgumentException(
                     "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
         }
-
         super.setAuthenticated(false);
     }
 

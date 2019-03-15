@@ -15,6 +15,7 @@ import org.springframework.util.DigestUtils;
 
 /**
  * 自定义身份认证验证组件
+ * 用户名和密码
  *
  * @author zhaoxinguo on 2017/9/12.
  */

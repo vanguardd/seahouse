@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
- * @title 短信验证码验证
+ * @title 短信验证码身份验证组件
  * @describe
  * @author vanguard
  * @version 1.0
@@ -50,6 +50,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             //验证短信验证码
             boolean isCorrectCode = smsSenderService.checkIsCorrectCode(username, validateCode);
             if(isCorrectCode) {
+                //生成令牌 手机号和验证码
                 Authentication auth = new SmsCodeAuthenticationToken(username, validateCode);
                 return auth;
             } else {
