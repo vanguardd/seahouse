@@ -6,7 +6,6 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Reservation;
 import com.team.seahouse.domain.vo.LandlordReservationVo;
 import com.team.seahouse.domain.vo.UserReservationVo;
@@ -14,6 +13,7 @@ import com.team.seahouse.mapper.ReservationMapper;
 import com.team.seahouse.service.IReservationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sun.rmi.runtime.Log;
@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  * @Version: 1.0
  * @Date: 2018/07/20
  */
+@Slf4j
 @RestController
 @RequestMapping("/reservation")
 @Api(value = "预约看房模块接口", description = "预约看房接口")
@@ -52,7 +53,7 @@ public class ReservationController extends BaseController {
             reservationService.add(reservation);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(ReservationController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(CommonReturnCode.INTERNAL_SERVER_ERROR);
         }
     }
@@ -69,7 +70,7 @@ public class ReservationController extends BaseController {
             PageResult<UserReservationVo> reservations = reservationService.findUserReservationList(userId, pages);
             return new Response(CommonReturnCode.OK, reservations);
         } catch (BusinessException e) {
-            LoggerUtils.error(ReservationController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -82,7 +83,7 @@ public class ReservationController extends BaseController {
             PageResult<LandlordReservationVo> reservationList = reservationService.findLandlordReservationList(userId, pageQuery);
             return new Response(CommonReturnCode.OK, reservationList);
         } catch (BusinessException e) {
-            LoggerUtils.error(ReservationController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -102,7 +103,7 @@ public class ReservationController extends BaseController {
             UserReservationVo reservation = reservationMapper.findTenantByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
         } catch (BusinessException e) {
-            LoggerUtils.error(ReservationController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -122,7 +123,7 @@ public class ReservationController extends BaseController {
             LandlordReservationVo reservation = reservationMapper.findLandlordByReservationId(reservationId);
             return new Response(CommonReturnCode.OK, reservation);
         } catch (BusinessException e) {
-            LoggerUtils.error(ReservationController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -138,7 +139,7 @@ public class ReservationController extends BaseController {
         try {
             reservationService.update(reservation);
         } catch (BusinessException e) {
-            LoggerUtils.error(ReservationController.class, e.getMessage());
+            log.error(e.getMessage());
         }
         return new Response(CommonReturnCode.OK);
 

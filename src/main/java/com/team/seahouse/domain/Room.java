@@ -2,6 +2,7 @@ package com.team.seahouse.domain;
 
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.mapper.typehandler.StringArrayTypeHandler;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import tk.mybatis.mapper.annotation.ColumnType;
@@ -17,7 +18,7 @@ import javax.persistence.*;
  * @Version: 1.0
  * @Date: 18/9/7
  */
-@Getter@Setter
+@Data
 @Table(name = "tb_room")
 public class Room extends BaseDomain {
 

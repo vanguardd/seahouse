@@ -1,6 +1,7 @@
 package com.team.seahouse.domain;
 
 import com.team.seahouse.commons.base.BaseDomain;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +15,8 @@ import java.util.Date;
  * @describe
  * @date 2018/07/19
  */
+@Data
 @Table(name = "tb_collection")
-@Getter@Setter
 public class Collections extends BaseDomain {
 
     /**

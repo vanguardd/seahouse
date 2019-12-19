@@ -1,6 +1,7 @@
 package com.team.seahouse.domain;
 
 import com.team.seahouse.commons.base.BaseDomain;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
  * @Version: 1.0
  * @Date: 18/8/26
  */
-@Getter@Setter
+@Data
 @Table(name = "tb_user")
 public class User extends BaseDomain {
 

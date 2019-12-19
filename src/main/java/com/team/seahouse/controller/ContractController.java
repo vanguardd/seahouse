@@ -9,6 +9,7 @@ import com.team.seahouse.domain.Contract;
 import com.team.seahouse.service.IContractService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
  * @Version: 1.0
  * @Date: 2018/09/12
  */
+@Slf4j
 @RestController
 @RequestMapping("/contract")
 @Api(value = "签约相关的接口", description = "创建签约信息、签约合同等")
@@ -44,7 +46,7 @@ public class ContractController extends BaseController {
             Contract saveContract = contractService.create(contract);
             return new Response(CommonReturnCode.OK, saveContract);
         } catch (BusinessException e) {
-            LoggerUtils.error(ContractController.class, e.getMessage());
+            log.error(e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
     }

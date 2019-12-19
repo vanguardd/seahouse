@@ -2,6 +2,7 @@ package com.team.seahouse.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.seahouse.commons.base.BaseDomain;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,8 +17,8 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/20
  */
+@Data
 @Table(name = "tb_reservation")
-@Getter@Setter
 public class Reservation extends BaseDomain {
 
     /**

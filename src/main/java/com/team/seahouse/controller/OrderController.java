@@ -6,7 +6,6 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Order;
 import com.team.seahouse.domain.vo.ContractInfoVo;
 import com.team.seahouse.domain.vo.OrderDetailVo;
@@ -15,6 +14,7 @@ import com.team.seahouse.domain.vo.TenantVo;
 import com.team.seahouse.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +27,7 @@ import java.util.List;
  * @Version: 1.0
  * @Date: 2018/09/01
  */
+@Slf4j
 @RestController
 @RequestMapping("/order")
 @Api(value = "订单业务", description = "包含生成订单、查询订单、我的订单")
@@ -48,7 +49,7 @@ public class OrderController extends BaseController {
             ContractInfoVo contractInfoVo  = orderService.getContractInfo(houseId, userId);
             return new Response(CommonReturnCode.OK, contractInfoVo);
         } catch (BusinessException e) {
-            LoggerUtils.error(OrderController.class, e.getMessage());
+            log.error(e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
 
@@ -68,7 +69,7 @@ public class OrderController extends BaseController {
             orderService.create(order);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(OrderController.class, e.getMessage());
+            log.error(e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
     }
@@ -162,7 +163,7 @@ public class OrderController extends BaseController {
             List<TenantVo> tenantList = orderService.tenantList(userId);
             return new Response(CommonReturnCode.OK, tenantList);
         } catch (BusinessException e) {
-            LoggerUtils.error(OrderController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }

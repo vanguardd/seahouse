@@ -2,11 +2,9 @@ package com.team.seahouse.controller;
 
 import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
-import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.IdentityAuth;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.domain.ZhiMaAuth;
@@ -17,6 +15,7 @@ import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  * @date 18/7/14
  */
+@Slf4j
 @RestController
 @RequestMapping("/pass")
 @Api(value = "用户接口", description = "用户信息接口")
@@ -51,7 +51,7 @@ public class UserController extends BaseController {
             UserInfoVo userInfo = userInfoMapper.findUserInfoByUserId(userId);
             return new Response(CommonReturnCode.OK, userInfo);
         } catch (BusinessException e) {
-            LoggerUtils.error(UserController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -64,7 +64,7 @@ public class UserController extends BaseController {
             TenantFunction tenantFunction = userService.fundTenantByUserId(userId);
             return new Response(CommonReturnCode.OK, tenantFunction);
         } catch (BusinessException e) {
-            LoggerUtils.error(UserController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -77,7 +77,7 @@ public class UserController extends BaseController {
             LandlordFunction landlordFunction  = userService.findLandlordInfoByUserId(userId);
             return new Response(CommonReturnCode.OK, landlordFunction);
         } catch (BusinessException e) {
-            LoggerUtils.error(UserController.class, e.getMessage());
+            log.error(e.getMessage());
             throw new BusinessException(e.getCode(), e.getMessage());
         }
     }
@@ -98,7 +98,7 @@ public class UserController extends BaseController {
             updateUserInfo = userService.updateUserInfo(userInfo);
             return new Response(CommonReturnCode.OK, updateUserInfo);
         } catch (BusinessException e) {
-            LoggerUtils.error(UserController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -116,7 +116,7 @@ public class UserController extends BaseController {
             userInfoMapper.setAvatar(avatarPath, userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(UserController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
 
@@ -144,7 +144,7 @@ public class UserController extends BaseController {
             userService.updateUserName(userName, user.getUserId());
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(UserController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }

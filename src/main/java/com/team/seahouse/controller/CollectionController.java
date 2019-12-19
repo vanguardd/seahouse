@@ -13,6 +13,7 @@ import com.team.seahouse.mapper.CollectionMapper;
 import com.team.seahouse.service.ICollectionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sun.rmi.runtime.Log;
@@ -24,6 +25,7 @@ import sun.rmi.runtime.Log;
  * @Version: 1.0
  * @Date: 2018/07/21
  */
+@Slf4j
 @RestController
 @RequestMapping("/collection")
 @Api(value = "收藏模块接口", description = "收藏模块接口")
@@ -43,7 +45,7 @@ public class CollectionController extends BaseController {
             collectionService.add(collections);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(CollectionController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -58,7 +60,7 @@ public class CollectionController extends BaseController {
             collectionMapper.deleteCollectionByHouseId(houseId);
             return new Response(CommonReturnCode.SUCCESS);
         } catch (Exception e) {
-            LoggerUtils.error(CollectionController.class, CommonReturnCode.FAILED.getMessage());
+            log.error(CommonReturnCode.FAILED.getMessage());
             return new Response(CommonReturnCode.FAILED);
         }
     }

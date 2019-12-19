@@ -8,10 +8,10 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.upload.UploadManager;
 import com.team.seahouse.commons.support.upload.UploadResult;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.ServletUtils;
 import io.swagger.annotations.Api;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +27,7 @@ import org.springframework.web.util.HtmlUtils;
  * @version 1.0
  * @date 18/7/16
  */
+@Slf4j
 @RestController
 @RequestMapping(value="/uploads")
 @Api(value = "文件上传", description = "文件上传")
@@ -48,7 +49,7 @@ public class UploadController extends BaseController {
 		putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize)}");
 		long expireSeconds = 3600;
 		String uploadToken = auth.uploadToken(BUCKET, null, expireSeconds, putPolicy);
-		LoggerUtils.info(UserController.class, "uploadToken:" + uploadToken);
+		log.info("uploadToken:" + uploadToken);
 		return new Response(CommonReturnCode.OK, uploadToken);
 	}
 
@@ -74,7 +75,7 @@ public class UploadController extends BaseController {
 					return new Response(CommonReturnCode.SUCCESS, uploadResult.getSavaPath());
 				}
 			} catch (Exception e) {
-				LoggerUtils.error(UploadController.class, e.getMessage());
+				log.error(e.getMessage());
 				return new Response(CommonReturnCode.UNKNOWN_ERROR);
 			}
 		}
@@ -105,7 +106,7 @@ public class UploadController extends BaseController {
 					return new Response(CommonReturnCode.SUCCESS, uploadResult.getSavaPath());
 				}
 			} catch (Exception e) {
-				LoggerUtils.error(UploadController.class, e.getMessage());
+				log.error(e.getMessage());
 				return new Response(CommonReturnCode.UNKNOWN_ERROR);
 			}
 		}

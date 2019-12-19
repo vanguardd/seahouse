@@ -3,6 +3,7 @@ package com.team.seahouse.domain;
 import com.team.seahouse.commons.base.BaseDomain;
 import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.mapper.typehandler.StringArrayTypeHandler;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.TypeHandler;
@@ -19,8 +20,8 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/18
  */
+@Data
 @Table(name = "tb_house")
-@Getter@Setter
 public class House extends BaseDomain {
 
     /******* 认证材料 1、房产证 type=1***********/

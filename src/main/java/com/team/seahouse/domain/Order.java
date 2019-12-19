@@ -1,6 +1,7 @@
 package com.team.seahouse.domain;
 
 import com.team.seahouse.commons.base.BaseDomain;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
@@ -16,7 +17,7 @@ import javax.persistence.*;
  * @Version: 1.0
  * @Date: 18/8/31
  */
-@Getter@Setter
+@Data
 @Table(name = "tb_order")
 public class Order extends BaseDomain {
     /**

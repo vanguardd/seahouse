@@ -1,6 +1,7 @@
 package com.team.seahouse.domain;
 
 import com.team.seahouse.commons.base.BaseDomain;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/19
  */
+@Data
 @Table(name = "tb_zhiMa_auth")
-@Getter@Setter
 public class ZhiMaAuth extends BaseDomain {
 
     /**

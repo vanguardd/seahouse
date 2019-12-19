@@ -1,5 +1,6 @@
 package com.team.seahouse.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @version 1.0
  * @date 16/7/18
  */
-@Getter@Setter
+@Data
 @Table(name = "tb_device")
 public class Device {
     @Id

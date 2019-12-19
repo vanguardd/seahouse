@@ -6,6 +6,7 @@ import com.team.seahouse.domain.Device;
 import com.team.seahouse.service.IDeviceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import java.util.Date;
  * @Version: 1.0
  * @Date: 2018/09/17
  */
+@Slf4j
 @RestController
 @RequestMapping("/device")
 @Api(value="设备业务", description = "新增设备信息、查询设备信息")

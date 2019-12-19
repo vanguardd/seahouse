@@ -6,13 +6,13 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.StringUtils;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.mapper.HouseMapper;
 import com.team.seahouse.service.ITrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +25,7 @@ import java.util.List;
  * @Version: 1.0
  * @Date: 2018/07/21
  */
+@Slf4j
 @RestController
 @RequestMapping("/track")
 @Api(value = "足迹模块接口", description = "包含我的足迹，自动合并客户端访问足迹和后端记录")
@@ -46,7 +47,7 @@ public class TrackController extends BaseController {
             PageResult<HouseListVo> houseList = trackService.myTracks(userId, page);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
-            LoggerUtils.error(TrackController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -69,7 +70,7 @@ public class TrackController extends BaseController {
             trackService.addList(userId, houseIdList);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(TrackController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         } 
     }
@@ -86,7 +87,7 @@ public class TrackController extends BaseController {
             trackService.clearTracks(userId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(TrackController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -108,7 +109,7 @@ public class TrackController extends BaseController {
             trackService.deleteTracks(userId, houseIdList);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(TrackController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }

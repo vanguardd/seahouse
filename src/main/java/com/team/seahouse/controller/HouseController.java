@@ -7,7 +7,6 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.House;
 import com.team.seahouse.domain.Room;
 import com.team.seahouse.domain.vo.HouseDetailVo;
@@ -18,7 +17,7 @@ import com.team.seahouse.service.IHouseService;
 import com.team.seahouse.service.IRoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.objects.annotations.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  * @date 18/7/18
  */
+@Slf4j
 @RestController
 @RequestMapping("/house")
 @Api(value = "房屋模块接口", description = "房屋模块接口")
@@ -52,7 +52,7 @@ public class HouseController extends BaseController {
             Room saveRoom = roomService.save(room);
             return new Response(CommonReturnCode.OK, saveRoom);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -69,7 +69,7 @@ public class HouseController extends BaseController {
             houseService.publish(house);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -88,7 +88,7 @@ public class HouseController extends BaseController {
             HouseDetailVo house = houseService.findByRoomId(roomId, userId);
             return new Response(CommonReturnCode.OK, house);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -105,7 +105,7 @@ public class HouseController extends BaseController {
             houseService.update(house);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -122,7 +122,7 @@ public class HouseController extends BaseController {
             PageResult<HouseListVo> houseList = houseService.search(searchQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -142,7 +142,7 @@ public class HouseController extends BaseController {
             PageResult<HouseListVo> houseList = houseService.findByType(type, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -162,7 +162,7 @@ public class HouseController extends BaseController {
             PageResult<HouseListVo> houseList = houseService.recommend(userInfo, pageQuery);
             return new Response(CommonReturnCode.OK, houseList);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -180,7 +180,7 @@ public class HouseController extends BaseController {
             PageResult<LandlordHouseListVo> pageResult = houseService.findLandlordHouseList(userId, pageQuery);
             return new Response(CommonReturnCode.OK, pageResult);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -192,7 +192,7 @@ public class HouseController extends BaseController {
             roomService.unShelve(roomId);
             return new Response(CommonReturnCode.OK);
         } catch (BusinessException e) {
-            LoggerUtils.error(HouseController.class, e.getMessage());
+            log.error(e.getMessage());
             return new Response(e.getCode(), e.getMessage());
         }
     }
