@@ -6,7 +6,6 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
 import com.team.seahouse.commons.support.page.PageQuery;
 import com.team.seahouse.commons.support.page.PageResult;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Collections;
 import com.team.seahouse.domain.vo.HouseListVo;
 import com.team.seahouse.mapper.CollectionMapper;

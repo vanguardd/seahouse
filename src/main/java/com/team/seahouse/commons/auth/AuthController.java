@@ -6,10 +6,10 @@ import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.JwtAuthResponse;
 import com.team.seahouse.commons.response.Response;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.request.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  * @date 18/7/17
  */
+@Slf4j
 @Api(value = "Auth验证控制器", description = "Auth验证控制器")
 @RestController
 public class AuthController extends BaseController {
@@ -45,7 +46,7 @@ public class AuthController extends BaseController {
             // Return the token
             return new Response(CommonReturnCode.OK ,token);
         } catch(ValidateException e) {
-            LoggerUtils.error(AuthController.class, e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -65,7 +66,7 @@ public class AuthController extends BaseController {
             // Return the token
             return new Response(CommonReturnCode.OK, token);
         } catch(ValidateException e) {
-            LoggerUtils.error(AuthController.class, e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return new Response(e.getCode(), e.getMessage());
         }
     }
@@ -99,7 +100,7 @@ public class AuthController extends BaseController {
             JwtAuthResponse response = authService.register(userVo);
             return new Response(CommonReturnCode.OK, response);
         } catch(ValidateException e) {
-            LoggerUtils.error(AuthController.class, e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return new Response(e.getCode(), e.getMessage());
         }
     }

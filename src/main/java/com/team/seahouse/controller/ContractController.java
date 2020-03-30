@@ -4,7 +4,6 @@ import com.team.seahouse.commons.base.BaseController;
 import com.team.seahouse.commons.exception.BusinessException;
 import com.team.seahouse.commons.response.CommonReturnCode;
 import com.team.seahouse.commons.response.Response;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.Contract;
 import com.team.seahouse.service.IContractService;
 import io.swagger.annotations.Api;

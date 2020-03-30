@@ -3,12 +3,12 @@ package com.team.seahouse.service.impl;
 import com.team.seahouse.commons.enums.TypeEnum;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.response.UserReturnCode;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.commons.utils.RedisKeyUtils;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.mapper.UserMapper;
 import com.team.seahouse.service.IRedisService;
 import com.team.seahouse.service.ISmsSenderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,7 @@ import java.util.Random;
  * @describe
  * @date 2018/07/16
  */
+@Slf4j
 @Service
 public class SmsSenderServiceImpl implements ISmsSenderService {
 
@@ -69,7 +70,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         //生成key
         String key = RedisKeyUtils.generateKeyWithPlaceHolder(REDIS_SMS_PRE, phoneNumber);
         boolean isExist = redisService.exists(key);
-        LoggerUtils.info(SmsSenderServiceImpl.class, "host is" + host);
+        log.info("host is" + host);
         String code = "";
         //该手机号验证码已经验证
         if(!isExist) {
@@ -80,7 +81,7 @@ public class SmsSenderServiceImpl implements ISmsSenderService {
         } else {
             code = redisService.get(key);
         }
-        LoggerUtils.info(SmsSenderServiceImpl.class, "generate smsCode success : " + code);
+        log.info("generate smsCode success : " + code);
 
         StringBuilder sb = new StringBuilder(120);
         sb.append("username=").append(username);

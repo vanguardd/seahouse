@@ -133,7 +133,7 @@ public class UserController extends BaseController {
 
         try {
             //昵称最大长度
-            Integer userNameLengthLimit = 12;
+            int userNameLengthLimit = 12;
             UserInfoVo user = getUserInfo();
             if(null != user.getUserName() && userName.equals(user.getUserName())) {
                 throw new BusinessException(UserReturnCode.USERNAME_SAME);

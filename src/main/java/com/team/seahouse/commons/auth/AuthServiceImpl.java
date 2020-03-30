@@ -8,14 +8,13 @@ import com.team.seahouse.commons.response.UserReturnCode;
 import com.team.seahouse.commons.exception.ValidateException;
 import com.team.seahouse.commons.security.SmsCodeAuthenticationToken;
 import com.team.seahouse.commons.utils.JwtTokenUtil;
-import com.team.seahouse.commons.utils.LoggerUtils;
 import com.team.seahouse.domain.User;
 import com.team.seahouse.domain.UserInfo;
 import com.team.seahouse.commons.request.UserVo;
 import com.team.seahouse.mapper.UserInfoMapper;
 import com.team.seahouse.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +35,7 @@ import java.util.Date;
  * @version 1.0
  * @date 18/7/12
  */
+@Slf4j
 @Service
 public class AuthServiceImpl implements IAuthService {
 
@@ -97,9 +97,9 @@ public class AuthServiceImpl implements IAuthService {
             //保存用户详细信息
             userInfoMapper.insert(userInfo);
 
-            LoggerUtils.info(AuthServiceImpl.class, "register success : " + userToAdd.getMobilePhone());
+            log.info("register success : " + userToAdd.getMobilePhone());
 
-            LoggerUtils.info(AuthServiceImpl.class, "auto login...");
+            log.info("auto login...");
             //注册成功后，自动登录并返回token
             return loginByPassword(userToAdd.getMobilePhone(), userToAdd.getPassword());
         } catch (ValidateException e) {
@@ -131,7 +131,7 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public JwtAuthResponse refresh(String refreshToken) {
         String userName = jwtTokenUtil.getUsernameFromToken(refreshToken);
-        LoggerUtils.info(AuthServiceImpl.class, " authentication : " + userName);
+        log.info("authentication : " + userName);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(userName);
         JwtAuthResponse response = new JwtAuthResponse();
         response.setRefreshToken(refreshToken);
@@ -161,11 +161,11 @@ public class AuthServiceImpl implements IAuthService {
         JwtAuthResponse response = new JwtAuthResponse();
         //生成AccessToken
         final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-        LoggerUtils.info(AuthServiceImpl.class, "generateAccessToken success");
+        log.info("generateAccessToken success");
 
         //生成RefreshToken
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
-        LoggerUtils.info(AuthServiceImpl.class, "generateAccessToken success");
+        log.info("generateAccessToken success");
 
         response.setAccessToken(accessToken);
         response.setRefreshToken(refreshToken);

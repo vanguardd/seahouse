@@ -2,7 +2,7 @@ package com.team.seahouse.commons.support.email;
 
 
 import com.team.seahouse.commons.utils.DateUtils;
-import com.team.seahouse.commons.utils.LoggerUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -25,6 +25,7 @@ import java.util.Map;
  * @Version: 1.0
  * @Date: 18/7/21
  */
+@Slf4j
 @SuppressWarnings("deprecation")
 public class EmailSendManager {
 
@@ -95,10 +96,10 @@ public class EmailSendManager {
 
             // 发送邮件 
 			javaMailSender.send(mime);
-            LoggerUtils.info(EmailSendManager.class, "发送了一封邮件<" + emailMsg.getToEmails() + ">,主题为<" + emailMsg.getSubject() + ">,时间为<" + DateUtils.formatDateTime(new Date()) + ">");
+            log.info("发送了一封邮件<" + emailMsg.getToEmails() + ">,主题为<" + emailMsg.getSubject() + ">,时间为<" + DateUtils.formatDateTime(new Date()) + ">");
 			return true;
 		}catch(Exception e){
-			LoggerUtils.error(EmailSendManager.class, "发送邮件失败", e);
+			log.error("发送邮件失败", e);
 			return false;
 		}
 	}
@@ -119,7 +120,7 @@ public class EmailSendManager {
             try {
 				helper.addInline(cid, img);
 			} catch (MessagingException e) {
-            	LoggerUtils.error(EmailSendManager.class, "EmailSendManager.setAddInline={}", e);
+            	log.error("EmailSendManager.setAddInline={}", e);
 			}
         }
 	}
@@ -139,7 +140,7 @@ public class EmailSendManager {
 			try {
 				helper.addAttachment(cid, fileResource);
 			} catch (MessagingException e) {
-				LoggerUtils.info(EmailSendManager.class, "EmailSendManager.setAddAttachment={}", e);
+				log.info("EmailSendManager.setAddAttachment={}", e);
 			}
 		}
 	}
@@ -155,7 +156,7 @@ public class EmailSendManager {
 			String emailContext = templateEngine.process(emailMsg.getThymeleafTemplate(), emailMsg.getContext());
 			helper.setText(emailContext, true);
 		} catch (Exception e) {
-			LoggerUtils.error(EmailSendManager.class, "EmailSendManager.sendWithTemplate={}", e);
+			log.error("EmailSendManager.sendWithTemplate={}", e);
 		}
 	}
 

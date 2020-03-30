@@ -3,7 +3,7 @@ package com.team.seahouse.commons.support.upload;
 import com.alibaba.fastjson.JSONObject;
 import com.team.seahouse.commons.utils.DateUtils;
 import com.team.seahouse.commons.utils.ImageUtils;
-import com.team.seahouse.commons.utils.LoggerUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +19,7 @@ import java.util.Random;
  * @version 1.0
  * @date 18/7/18
  */
+@Slf4j
 public class UploadManager {
 
 	private UploadManager() { 
@@ -111,7 +112,7 @@ public class UploadManager {
 				flag = true;
 			}
 		} catch (Exception e) {
-			LoggerUtils.error(UploadManager.class, "UploadFileUtils.Upload:{}", e);
+			log.error("UploadFileUtils.Upload:{}", e);
 		}
 		return new UploadResult(flag, getSavaDir(dir, belong, newFileName));
 	}
@@ -159,7 +160,7 @@ public class UploadManager {
 				flag = true;
 			}
 		} catch (Exception e) {
-			LoggerUtils.error(UploadManager.class, "UploadFileUtils.Upload:{}", e);
+			log.error("UploadFileUtils.Upload:{}", e);
 		}
 		return new UploadResult(flag, getSavaDir(dir, belong, newFileName));
 	}
