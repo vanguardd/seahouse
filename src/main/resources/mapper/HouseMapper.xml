@@ -175,7 +175,7 @@
     <where>
       h.audit_state='1' AND r.state='1'
       <if test="keyWord != null and keyWord != ''">
-        AND title LIKE '%${keyWord}%' OR address LIKE '%${keyWord})%'
+        AND title LIKE '%${keyWord}%' OR address LIKE '%${keyWord}%'
       </if>
       <if test="type != null">
         AND type = #{type}

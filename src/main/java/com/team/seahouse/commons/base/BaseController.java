@@ -38,10 +38,6 @@ public class BaseController {
 	@Autowired
 	private UserInfoMapper userInfoMapper;
 
-	@Autowired
-	private UserMapper userMapper;
-
-
 	/**
 	 * 获得HttpServletRequest
 	 * @return
